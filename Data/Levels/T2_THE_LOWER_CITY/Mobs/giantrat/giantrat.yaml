@@ -1,0 +1,11 @@
+name: Giant Rat
+healthLow: 2
+healthHigh: 6
+dmgLow: 1
+dmgHigh: 6
+lootBonus: 100
+rewardLow: 90
+rewardHigh: 150
+encounterText: A rat scampers past you, carrying a bag of coins in it's teeth. Quick, catch it!
+defeatText: The danger not worth it's prize, the rat drops the bag and scurries up a nearby tree.
+weakness: Flux

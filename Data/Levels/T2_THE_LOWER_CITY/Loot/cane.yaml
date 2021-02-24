@@ -1,0 +1,8 @@
+name: Cane
+type: weapon
+damage: 7
+defence: 0
+value: 45
+description: Blank
+defaultRarity: Common
+defaultElement: None

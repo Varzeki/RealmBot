@@ -1,0 +1,12 @@
+name: Slime
+healthLow: 5
+healthHigh: 55
+dmgLow: 5
+dmgHigh: 25
+rewardLow: 3
+rewardHigh: 12
+lootBonus: 0
+encounterText: A green mass slides out of some underbrush and aggressively towards you, leaving a sticky trail in it's wake. You've encountered a Slime!
+defeatText: It's hide damaged beyond repair, liquid oozes from the monster until it is no longer whole enough to function.
+weakness: Alica
+statValue: 90

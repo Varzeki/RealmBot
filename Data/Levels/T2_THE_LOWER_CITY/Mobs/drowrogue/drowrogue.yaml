@@ -1,0 +1,12 @@
+name: Drow Rogue
+healthLow: 10
+healthHigh: 16
+dmgLow: 18
+dmgHigh: 30
+lootBonus: 0
+rewardLow: 15
+rewardHigh: 25
+encounterText: DROW ROGUE ENCOUNTER
+defeatText: DROW ROGUE DEFEAT
+weakness: Aer
+statValue: 109

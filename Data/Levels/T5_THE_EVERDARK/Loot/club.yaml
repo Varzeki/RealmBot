@@ -1,0 +1,8 @@
+name: Club
+type: weapon
+damage: 8
+defence: 0
+value: 50
+description: A crude weapon made of naturally shaped wood.
+defaultRarity: Common
+defaultElement: None

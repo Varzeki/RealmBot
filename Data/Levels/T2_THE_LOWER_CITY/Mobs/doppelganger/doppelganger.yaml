@@ -1,0 +1,12 @@
+name: Doppelganger
+healthLow: 30
+healthHigh: 50
+dmgLow: 8
+dmgHigh: 16
+rewardLow: 10
+rewardHigh: 20
+lootBonus: 0
+encounterText: You catch a man you thought was a merchant attempting to steal your coin - as you grab his arm, the illusion shatters and a tall faceless creature stands in his place. You've encountered a Doppelganger!
+defeatText: The creature shrieks as morphs into hundreds of faces at once, collapsing to the ground.
+weakness: Fyr
+statValue: 88

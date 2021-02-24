@@ -1,0 +1,12 @@
+name: Dryad
+healthLow: 53
+healthHigh: 57
+dmgLow: 10
+dmgHigh: 18
+rewardLow: 15
+rewardHigh: 25
+lootBonus: 0
+encounterText: You hear warm laughter, seemingly emanating from the trees themselves. While trying to find the source, it suddenly turns to cackling, and you spin around to see a Dryad attempting to cast a spell on you.
+defeatText: The laughter turns to a long sigh as the Dryad collapses, before dispersing into the wind as a pile of leaves.
+weakness: Fyr
+statValue: 111

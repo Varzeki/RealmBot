@@ -1,0 +1,12 @@
+name: Thug
+healthLow: 45
+healthHigh: 65
+dmgLow: 10
+dmgHigh: 18
+rewardLow: 15
+rewardHigh: 25
+lootBonus: 0
+encounterText: THUG ENCOUNTER
+defeatText: THUG DEFEAT
+weakness: Fyr
+statValue: 111

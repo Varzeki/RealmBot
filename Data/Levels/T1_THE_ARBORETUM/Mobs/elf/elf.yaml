@@ -1,0 +1,12 @@
+name: Elf
+healthLow: 12
+healthHigh: 14
+dmgLow: 18
+dmgHigh: 30
+lootBonus: 0
+rewardLow: 15
+rewardHigh: 25
+encounterText: An arrow shot from a tree ahead whizzes past you before a figure charges forward, dagger in hand. You've entered Elf territory!
+defeatText: Sensing defeat, the elf darts back into the forest as quickly as it appeared.
+weakness: Aer
+statValue: 109

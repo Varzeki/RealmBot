@@ -1,0 +1,8 @@
+name: Buckler
+type: weapon
+damage: 0
+defence: 4
+value: 35
+description: Blank
+defaultRarity: Common
+defaultElement: None

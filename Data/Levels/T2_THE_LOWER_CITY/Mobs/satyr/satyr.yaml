@@ -1,0 +1,12 @@
+name: Satyr
+healthLow: 5
+healthHigh: 55
+dmgLow: 5
+dmgHigh: 25
+rewardLow: 3
+rewardHigh: 12
+lootBonus: 0
+encounterText: SATYR ENCOUNTER
+defeatText: SATYR DEFEAT
+weakness: Alica
+statValue: 90

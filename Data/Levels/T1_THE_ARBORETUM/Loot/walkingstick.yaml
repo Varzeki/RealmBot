@@ -1,0 +1,8 @@
+name: Walking Stick
+type: weapon
+damage: 7
+defence: 0
+value: 45
+description: A long stick, suitable for providing extra balance.
+defaultRarity: Common
+defaultElement: None

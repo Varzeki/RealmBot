@@ -1,0 +1,8 @@
+name: Shiv
+type: weapon
+damage: 8
+defence: 0
+value: 50
+description: Blank
+defaultRarity: Common
+defaultElement: None

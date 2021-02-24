@@ -1,0 +1,7 @@
+name: Leafy Robe
+type: armour
+damage: 0
+defence: 4
+value: 35
+description: A light robe made of leaves, stitched together by vines.
+defaultRarity: Common

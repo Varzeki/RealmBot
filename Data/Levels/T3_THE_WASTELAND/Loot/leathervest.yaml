@@ -1,0 +1,7 @@
+name: Leather Vest
+type: armour
+damage: 0
+defence: 5
+value: 40
+description: A basic leather vest.
+defaultRarity: Common
