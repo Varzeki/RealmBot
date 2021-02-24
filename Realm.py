@@ -858,8 +858,6 @@ async def on_message(message):
                 await makeInventoryImage()
                 reactables["playerInventories"][currentPlayer.ID] = await message.author.send(file=discord.File('currentUserInventoryOutput.png'))
                 emojiResponses = [emoji_set["1"],emoji_set["2"],emoji_set["3"],emoji_set["4"],emoji_set["5"],emoji_set["A"],emoji_set["B"]]
-                print(emojiResponses)
-                print(bot.get_emoji("814063868430778378"))
                 await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[0])
                 await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[1])
                 await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[2])
@@ -868,7 +866,7 @@ async def on_message(message):
                 await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[5])
                 await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[6])
                 def check(r, u):
-                    return (r.message == reactables["playerInventories"][currentPlayer.ID]) and (r.emoji in emojiResponses) and (u.id == message.author.id)
+                    return (r.message == reactables["playerInventories"][currentPlayer.ID]) and (str(r.emoji) in emojiResponses) and (u.id == message.author.id)
                 try:
                     try:
                         reactionChoiceOne, usr = await bot.wait_for('reaction_add', check=check, timeout=20.0)
@@ -881,7 +879,7 @@ async def on_message(message):
                     else:
                         await reactables["playerInventories"][currentPlayer.ID].delete()
                         reactables["playerInventories"][currentPlayer.ID] = None
-                        highlightCell = emojiResponses.index(reactionChoiceOne.emoji)+1
+                        highlightCell = emojiResponses.index(str(reactionChoiceOne.emoji))+1
                         await makeInventoryImage()
                         reactables["playerInventories"][currentPlayer.ID] = await message.author.send(file=discord.File('currentUserInventoryOutput.png'))
                         emojiResponses = [emoji_set["1"],emoji_set["2"],emoji_set["3"],emoji_set["4"],emoji_set["5"],emoji_set["A"],emoji_set["B"],emoji_set["moneyBag"]]
@@ -905,8 +903,8 @@ async def on_message(message):
                             await reactables["playerInventories"][currentPlayer.ID].delete()
                             reactables["playerInventories"][currentPlayer.ID] = None
                             highlightCell = 999
-                            slot1 = emojiResponses.index(reactionChoiceOne.emoji)
-                            slot2 = emojiResponses.index(reactionChoiceTwo.emoji)
+                            slot1 = emojiResponses.index(str(reactionChoiceOne.emoji))
+                            slot2 = emojiResponses.index(str(reactionChoiceTwo.emoji))
                             if slot2 == 7:
                                 if slot1 < 5:
                                     if players[message.author.id].inventory[slot1] == "Empty":
@@ -1087,7 +1085,7 @@ async def on_raw_reaction_remove(payload):
 async def on_reaction_add(reaction, user):
     global activeMobs
     message = reaction.message
-    e = reaction.emoji
+    e = str(reaction.emoji)
 
 
     if user.bot:
