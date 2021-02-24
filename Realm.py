@@ -25,18 +25,18 @@ bot = commands.Bot(command_prefix='!')
 vc = None
 realm = ""
 emoji_set = {
-    "swords": "\U00002694",
-    "greenHP": "\U0001F7E9",
-    "redHP": "\U0001F7E5",
-    "thumbsUP": "\U0001F44D",
-    "1": bot.get_emoji("814063868430778378"),
-    "2": bot.get_emoji("814066550025093142"),
-    "3": emoji.emojize(":three:"),
-    "4": emoji.emojize(":four:"),
-    "5": emoji.emojize(":five:"),
-    "A": "\U0001F170",
-    "B": "\U0001F171",
-    "moneyBag": emoji.emojize(":moneybag:")
+    "swords": "⚔️",
+    "greenHP": "🟩",
+    "redHP": "🟥",
+    "thumbsUP": "👍",
+    "1": "1️⃣",
+    "2": "2️⃣",
+    "3": "3️⃣",
+    "4": "4️⃣",
+    "5": "5️⃣",
+    "A": "🅰️",
+    "B": "🅱️",
+    "moneyBag": "💰"
 }
 fullHP = emoji_set["greenHP"]*10
 ratList = ["Rat", "Giant Rat"]
@@ -497,7 +497,7 @@ class Mob:
 
 @bot.event
 async def on_ready():
-    print(f'{bot.user} has connected to Discord!')
+    print(f'Connection to discord successful as: {bot.user}')
     global realm
     global channels
     global roles
@@ -524,6 +524,7 @@ async def on_ready():
             "tavern": realm.get_channel(763300003095117846)
         }
     }
+    print("Channel IDs Set")
     roles = {
         "class-select": realm.get_role(763270590109843457),
         "race-select": realm.get_role(763270592869695498),
@@ -544,6 +545,7 @@ async def on_ready():
         "elf": realm.get_role(763382893812121610),
         "t2": realm.get_role(770537052454125569)
     }
+    print("Role IDs Set")
     channel = discord.utils.get(realm.channels, name='the-discordium')
     vc = await channel.connect()
     with open('./Data/Players.pkl', 'rb') as f:
@@ -612,6 +614,9 @@ async def on_ready():
             activeMobs[t[:2]].partyMessage = await c.send("Party:\n")
             if "Rat" in activeMobs[t[:2]].name:
                 vc.play(discord.FFmpegPCMAudio("rat.mp3"))
+
+    print("Channel Initialization Complete")
+    print("Commencing Cycle")
     while True:
         await doCombat()
         await doHealthRegen()
@@ -853,6 +858,8 @@ async def on_message(message):
                 await makeInventoryImage()
                 reactables["playerInventories"][currentPlayer.ID] = await message.author.send(file=discord.File('currentUserInventoryOutput.png'))
                 emojiResponses = [emoji_set["1"],emoji_set["2"],emoji_set["3"],emoji_set["4"],emoji_set["5"],emoji_set["A"],emoji_set["B"]]
+                print(emojiResponses)
+                print(bot.get_emoji("814063868430778378"))
                 await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[0])
                 await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[1])
                 await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[2])
