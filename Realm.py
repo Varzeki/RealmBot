@@ -20,8 +20,9 @@ import pyttsx3
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-
-bot = commands.Bot(command_prefix='!')
+intents = discord.Intents.default()
+intents.members = True
+bot = commands.Bot(command_prefix='!', intents=intents)
 vc = None
 realm = ""
 emoji_set = {
