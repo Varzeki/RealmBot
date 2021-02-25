@@ -358,18 +358,15 @@ class Player:
         actualDFC = self.DFC
         if not self.equipment[0] == "Empty":
             if self.equipment[0].type == "armour":
-                print(self.inventory)
-                print(self.equipment)
-                print(self.equipment[0])
                 actualDFC = actualDFC + self.equipment[0].defence
         if not self.equipment[1] == "Empty":
             if self.equipment[1].type == "armour":
                 actualDFC = actualDFC + self.equipment[0].defence
-        if actualDFC - self.DFC < 1:
+        if d - actualDFC < 1:
             return 0
         else:
-            self.STAT_damageReceived = self.STAT_damageReceived + (actualDFC-self.DFC)
-            return actualDFC - self.DFC
+            self.STAT_damageReceived = self.STAT_damageReceived + (d-actualDFC)
+            return d - actualDFC
     def giveEXP(self, x, lvl):
         lvlDiff = lvl - self.level
         if lvlDiff < -4:
