@@ -358,6 +358,9 @@ class Player:
         actualDFC = self.DFC
         if not self.equipment[0] == "Empty":
             if self.equipment[0].type == "armour":
+                print(self.inventory)
+                print(self.equipment)
+                print(self.equipment[0])
                 actualDFC = actualDFC + self.equipment[0].defence
         if not self.equipment[1] == "Empty":
             if self.equipment[1].type == "armour":
