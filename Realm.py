@@ -342,12 +342,13 @@ class Player:
         self.hpBar = emoji_set["greenHP"]*10
     def getDamage(self, r):
         d = random.uniform(0.9,1.1)*float(self.DMG)
-        if not self.equipment[0] == "Empty":
-            if self.equipment[0].type == "weapon":
-                d = d + self.equipment[0].damage
-        if not self.equipment[1] == "Empty":
-            if self.equipment[1].type == "weapon":
-                d = d + self.equipment[1].damage
+        tempEquip = self.equipment
+        if not tempEquip[0] == "Empty":
+            if tempEquip[0].type == "weapon":
+                d = d + tempEquip[0].damage
+        if not tempEquip[1] == "Empty":
+            if tempEquip[1].type == "weapon":
+                d = d + tempEquip[1].damage
         if self.pClass == "arbiter":
             self.STAT_damageDealt = self.STAT_damageDealt + round(d * (r*0.05))
             return round(d * (r*0.05))
@@ -356,12 +357,13 @@ class Player:
             return round(d)
     def getDamageTaken(self, d):
         actualDFC = self.DFC
-        if not self.equipment[0] == "Empty":
-            if self.equipment[0].type == "armour":
-                actualDFC = actualDFC + self.equipment[0].defence
-        if not self.equipment[1] == "Empty":
-            if self.equipment[1].type == "armour":
-                actualDFC = actualDFC + self.equipment[0].defence
+        tempEquip = self.equipment
+        if not tempEquip[0] == "Empty":
+            if tempEquip[0].type == "armour":
+                actualDFC = actualDFC + tempEquip[0].defence
+        if not tempEquip[1] == "Empty":
+            if tempEquip[1].type == "armour":
+                actualDFC = actualDFC + tempEquip[0].defence
         if d - actualDFC < 1:
             return 0
         else:
