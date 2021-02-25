@@ -342,6 +342,12 @@ class Player:
         self.hpBar = emoji_set["greenHP"]*10
     def getDamage(self, r):
         d = random.uniform(0.9,1.1)*float(self.DMG)
+        if not self.equipment[0] == "Empty":
+            if self.equipment[0].type == "weapon":
+                d = d + self.equipment[0].damage
+        if not self.equipment[1] == "Empty":
+            if self.equipment[1].type == "weapon":
+                d = d + self.equipment[1].damage
         if self.pClass == "arbiter":
             self.STAT_damageDealt = self.STAT_damageDealt + round(d * (r*0.05))
             return round(d * (r*0.05))
@@ -349,11 +355,18 @@ class Player:
             self.STAT_damageDealt = self.STAT_damageDealt + round(d)
             return round(d)
     def getDamageTaken(self, d):
-        if d - self.DFC < 1:
+        actualDFC = self.DFC
+        if not self.equipment[0] == "Empty":
+            if self.equipment[0].type == "armour":
+                actualDFC = actualDFC + self.equipment[0].defence
+        if not self.equipment[1] == "Empty":
+            if self.equipment[1].type == "armour":
+                actualDFC = actualDFC + self.equipment[0].defence
+        if actualDFC - self.DFC < 1:
             return 0
         else:
-            self.STAT_damageReceived = self.STAT_damageReceived + (d-self.DFC)
-            return d - self.DFC
+            self.STAT_damageReceived = self.STAT_damageReceived + (actualDFC-self.DFC)
+            return actualDFC - self.DFC
     def giveEXP(self, x, lvl):
         lvlDiff = lvl - self.level
         if lvlDiff < -4:
