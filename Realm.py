@@ -869,9 +869,9 @@ async def on_message(message):
                                 downText = 370
                                 draw.text((i*160)+leftText, downText, "Empty")
                         draw(inv)
-                        inv.save(filename="currentUserInventoryOutput.png")
+                        inv.save(filename=(str(currentPlayer.ID)+"_InventoryOutput.png"))
                 await makeInventoryImage()
-                reactables["playerInventories"][currentPlayer.ID] = await message.author.send(file=discord.File('currentUserInventoryOutput.png'))
+                reactables["playerInventories"][currentPlayer.ID] = await message.author.send(file=discord.File((str(currentPlayer.ID)+"_InventoryOutput.png")))
                 emojiResponses = [emoji_set["1"],emoji_set["2"],emoji_set["3"],emoji_set["4"],emoji_set["5"],emoji_set["A"],emoji_set["B"]]
                 await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[0])
                 await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[1])
@@ -896,7 +896,7 @@ async def on_message(message):
                         reactables["playerInventories"][currentPlayer.ID] = None
                         highlightCell = emojiResponses.index(str(reactionChoiceOne.emoji))+1
                         await makeInventoryImage()
-                        reactables["playerInventories"][currentPlayer.ID] = await message.author.send(file=discord.File('currentUserInventoryOutput.png'))
+                        reactables["playerInventories"][currentPlayer.ID] = await message.author.send(file=discord.File((str(currentPlayer.ID)+"_InventoryOutput.png")))
                         emojiResponses = [emoji_set["1"],emoji_set["2"],emoji_set["3"],emoji_set["4"],emoji_set["5"],emoji_set["A"],emoji_set["B"],emoji_set["moneyBag"]]
                         await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[0])
                         await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[1])
@@ -982,6 +982,7 @@ async def on_message(message):
                 except:
                     print("Error in inventory management!")
                     await reactables["playerInventories"][currentPlayer.ID].delete()
+                    currentPlayer.openInventory = False
                     reactables["playerInventories"][currentPlayer.ID] = None
                     print(sys.exc_info()[0])
 
