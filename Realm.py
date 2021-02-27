@@ -52,7 +52,7 @@ players = {}
 activeMobs = {}
 currentTick = 0
 voiceEngine = pyttsx3.init()
-voiceEngine.setProperty('rate', 125)
+voiceEngine.setProperty('rate', 90)
 voiceEngine.save_to_file("A rat has spawned", './rat.mp3')
 voiceEngine.runAndWait()
 tier_levels = {
@@ -746,8 +746,6 @@ async def on_message(message):
                         draw.fill_color = Color('white')
                         draw.text_alignment = 'center'
                         draw.text(100, 60, "Inventory")
-                        # draw.font = 'whitneybook.otf'
-                        # draw.fill_color = Color('#B4B6B9')
                         draw.font_size = 18
                         draw.font = 'whitneybold.otf'
                         draw.fill_color = commonCol
