@@ -1,0 +1,12 @@
+name: Orc
+healthLow: 10
+healthHigh: 16
+dmgLow: 18
+dmgHigh: 30
+lootBonus: 0
+rewardLow: 15
+rewardHigh: 25
+encounterText: ORC ENCOUNTER
+defeatText: ORC DEFEAT
+weakness: Aer
+statValue: 109

@@ -1,0 +1,12 @@
+name: Elk
+healthLow: 53
+healthHigh: 57
+dmgLow: 10
+dmgHigh: 18
+rewardLow: 15
+rewardHigh: 25
+lootBonus: 0
+encounterText: You hear grunting, and turn to see an angry Elk beginning it's charge!
+defeatText: The Elk stumbles away into the trees, then collapses dead.
+weakness: Fyr
+statValue: 111

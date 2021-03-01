@@ -1,0 +1,12 @@
+name: Werewolf
+healthLow: 5
+healthHigh: 55
+dmgLow: 5
+dmgHigh: 25
+rewardLow: 3
+rewardHigh: 12
+lootBonus: 0
+encounterText: WEREWOLF ENCOUNTER
+defeatText: WEREWOLF DEFEAT
+weakness: Alica
+statValue: 90

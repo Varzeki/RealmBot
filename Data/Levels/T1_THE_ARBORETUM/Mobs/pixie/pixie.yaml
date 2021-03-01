@@ -1,0 +1,12 @@
+name: Pixie
+healthLow: 28
+healthHigh: 32
+dmgLow: 5
+dmgHigh: 25
+rewardLow: 3
+rewardHigh: 12
+lootBonus: 0
+encounterText: A tiny winged creature flies out from behind a tree, and attempts to stab you with an even smaller spear. You've encountered a Pixie!
+defeatText: You finally manage to swat the creature against a tree, which it bounces off, landing dead in the undergrowth.
+weakness: Alica
+statValue: 90

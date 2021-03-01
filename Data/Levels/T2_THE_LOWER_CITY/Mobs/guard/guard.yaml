@@ -1,0 +1,12 @@
+name: Guard
+healthLow: 80
+healthHigh: 100
+dmgLow: 6
+dmgHigh: 12
+lootBonus: 0
+rewardLow: 15
+rewardHigh: 25
+encounterText: GUARD ENCOUNTER
+defeatText: GUARD DEFEAT
+weakness: Fyr
+statValue: 108
