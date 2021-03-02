@@ -871,13 +871,8 @@ async def on_message(message):
                 await makeInventoryImage()
                 reactables["playerInventories"][currentPlayer.ID] = await message.author.send(file=discord.File((str(currentPlayer.ID)+"_InventoryOutput.png")))
                 emojiResponses = [emoji_set["1"],emoji_set["2"],emoji_set["3"],emoji_set["4"],emoji_set["5"],emoji_set["A"],emoji_set["B"]]
-                await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[0])
-                await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[1])
-                await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[2])
-                await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[3])
-                await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[4])
-                await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[5])
-                await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[6])
+                for i in range(7):
+                    await reactables["playerInventories"][currentPlayer.ID].add_reaction(emojiResponses[i])
                 def check(r, u):
                     return (r.message == reactables["playerInventories"][currentPlayer.ID]) and (str(r.emoji) in emojiResponses) and (u.id == message.author.id)
                 try:
@@ -1112,6 +1107,7 @@ async def on_message(message):
             voiceEngine.runAndWait()
             vc.play(discord.FFmpegPCMAudio("glenn.mp3"))
             await message.channel.send(response)
+
 @bot.event
 async def on_raw_reaction_remove(payload):
     global activeMobs
