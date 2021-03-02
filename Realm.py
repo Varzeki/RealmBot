@@ -963,6 +963,7 @@ async def on_message(message):
                                     else:
                                         players[message.author.id].equipment[slot1-5], players[message.author.id].inventory[slot2] = players[message.author.id].inventory[slot2], players[message.author.id].equipment[slot1-5]
                                 else:
+                                    print("FROM INV TO EQUIP")
                                     if not players[message.author.id].inventory[slot1] == "Empty":
                                         if not players[message.author.id].inventory[slot1].type == "treasure":
                                             if players[message.author.id].pClass == "corsair":
@@ -975,7 +976,7 @@ async def on_message(message):
                                                     swapTo = "Empty"
                                                 if players[message.author.id].inventory[slot1].type == "weapon" and (weaponCount == 0 or swapTo == "weapon"):
                                                     players[message.author.id].inventory[slot1], players[message.author.id].equipment[slot2-5] = players[message.author.id].equipment[slot2-5], players[message.author.id].inventory[slot1]
-                                                elif players[message.author.id].inventory[slot1].type == "armour" and (armourCount == 0 or swapTo == "weapon"):
+                                                elif players[message.author.id].inventory[slot1].type == "armour" and (armourCount == 0 or swapTo == "armour"):
                                                     players[message.author.id].inventory[slot1], players[message.author.id].equipment[slot2-5] = players[message.author.id].equipment[slot2-5], players[message.author.id].inventory[slot1]
                                     else:
                                         players[message.author.id].inventory[slot1], players[message.author.id].equipment[slot2-5] = players[message.author.id].equipment[slot2-5], players[message.author.id].inventory[slot1]
