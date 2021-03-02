@@ -952,9 +952,13 @@ async def on_message(message):
                                                 if players[message.author.id].inventory[slot2].type == "weapon":
                                                     players[message.author.id].equipment[slot1-5], players[message.author.id].inventory[slot2] = players[message.author.id].inventory[slot2], players[message.author.id].equipment[slot1-5]
                                             else:
-                                                if players[message.author.id].inventory[slot2].type == "weapon" and weaponCount == 0:
+                                                if not players[message.author.id].equipment[slot1-5] == "Empty":
+                                                    swapTo = players[message.author.id].equipment[slot1-5].type
+                                                else:
+                                                    swapTo = "Empty"
+                                                if players[message.author.id].inventory[slot2].type == "weapon" and (weaponCount == 0 or swapTo == "weapon"):
                                                     players[message.author.id].equipment[slot1-5], players[message.author.id].inventory[slot2] = players[message.author.id].inventory[slot2], players[message.author.id].equipment[slot1-5]
-                                                if players[message.author.id].inventory[slot2].type == "armour" and armourCount == 0:
+                                                elif players[message.author.id].inventory[slot2].type == "armour" and (armourCount == 0 or swapTo == "armour"):
                                                     players[message.author.id].equipment[slot1-5], players[message.author.id].inventory[slot2] = players[message.author.id].inventory[slot2], players[message.author.id].equipment[slot1-5]
                                     else:
                                         players[message.author.id].equipment[slot1-5], players[message.author.id].inventory[slot2] = players[message.author.id].inventory[slot2], players[message.author.id].equipment[slot1-5]
@@ -964,11 +968,15 @@ async def on_message(message):
                                             if players[message.author.id].pClass == "corsair":
                                                 if players[message.author.id].inventory[slot1].type == "weapon":
                                                     players[message.author.id].inventory[slot1], players[message.author.id].equipment[slot2-5] = players[message.author.id].equipment[slot2-5], players[message.author.id].inventory[slot1]
+                                            else:
+                                                if not players[message.author.id].equipment[slot2-5] == "Empty":
+                                                    swapTo = players[message.author.id].equipment[slot2-5].type
                                                 else:
-                                                    if players[message.author.id].inventory[slot2].type == "weapon" and weaponCount == 0:
-                                                        players[message.author.id].inventory[slot1], players[message.author.id].equipment[slot2-5] = players[message.author.id].equipment[slot2-5], players[message.author.id].inventory[slot1]
-                                                    if players[message.author.id].inventory[slot2].type == "armour" and armourCount == 0:
-                                                        players[message.author.id].inventory[slot1], players[message.author.id].equipment[slot2-5] = players[message.author.id].equipment[slot2-5], players[message.author.id].inventory[slot1]
+                                                    swapTo = "Empty"
+                                                if players[message.author.id].inventory[slot1].type == "weapon" and (weaponCount == 0 or swapTo == "weapon"):
+                                                    players[message.author.id].inventory[slot1], players[message.author.id].equipment[slot2-5] = players[message.author.id].equipment[slot2-5], players[message.author.id].inventory[slot1]
+                                                elif players[message.author.id].inventory[slot1].type == "armour" and (armourCount == 0 or swapTo == "weapon"):
+                                                    players[message.author.id].inventory[slot1], players[message.author.id].equipment[slot2-5] = players[message.author.id].equipment[slot2-5], players[message.author.id].inventory[slot1]
                                     else:
                                         players[message.author.id].inventory[slot1], players[message.author.id].equipment[slot2-5] = players[message.author.id].equipment[slot2-5], players[message.author.id].inventory[slot1]
                             loop = True
