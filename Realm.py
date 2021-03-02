@@ -963,7 +963,6 @@ async def on_message(message):
                                     else:
                                         players[message.author.id].equipment[slot1-5], players[message.author.id].inventory[slot2] = players[message.author.id].inventory[slot2], players[message.author.id].equipment[slot1-5]
                                 else:
-                                    print("FROM INV TO EQUIP")
                                     if not players[message.author.id].inventory[slot1] == "Empty":
                                         if not players[message.author.id].inventory[slot1].type == "treasure":
                                             if players[message.author.id].pClass == "corsair":
@@ -991,20 +990,6 @@ async def on_message(message):
     if message.channel == channels["help"]:
         if message.author.bot:
             return
-        if message.content == "!reset_players":
-            print("Reset Command Triggered")
-            if message.author.id == 137451662817230848:
-                print("User Auth OK")
-                players = {}
-                with open('./Data/Players.pkl', 'w+b') as f:
-                    pickle.dump(players,f, pickle.HIGHEST_PROTOCOL)
-                await message.channel.send("Manual Save Complete")
-        if message.content == "!updateInventoryList":
-            if message.author.id == 137451662817230848:
-                for p in players.values():
-                    reactables["playerInventories"][p.ID] = None
-                    p.openInventory = False
-                print("Players Updated")
         if message.content == "!load":
             print("Load Command Triggered")
             if message.author.id == 137451662817230848:
@@ -1100,22 +1085,7 @@ async def on_message(message):
                     print("Error sending User Stats Image")
             else:
                 await message.channel.send("You don't appear to be registered yet!")
-        if message.content == "!glennisasickcunt":
-            responseList = [
-                "no he's a shit cunt",
-                "lol what a nerd",
-                "nah m80",
-                "he's a fuckin rat tbh",
-                "glenn is as sick as kerser is healthy",
-                "bruh",
-                "he's a fucking nonce"
-            ]
-            channel = discord.utils.get(realm.channels, name='the-discordium')
-            response = random.sample(responseList,k=1)[0]
-            voiceEngine.save_to_file(response, 'glenn.mp3')
-            voiceEngine.runAndWait()
-            vc.play(discord.FFmpegPCMAudio("glenn.mp3"))
-            await message.channel.send(response)
+
 
 @bot.event
 async def on_raw_reaction_remove(payload):
