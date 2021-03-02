@@ -6,7 +6,7 @@ dmgHigh: 25
 rewardLow: 3
 rewardHigh: 12
 lootBonus: 0
-encounterText: WEREWOLF ENCOUNTER
-defeatText: WEREWOLF DEFEAT
+encounterText: Wandering around the city's garden you hear a growl in a bush. Suddenly a huge werewolf leaps at you!
+defeatText: The werewolf howls and collapses transforming into the corpse of a young girl.
 weakness: Alica
 statValue: 90

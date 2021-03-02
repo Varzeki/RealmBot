@@ -6,7 +6,7 @@ dmgHigh: 18
 rewardLow: 15
 rewardHigh: 25
 lootBonus: 0
-encounterText: THUG ENCOUNTER
-defeatText: THUG DEFEAT
+encounterText: As you turn to go into an alleway you notice an unwashed man grinning at you and holding a bludgeon.
+defeatText: Seeing his imminent defeat, the thug turns and sprints into the alleyway quickly disappearing in the low light.
 weakness: Fyr
 statValue: 111

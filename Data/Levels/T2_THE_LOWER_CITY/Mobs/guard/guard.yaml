@@ -6,7 +6,7 @@ dmgHigh: 12
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
-encounterText: GUARD ENCOUNTER
-defeatText: GUARD DEFEAT
+encounterText: A guard approaches you weapon drawn. They seemed determined to stop you.
+defeatText: The guard falls over dead. You step over their body, ignoring the picture of their family that slipped out of their pocket.
 weakness: Fyr
 statValue: 108

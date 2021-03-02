@@ -6,7 +6,7 @@ dmgHigh: 16
 rewardLow: 10
 rewardHigh: 20
 lootBonus: 0
-encounterText: GIANT SPIDER ENCOUNTER
-defeatText: GIANT SPIDER DEFEAT
+encounterText: Walking through a dark alley you hear a noise, you look all around you but see nothing, but then you look up.
+defeatText: The Giant spider suddenly reals back and collapses as its legs curl up into its body.
 weakness: Fyr
 statValue: 88
