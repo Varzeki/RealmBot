@@ -545,7 +545,7 @@ async def on_ready():
             "t6-main": realm.get_channel(816629159954219029),
             "t6-log": realm.get_channel(816629210780663808),
             "t7-main": realm.get_channel(816629250102788176),
-            "t7-log": realm.get_channel(816629286613549096),
+            "t7-log": realm.get_channel(816629286613549096)
         },
         "havens": {
             "tavern": realm.get_channel(763300003095117846)
@@ -570,7 +570,7 @@ async def on_ready():
         "lizardfolk": realm.get_role(763382889345450075),
         "dwarf": realm.get_role(763382890733633566),
         "elf": realm.get_role(763382893812121610),
-        "t2": realm.get_role(770537052454125569)
+        "tier access": realm.get_role(770537052454125569)
     }
     print("Role IDs Set")
     channel = discord.utils.get(realm.channels, name='the-discordium')
