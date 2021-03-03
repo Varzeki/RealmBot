@@ -40,7 +40,7 @@ emoji_set = {
     "moneyBag": "💰"
 }
 fullHP = emoji_set["greenHP"]*10
-ratList = ["Rat", "Giant Rat"]
+ratList = ["Rat"]
 channels = {}
 reactables = {
     "playerInventories": {}
@@ -53,7 +53,7 @@ activeMobs = {}
 currentTick = 0
 voiceEngine = pyttsx3.init()
 voiceEngine.setProperty('rate', 90)
-voiceEngine.save_to_file("A rat has spawned", './rat.mp3')
+voiceEngine.save_to_file("A rat has spawned", './Data/Resources/Audio/rat.mp3')
 voiceEngine.runAndWait()
 tier_levels = {
     "t1": [1],
@@ -534,7 +534,17 @@ async def on_ready():
             "t1-main": realm.get_channel(769546581405204501),
             "t1-log": realm.get_channel(763272419308732416),
             "t2-main": realm.get_channel(770536914910314497),
-            "t2-log": realm.get_channel(770536956521873418)
+            "t2-log": realm.get_channel(770536956521873418),
+            "t3-main": realm.get_channel(816623602563809280),
+            "t3-log": realm.get_channel(816623758600568833),
+            "t4-main": realm.get_channel(816628961295466496),
+            "t4-log": realm.get_channel(816629013643919390),
+            "t5-main": realm.get_channel(816629061979865130),
+            "t5-log": realm.get_channel(816629090802073611),
+            "t6-main": realm.get_channel(816629159954219029),
+            "t6-log": realm.get_channel(816629210780663808),
+            "t7-main": realm.get_channel(816629250102788176),
+            "t7-log": realm.get_channel(816629286613549096),
         },
         "havens": {
             "tavern": realm.get_channel(763300003095117846)
