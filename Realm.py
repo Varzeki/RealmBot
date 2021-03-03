@@ -699,7 +699,7 @@ async def on_message(message):
     if message.content == "!sell_all":
         currentInv = players[message.author.id].inventory
         for i in range(0,len(currentInv)):
-            if not currentInv[i] = "Empty":
+            if not currentInv[i] == "Empty":
                 players[message.author.id].giveGold(currentInv[i].value, True)
                 await message.author.send("You sold a "+currentInv[i].fullName+" for "+str(currentInv[i].value)+" gold")
                 currentInv[i] = "Empty"
