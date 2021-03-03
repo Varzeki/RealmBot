@@ -397,6 +397,7 @@ class Player:
         self.STAT_goldLooted = round(self.STAT_goldLooted + received)
         return received
     def addLoot(self, loot):
+        self.STAT_itemsLooted = self.STAT_itemsLooted + 1
         if not "Empty" in self.inventory:
             g = self.giveGold(loot.value, True)
             return self.name + " sold a " + loot.fullName + " they couldn't carry for " + str(g) + " gold\n"
