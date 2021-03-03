@@ -501,7 +501,7 @@ class Mob:
         self.HP = self.maxHP
     def getDamage(self):
         return random.sample(range(self.dmgLow,self.dmgHigh),k=1)[0]
-    def getDamageTaken(self,d):
+    def getDamageTaken(self,d, element="None"):
         return d
     def getLoot(self):
         roll = random.uniform(0,1)
@@ -699,9 +699,10 @@ async def on_message(message):
     if message.content == "!sell_all":
         currentInv = players[message.author.id].inventory
         for i in range(0,len(currentInv)):
-            players[message.author.id].giveGold(currentInv[i].value, True)
-            await message.author.send("You sold a "+currentInv[i].fullName+" for "+str(currentInv[i].value)+" gold")
-            currentInv[i] = "Empty"
+            if not currentInv[i] = "Empty":
+                players[message.author.id].giveGold(currentInv[i].value, True)
+                await message.author.send("You sold a "+currentInv[i].fullName+" for "+str(currentInv[i].value)+" gold")
+                currentInv[i] = "Empty"
     if message.content == "!inventory":
         if message.author.id == 137451662817230848:
             currentPlayer = players[137474665747578880]
