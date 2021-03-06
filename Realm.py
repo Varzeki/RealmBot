@@ -751,8 +751,8 @@ async def on_ready():
         },
         "havens": {
             "the-tavern": realm.get_channel(763300003095117846),
-            "the-travelling-caravan": realm.get_channel(817631855603089439)
-        }
+            "the-travelling-caravan": realm.get_channel(817631855603089439),
+        },
     }
     print("Channel IDs Set")
     roles = {
