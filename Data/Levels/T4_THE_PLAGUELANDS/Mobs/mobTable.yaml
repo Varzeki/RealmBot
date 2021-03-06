@@ -1,7 +1,7 @@
-imp: 8
-giantscorpion: 8
-lizardman: 8
-orc: 15
-vulture: 10
-hyena: 8
+FleshGolem: 8
+Ogre: 8
+Slime: 8
+Skeleton: 15
+Zombie: 10
+MadAlchemist: 8
 rat: 1
