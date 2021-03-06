@@ -45,7 +45,7 @@ emoji_set = {
 fullHP = emoji_set["greenHP"] * 10
 ratList = ["Rat"]
 channels = {}
-reactables = {"playerInventories": {},"vendors": {}}
+reactables = {"playerInventories": {}, "vendors": {}}
 roles = {}
 classRoles = [
     "arcanist",
@@ -914,11 +914,15 @@ async def on_ready():
     reactables["vendors"]["caravan-weapon-lootbox"] = await c.send(
         file=discord.File("Data/Resources/Images/LootBoxWeaponBasic.png")
     )
-    await reactables["vendors"]["caravan-weapon-lootbox"].add_reaction(emoji_set["moneyBag"])
+    await reactables["vendors"]["caravan-weapon-lootbox"].add_reaction(
+        emoji_set["moneyBag"]
+    )
     reactables["vendors"]["caravan-armour-lootbox"] = await c.send(
         file=discord.File("Data/Resources/Images/LootBoxArmourBasic.png")
     )
-    await reactables["vendors"]["caravan-armour-lootbox"].add_reaction(emoji_set["moneyBag"])
+    await reactables["vendors"]["caravan-armour-lootbox"].add_reaction(
+        emoji_set["moneyBag"]
+    )
     print("Channel Initialization Complete")
     print("Commencing Cycle")
     while not graceful_exit:
@@ -2092,10 +2096,19 @@ async def on_reaction_add(reaction, user):
             elif not roles["class-select"] in user.roles:
                 await user.add_roles(roles["character-creation"])
                 await user.add_roles(roles["class-select"])
-        elif message in reactables["vendors"]["caravan-armour-lootbox"]:
-            cost = math.ceil(150 * (1.1 ** players[user.id].level))
+        elif message in reactables["vendors"].values():
+            if message == reactables["vendors"]["caravan-weapon-lootbox"]:
+                boxType = "weapon"
+                boxRarity = "basic"
+            elif message == reactables["vendors"]["caravan-armour-lootbox"]:
+                boxType = "weapon"
+                boxRarity = "basic"
+            if boxRarity == "basic":
+                cost = math.ceil(150 * (1.1 ** players[user.id].level))
+            elif boxRarity == "advanced":
+                cost = math.ceil(350 * (1.1 ** players[user.id].level))
             buyMessage = await user.send(
-                "This Basic Weapon Lootbox would cost you " + str(cost) + " gold."
+                "This " + capitalize(boxRarity) + " " + capitalize(boxType) + " Lootbox would cost you " + str(cost) + " gold."
             )
             await buyMessage.add_reaction(emoji_set["moneyBag"])
 
@@ -2120,17 +2133,27 @@ async def on_reaction_add(reaction, user):
                         if "Empty" in players[user.id].inventory:
                             players[user.id].gold = players[user.id].gold - cost
                             lootOK = False
-                            while not lootOK:
-                                lootGen = Loot(
-                                    random.choice(["t1", "t2", "t3", "t4", "t5", "t6"]),
-                                    players[user.id].level,
-                                    "equipment",
-                                )
-                                if lootGen.type == "weapon" and lootGen.rarity in [
+                            if boxRarity == "basic":
+                                tier = random.choice(["t1", "t2", "t3", "t4", "t5", "t6"])
+                                possibleRarities = [
                                     "Common",
                                     "Uncommon",
                                     "Rare",
-                                ]:
+                                ]
+                            elif boxRarity == "advanced":
+                                tier = "t7"
+                                possibleRarities = [
+                                    "Epic",
+                                    "Legendary",
+                                    "Zekiforged",
+                                ]
+                            while not lootOK:
+                                lootGen = Loot(
+                                    tier,
+                                    players[user.id].level,
+                                    "equipment",
+                                )
+                                if lootGen.type == boxType and lootGen.rarity in possibleRarities:
                                     lootOK = True
                             players[user.id].addLoot(lootGen)
                             await buyMessage.delete()
