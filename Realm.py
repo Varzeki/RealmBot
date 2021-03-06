@@ -1049,60 +1049,60 @@ async def on_message(message):
         if message.content == "!sell_1":
             currentInv = players[message.author.id].inventory
             if not currentInv[0] == "Empty":
-                players[message.author.id].giveGold(currentInv[i].value, True)
+                players[message.author.id].giveGold(currentInv[0].value, True)
                 await message.author.send(
                     "You sold a "
-                    + currentInv[i].fullName
+                    + currentInv[0].fullName
                     + " for "
-                    + str(currentInv[i].value)
+                    + str(currentInv[0].value)
                     + " gold"
                 )
                 currentInv[0] = "Empty"
         if message.content == "!sell_2":
             currentInv = players[message.author.id].inventory
             if not currentInv[1] == "Empty":
-                players[message.author.id].giveGold(currentInv[i].value, True)
+                players[message.author.id].giveGold(currentInv[1].value, True)
                 await message.author.send(
                     "You sold a "
-                    + currentInv[i].fullName
+                    + currentInv[1].fullName
                     + " for "
-                    + str(currentInv[i].value)
+                    + str(currentInv[1].value)
                     + " gold"
                 )
                 currentInv[1] = "Empty"
         if message.content == "!sell_3":
             currentInv = players[message.author.id].inventory
             if not currentInv[2] == "Empty":
-                players[message.author.id].giveGold(currentInv[i].value, True)
+                players[message.author.id].giveGold(currentInv[2].value, True)
                 await message.author.send(
                     "You sold a "
-                    + currentInv[i].fullName
+                    + currentInv[2].fullName
                     + " for "
-                    + str(currentInv[i].value)
+                    + str(currentInv[2].value)
                     + " gold"
                 )
                 currentInv[2] = "Empty"
         if message.content == "!sell_4":
             currentInv = players[message.author.id].inventory
             if not currentInv[3] == "Empty":
-                players[message.author.id].giveGold(currentInv[i].value, True)
+                players[message.author.id].giveGold(currentInv[3].value, True)
                 await message.author.send(
                     "You sold a "
-                    + currentInv[i].fullName
+                    + currentInv[3].fullName
                     + " for "
-                    + str(currentInv[i].value)
+                    + str(currentInv[3].value)
                     + " gold"
                 )
                 currentInv[3] = "Empty"
         if message.content == "!sell_5":
             currentInv = players[message.author.id].inventory
             if not currentInv[4] == "Empty":
-                players[message.author.id].giveGold(currentInv[i].value, True)
+                players[message.author.id].giveGold(currentInv[4].value, True)
                 await message.author.send(
                     "You sold a "
-                    + currentInv[i].fullName
+                    + currentInv[4].fullName
                     + " for "
-                    + str(currentInv[i].value)
+                    + str(currentInv[4].value)
                     + " gold"
                 )
                 currentInv[4] = "Empty"
