@@ -1058,17 +1058,17 @@ async def on_message(message):
                     async def makeInventoryImage():
                         inv = inventoryImage.clone()
                         with Drawing() as draw:
-                            draw.font = "whitneybold.otf"
+                            draw.font = "Data/Resources/Fonts/whitneybold.otf"
                             draw.font_size = 28
                             draw.fill_color = Color("white")
                             draw.text_alignment = "center"
                             draw.text(100, 60, "Inventory")
                             draw.font_size = 18
-                            draw.font = "whitneybold.otf"
+                            draw.font = "Data/Resources/Fonts/whitneybold.otf"
                             draw.fill_color = commonCol
                             draw.text(75, 140, "STORAGE")
                             draw.text(930, 140, "EQUIPMENT")
-                            draw.font = "whitneymedium.otf"
+                            draw.font = "Data/Resources/Fonts/whitneymedium.otf"
                             for i in range(1, 6):
                                 if i == highlightCell:
                                     draw.fill_color = highlightCol
@@ -1880,7 +1880,7 @@ async def on_message(message):
                         # draw.fill_color = Color("black")
                         # draw.rectangle(left=int((s.width/2)-64),top=30,width=128,height=128,radius=64)  # 30% rounding?
                         apply_mask(a, m)
-                        draw.font = "whitneybold.otf"
+                        draw.font = "Data/Resources/Fonts/whitneybold.otf"
                         draw.font_size = 18
                         draw.fill_color = Color("white")
                         draw.text_alignment = "center"
@@ -1891,19 +1891,19 @@ async def on_message(message):
                             players[message.author.id].name
                             + players[message.author.id].title,
                         )
-                        draw.font = "whitneybook.otf"
+                        draw.font = "Data/Resources/Fonts/whitneybook.otf"
                         draw.fill_color = Color("#B4B6B9")
                         draw.text(
                             int(s.width / 2),
                             205,
                             "Level: " + str(players[message.author.id].level),
                         )
-                        draw.font = "whitneybold.otf"
+                        draw.font = "Data/Resources/Fonts/whitneybold.otf"
                         draw.fill_color = Color("#B9BBBE")
                         draw.text(int(s.width / 2) - 110, 270, "HEALTH")
                         draw.text(int(s.width / 2) - 119, 390, "STATS")
                         draw.text(int(s.width / 2) - 129, 540, "FACT")
-                        draw.font = "whitneymedium.otf"
+                        draw.font = "Data/Resources/Fonts/whitneymedium.otf"
                         draw.text(
                             int(s.width / 2),
                             350,
