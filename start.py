@@ -1,7 +1,7 @@
 import os
 
 while True:
-    Print("\nRUNNING GIT PULL")
+    print("\nRUNNING GIT PULL")
     os.system("git pull")
-    PRINT("RUNNING BOT\n")
+    print("RUNNING BOT\n")
     os.system("python3 Realm.py")
