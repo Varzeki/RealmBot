@@ -896,11 +896,11 @@ async def on_ready():
         await msg.delete(delay=0.2)
     await c.send("Welcome to the travelling caravan! The wares are as below:")
     reactables["caravan-weapon-lootbox"] = await c.send(
-        file=discord.file("Data/Resources/Images/LootBoxWeaponBasic.png")
+        file=discord.File("Data/Resources/Images/LootBoxWeaponBasic.png")
     )
     await reactables["caravan-weapon-lootbox"].add_reaction(emoji_set["moneyBag"])
     reactables["caravan-armour-lootbox"] = await c.send(
-        file=discord.file("Data/Resources/Images/LootBoxArmourBasic.png")
+        file=discord.File("Data/Resources/Images/LootBoxArmourBasic.png")
     )
     await reactables["caravan-armour-lootbox"].add_reaction(emoji_set["moneyBag"])
     print("Channel Initialization Complete")
