@@ -2101,14 +2101,20 @@ async def on_reaction_add(reaction, user):
                 boxType = "weapon"
                 boxRarity = "basic"
             elif message == reactables["vendors"]["caravan-armour-lootbox"]:
-                boxType = "weapon"
+                boxType = "armour"
                 boxRarity = "basic"
             if boxRarity == "basic":
                 cost = math.ceil(150 * (1.1 ** players[user.id].level))
             elif boxRarity == "advanced":
                 cost = math.ceil(350 * (1.1 ** players[user.id].level))
             buyMessage = await user.send(
-                "This " + capitalize(boxRarity) + " " + capitalize(boxType) + " Lootbox would cost you " + str(cost) + " gold."
+                "This "
+                + capitalize(boxRarity)
+                + " "
+                + capitalize(boxType)
+                + " Lootbox would cost you "
+                + str(cost)
+                + " gold."
             )
             await buyMessage.add_reaction(emoji_set["moneyBag"])
 
@@ -2134,7 +2140,9 @@ async def on_reaction_add(reaction, user):
                             players[user.id].gold = players[user.id].gold - cost
                             lootOK = False
                             if boxRarity == "basic":
-                                tier = random.choice(["t1", "t2", "t3", "t4", "t5", "t6"])
+                                tier = random.choice(
+                                    ["t1", "t2", "t3", "t4", "t5", "t6"]
+                                )
                                 possibleRarities = [
                                     "Common",
                                     "Uncommon",
@@ -2153,7 +2161,10 @@ async def on_reaction_add(reaction, user):
                                     players[user.id].level,
                                     "equipment",
                                 )
-                                if lootGen.type == boxType and lootGen.rarity in possibleRarities:
+                                if (
+                                    lootGen.type == boxType
+                                    and lootGen.rarity in possibleRarities
+                                ):
                                     lootOK = True
                             players[user.id].addLoot(lootGen)
                             await buyMessage.delete()
