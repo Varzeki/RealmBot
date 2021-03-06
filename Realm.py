@@ -68,10 +68,10 @@ tier_levels = {
     "t1": [1],
     "t2": range(1, 11),
     "t3": range(11, 21),
-    "t4": range(31, 41),
-    "t5": range(41, 51),
-    "t6": range(51, 61),
-    "t7": range(61, 71),
+    "t4": range(21, 31),
+    "t5": range(31, 41),
+    "t6": range(41, 51),
+    "t7": range(51, 61),
 }
 
 
