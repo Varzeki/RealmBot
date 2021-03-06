@@ -291,7 +291,7 @@ async def doCombat():
                         lootLog = lootLog + players[p].addLoot(pLoot[2]) + "\n"
                 z = await channels["tiers"][mob.tier + "-log"].send(lootLog)
                 if not pLoot[2] == "Nothing":
-                    z.add_reaction(emoji_set["important"])
+                    await z.add_reaction(emoji_set["important"])
                 tier = mob.tier
                 activeMobs.pop(tier, None)
                 msgs = (
