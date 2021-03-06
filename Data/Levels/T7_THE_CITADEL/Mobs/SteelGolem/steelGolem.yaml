@@ -7,6 +7,6 @@ rewardLow: 3
 rewardHigh: 12
 lootBonus: 0
 encounterText: Steel Golem ENCOUNTER
-defeatText: Steel Golem DEFEAT
+defeatText: Steel Golem DEFEATs
 weakness: Alica
 statValue: 90
