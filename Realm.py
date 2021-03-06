@@ -726,6 +726,7 @@ async def on_ready():
     realm = bot.guilds[0]
     channels = {
         "help": realm.get_channel(763273256839938048),
+        "admin": realm.get_channel(770931709846749197),
         "registration": {
             "register": realm.get_channel(763269562426064906),
             "class-select": realm.get_channel(763269670857736202),
@@ -748,7 +749,10 @@ async def on_ready():
             "t7-main": realm.get_channel(816629250102788176),
             "t7-log": realm.get_channel(816629286613549096),
         },
-        "havens": {"tavern": realm.get_channel(763300003095117846)},
+        "havens": {
+            "the-tavern": realm.get_channel(763300003095117846),
+            "the-travelling-caravan": realm.get_channel(817631855603089439)
+        }
     }
     print("Channel IDs Set")
     roles = {
@@ -1767,34 +1771,29 @@ async def on_message(message):
                         reactables["playerInventories"][currentPlayer.ID] = None
                         print(sys.exc_info()[0])
 
-        if message.channel == channels["help"]:
+        if message.channel == channels["admin"]:
             if message.author.bot:
                 return
-            if message.content == "!load":
-                print("Load Command Triggered")
-                if message.author.id == 137451662817230848:
-                    print("User Auth OK")
-                    with open("./Data/Players.pkl", "rb") as f:
-                        players = pickle.load(f)
-                    await message.channel.send("Manual Load Complete")
             if message.content == "!shutdown":
                 print("Graceful Shutdown Triggered")
-                if message.author.id == 137451662817230848:
-                    print("User Auth OK")
-                    graceful_init = True
-                    await message.channel.send("SHUTDOWN IN 3 MINUTES")
-                    await asyncio.sleep(60)
-                    await message.channel.send("SHUTDOWN IN 2 MINUTES")
-                    await asyncio.sleep(60)
-                    await message.channel.send("SHUTDOWN IN 1 MINUTE")
-                    await asyncio.sleep(60)
-                    await message.channel.send("SHUTTING DOWN")
-                    graceful_exit = True
-            if message.content == "!reset_me":
+                graceful_init = True
+                await message.channel.send("SHUTDOWN IN 3 MINUTES")
+                await asyncio.sleep(60)
+                await message.channel.send("SHUTDOWN IN 2 MINUTES")
+                await asyncio.sleep(60)
+                await message.channel.send("SHUTDOWN IN 1 MINUTE")
+                await asyncio.sleep(60)
+                await message.channel.send("SHUTTING DOWN")
+                graceful_exit = True
+
+        if message.channel == channels["help"]:
+            if message.content == "!reset":
                 players[message.author.id].inCombat = False
                 players[message.author.id].HP = players[message.author.id].maxHP
                 players[message.author.id].hpBar = emoji_set["greenHP"] * 10
                 await message.channel.send("Player Reset!")
+
+        if message.channel == channels["havens"]["the-tavern"]:
             if message.content == "!stats":
                 if message.author.id in players:
                     factList = [
