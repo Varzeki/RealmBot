@@ -1,4 +1,4 @@
-name: Giant Scorpion
+name: Steel Golem
 healthLow: 5
 healthHigh: 55
 dmgLow: 5
@@ -6,7 +6,7 @@ dmgHigh: 25
 rewardLow: 3
 rewardHigh: 12
 lootBonus: 0
-encounterText: GIANT SCORPION ENCOUNTER
-defeatText: GIANT SCORPION DEFEAT
+encounterText: Steel Golem ENCOUNTER
+defeatText: Steel Golem DEFEAT
 weakness: Alica
 statValue: 90
