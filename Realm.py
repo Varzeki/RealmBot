@@ -2118,7 +2118,7 @@ async def on_reaction_add(reaction, user):
                 else:
                     if players[user.id].gold >= cost:
                         if "Empty" in players[user.id].inventory:
-                            players[user.id].gold = players[user.id] - cost
+                            players[user.id].gold = players[user.id].gold - cost
                             lootOK = False
                             while not lootOK:
                                 lootGen = Loot(
