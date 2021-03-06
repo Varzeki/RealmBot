@@ -2012,7 +2012,7 @@ async def on_message(message):
                         s.save(
                             filename=(
                                 "Data/Dynamic/"
-                                + str(currentPlayer.ID)
+                                + str(message.author.id)
                                 + "_UserStatsOutput.png"
                             )
                         )
@@ -2020,7 +2020,7 @@ async def on_message(message):
                         await message.channel.send(
                             file=discord.File(
                                 "Data/Dynamic/"
-                                + str(currentPlayer.ID)
+                                + str(message.author.id)
                                 + "_UserStatsOutput.png"
                             )
                         )
