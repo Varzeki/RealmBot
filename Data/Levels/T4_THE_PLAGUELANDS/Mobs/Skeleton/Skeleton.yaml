@@ -7,6 +7,6 @@ rewardLow: 3
 rewardHigh: 12
 lootBonus: 0
 encounterText: GIANT SCORPION ENCOUNTER
-defeatText: GIANT SCORPION DEFEAT
+defeatText: GIANT SCORPION DEFEATs
 weakness: Alica
 statValue: 90

@@ -7,6 +7,6 @@ lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
 encounterText: HYENA ENCOUNTER
-defeatText: HYENA DEFEAT
+defeatText: HYENA DEFEATs
 weakness: Fyr
 statValue: 108

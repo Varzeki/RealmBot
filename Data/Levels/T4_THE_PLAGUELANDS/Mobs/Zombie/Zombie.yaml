@@ -7,6 +7,6 @@ rewardLow: 10
 rewardHigh: 20
 lootBonus: 0
 encounterText: IMP ENCOUNTER
-defeatText: IMP DEFEAT
+defeatText: IMP DEFEATs
 weakness: Fyr
 statValue: 88

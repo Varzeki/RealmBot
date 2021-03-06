@@ -7,6 +7,6 @@ rewardLow: 15
 rewardHigh: 25
 lootBonus: 0
 encounterText: LIZARDMAN ENCOUNTER
-defeatText: LIZARDMAN DEFEAT
+defeatText: LIZARDMAN DEFEATs
 weakness: Fyr
 statValue: 111
