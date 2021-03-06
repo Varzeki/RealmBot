@@ -264,6 +264,7 @@ async def doCombat():
                 )
             await channels["tiers"][mob.tier + "-log"].send(damageLog)
             if mob.HP < 1:
+                lootDropped = False
                 lootLog = mob.defeatText + "\n"
                 for p in mob.playersEngaged:
                     mob.lootBonus = mob.lootBonus + players[p].lootBonus
@@ -288,9 +289,10 @@ async def doCombat():
                         + pEXP[1]
                     )
                     if not pLoot[2] == "Nothing":
+                        lootDropped = True
                         lootLog = lootLog + players[p].addLoot(pLoot[2]) + "\n"
                 z = await channels["tiers"][mob.tier + "-log"].send(lootLog)
-                if not pLoot[2] == "Nothing":
+                if lootDropped:
                     await z.add_reaction(emoji_set["important"])
                 tier = mob.tier
                 activeMobs.pop(tier, None)
