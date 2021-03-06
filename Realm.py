@@ -40,6 +40,7 @@ emoji_set = {
     "A": "🅰️",
     "B": "🅱️",
     "moneyBag": "💰",
+    "important": ("\u203C" + "\uFE0F"),
 }
 fullHP = emoji_set["greenHP"] * 10
 ratList = ["Rat"]
@@ -288,7 +289,9 @@ async def doCombat():
                     )
                     if not pLoot[2] == "Nothing":
                         lootLog = lootLog + players[p].addLoot(pLoot[2]) + "\n"
-                await channels["tiers"][mob.tier + "-log"].send(lootLog)
+                z = await channels["tiers"][mob.tier + "-log"].send(lootLog)
+                if not pLoot[2] == "Nothing":
+                    z.add_reaction(emoji_set["important"])
                 tier = mob.tier
                 activeMobs.pop(tier, None)
                 msgs = (
