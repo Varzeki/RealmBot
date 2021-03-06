@@ -2092,48 +2092,100 @@ async def on_reaction_add(reaction, user):
             elif not roles["class-select"] in user.roles:
                 await user.add_roles(roles["character-creation"])
                 await user.add_roles(roles["class-select"])
-        for cls in classRoles:
-            if message == reactables["class-select-" + cls]:
-                await user.remove_roles(roles["class-select"])
-                time.sleep(1)
-                hasRole = False
-                for x in classRoles:
-                    if roles[x] in user.roles:
-                        hasRole = True
-                        break
-                if not hasRole:
-                    await user.add_roles(roles[cls])
-                    await user.add_roles(roles["race-select"])
-                return
-        for rce in raceRoles:
-            if message == reactables["race-select-" + rce]:
-                await user.remove_roles(roles["race-select"])
-                time.sleep(1)
-                hasRole = False
-                for x in raceRoles:
-                    if roles[x] in user.roles:
-                        hasRole = True
-                        break
-                if not hasRole:
-                    await user.add_roles(roles[rce])
-                    await user.add_roles(roles["name-select"])
-                return
-        for mob in [*activeMobs.values()]:
-            if message == mob.hpMessage:
-                if not user.id in mob.playersEngaged:
-                    if not len(mob.playersEngaged) > 3:
-                        if not players[user.id].inCombat:
-                            mob.playersEngaged.append(user.id)
-                            if user.id in mob.playersEngaged:
-                                players[user.id].inCombat = True
-                        else:
-                            await user.send("You are already in combat!")
-                    else:
-                        await user.send(
-                            "There is already a full party fighting this mob!"
-                        )
+        elif message == reactables["caravan-armour-lootbox"]:
+            cost = ceil(300 * (1.1 ^ players[user.id].level))
+            buyMessage = await user.send(
+                "This Basic Weapon Lootbox would cost you " + str(cost) + " gold."
+            )
+            await buyMessage.add_reaction(emoji_set["moneyBag"])
+
+            def check(r, u):
+                return (
+                    (r.message == buyMessage)
+                    and (str(r.emoji) == emoji_set["moneyBag"])
+                    and (u.id == user.id)
+                )
+
+            try:
+                try:
+                    react, usr = await bot.wait_for(
+                        "reaction_add", check=check, timeout=20.0
+                    )
+                except asyncio.TimeoutError:
+                    buyMessage.delete()
+                    await user.send("Time's up - no deal!")
+                    return
                 else:
-                    pass
+                    if players[user.id].gold >= cost:
+                        if "Empty" in players[user.id].inventory:
+                            players[user.id].gold = players[user.id] - cost
+                            lootOK = False
+                            while not lootOK:
+                                lootGen = Loot(
+                                    random.choice(["t1", "t2", "t3", "t4", "t5", "t6"]),
+                                    players[user.id].level,
+                                    "equipment",
+                                )
+                                if lootGen.type == "weapon" and lootGen.rarity in [
+                                    "Common",
+                                    "Uncommon",
+                                    "Rare",
+                                ]:
+                                    lootOK = true
+                            players[user.id].addLoot(lootGen)
+                            buyMessage.delete()
+                            await user.send("Sold!")
+                        else:
+                            buyMessage.delete()
+                            user.send("You don't have the space for this!")
+                    else:
+                        buyMessage.delete()
+                        user.send("You can't afford this!")
+            except:
+                print("Error during lootbox transaction!")
+        else:
+            for cls in classRoles:
+                if message == reactables["class-select-" + cls]:
+                    await user.remove_roles(roles["class-select"])
+                    time.sleep(1)
+                    hasRole = False
+                    for x in classRoles:
+                        if roles[x] in user.roles:
+                            hasRole = True
+                            break
+                    if not hasRole:
+                        await user.add_roles(roles[cls])
+                        await user.add_roles(roles["race-select"])
+                    return
+            for rce in raceRoles:
+                if message == reactables["race-select-" + rce]:
+                    await user.remove_roles(roles["race-select"])
+                    time.sleep(1)
+                    hasRole = False
+                    for x in raceRoles:
+                        if roles[x] in user.roles:
+                            hasRole = True
+                            break
+                    if not hasRole:
+                        await user.add_roles(roles[rce])
+                        await user.add_roles(roles["name-select"])
+                    return
+            for mob in [*activeMobs.values()]:
+                if message == mob.hpMessage:
+                    if not user.id in mob.playersEngaged:
+                        if not len(mob.playersEngaged) > 3:
+                            if not players[user.id].inCombat:
+                                mob.playersEngaged.append(user.id)
+                                if user.id in mob.playersEngaged:
+                                    players[user.id].inCombat = True
+                            else:
+                                await user.send("You are already in combat!")
+                        else:
+                            await user.send(
+                                "There is already a full party fighting this mob!"
+                            )
+                    else:
+                        pass
 
 
 bot.run(TOKEN)
