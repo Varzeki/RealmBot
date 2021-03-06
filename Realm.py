@@ -45,7 +45,7 @@ emoji_set = {
 fullHP = emoji_set["greenHP"] * 10
 ratList = ["Rat"]
 channels = {}
-reactables = {"playerInventories": {}}
+reactables = {"playerInventories": {},"vendors": {}}
 roles = {}
 classRoles = [
     "arcanist",
@@ -911,14 +911,14 @@ async def on_ready():
     for msg in msgs:
         await msg.delete(delay=0.2)
     await c.send("Welcome to the travelling caravan! The wares are as below:")
-    reactables["caravan-weapon-lootbox"] = await c.send(
+    reactables["vendors"]["caravan-weapon-lootbox"] = await c.send(
         file=discord.File("Data/Resources/Images/LootBoxWeaponBasic.png")
     )
-    await reactables["caravan-weapon-lootbox"].add_reaction(emoji_set["moneyBag"])
-    reactables["caravan-armour-lootbox"] = await c.send(
+    await reactables["vendors"]["caravan-weapon-lootbox"].add_reaction(emoji_set["moneyBag"])
+    reactables["vendors"]["caravan-armour-lootbox"] = await c.send(
         file=discord.File("Data/Resources/Images/LootBoxArmourBasic.png")
     )
-    await reactables["caravan-armour-lootbox"].add_reaction(emoji_set["moneyBag"])
+    await reactables["vendors"]["caravan-armour-lootbox"].add_reaction(emoji_set["moneyBag"])
     print("Channel Initialization Complete")
     print("Commencing Cycle")
     while not graceful_exit:
@@ -2092,8 +2092,8 @@ async def on_reaction_add(reaction, user):
             elif not roles["class-select"] in user.roles:
                 await user.add_roles(roles["character-creation"])
                 await user.add_roles(roles["class-select"])
-        elif message == reactables["caravan-armour-lootbox"]:
-            cost = math.ceil(300 * (1.1 ** players[user.id].level))
+        elif message in reactables["vendors"]["caravan-armour-lootbox"]:
+            cost = math.ceil(150 * (1.1 ** players[user.id].level))
             buyMessage = await user.send(
                 "This Basic Weapon Lootbox would cost you " + str(cost) + " gold."
             )
