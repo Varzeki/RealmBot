@@ -912,7 +912,9 @@ async def on_message(message):
 
             await message.author.remove_roles(roles["name-select"])
             if message.author.id in players:
-                print("Player attempted __init__ in name-select but was already present!")
+                print(
+                    "Player attempted __init__ in name-select but was already present!"
+                )
             else:
                 foundClassRole = False
                 foundRaceRole = False
@@ -1087,9 +1089,9 @@ async def on_message(message):
                                             boxImg = ih
                                         else:
                                             boxImg = ia
-                                        itemRarity = currentInv[i - 1].fullName.split(" ")[
-                                            0
-                                        ]
+                                        itemRarity = currentInv[i - 1].fullName.split(
+                                            " "
+                                        )[0]
                                         rarityCol = commonCol
                                         if itemRarity == "Common":
                                             pass
@@ -1151,7 +1153,8 @@ async def on_message(message):
                                                 draw.text(
                                                     (i * 160) - leftText,
                                                     downText + 110,
-                                                    "Element: " + currentInv[i - 1].element,
+                                                    "Element: "
+                                                    + currentInv[i - 1].element,
                                                 )
                                     else:
                                         draw.text(
@@ -1185,9 +1188,9 @@ async def on_message(message):
                                             boxImg = ih
                                         else:
                                             boxImg = ia
-                                        itemRarity = currentEquipment[i - 1].fullName.split(
-                                            " "
-                                        )[0]
+                                        itemRarity = currentEquipment[
+                                            i - 1
+                                        ].fullName.split(" ")[0]
                                         rarityCol = commonCol
                                         if itemRarity == "Common":
                                             pass
@@ -1226,26 +1229,33 @@ async def on_message(message):
                                         draw.text(
                                             (i * 160) + leftText,
                                             downText + 30,
-                                            "DMG: " + str(currentEquipment[i - 1].damage),
+                                            "DMG: "
+                                            + str(currentEquipment[i - 1].damage),
                                         )
                                         draw.text(
                                             (i * 160) + leftText,
                                             downText + 50,
-                                            "DFC: " + str(currentEquipment[i - 1].defence),
+                                            "DFC: "
+                                            + str(currentEquipment[i - 1].defence),
                                         )
                                         draw.text(
                                             (i * 160) + leftText,
                                             downText + 70,
-                                            "Level: " + str(currentEquipment[i - 1].level),
+                                            "Level: "
+                                            + str(currentEquipment[i - 1].level),
                                         )
                                         draw.text(
                                             (i * 160) + leftText,
                                             downText + 90,
-                                            "Value: " + str(currentEquipment[i - 1].value),
+                                            "Value: "
+                                            + str(currentEquipment[i - 1].value),
                                         )
                                         # draw.text((i*160)-leftText, 440, currentEquipment[i-1].description)
                                         if currentEquipment[i - 1].type == "weapon":
-                                            if not currentEquipment[i - 1].element == "":
+                                            if (
+                                                not currentEquipment[i - 1].element
+                                                == ""
+                                            ):
                                                 draw.text(
                                                     (i * 160) + leftText,
                                                     downText + 110,
@@ -1256,7 +1266,8 @@ async def on_message(message):
                                         draw.text(
                                             (i * 160) + leftText,
                                             downText + 30,
-                                            "Value: " + str(currentEquipment[i - 1].value),
+                                            "Value: "
+                                            + str(currentEquipment[i - 1].value),
                                         )
                                         # draw.text((i*160)-leftText, 380, currentEquipment[i-1].description)
                                 else:
@@ -1278,7 +1289,9 @@ async def on_message(message):
                         currentPlayer.ID
                     ] = await message.author.send(
                         file=discord.File(
-                            "Data/Dynamic/" + str(currentPlayer.ID) + "_InventoryOutput.png"
+                            "Data/Dynamic/"
+                            + str(currentPlayer.ID)
+                            + "_InventoryOutput.png"
                         )
                     )
                     emojiResponses = [
@@ -1297,7 +1310,10 @@ async def on_message(message):
 
                     def check(r, u):
                         return (
-                            (r.message == reactables["playerInventories"][currentPlayer.ID])
+                            (
+                                r.message
+                                == reactables["playerInventories"][currentPlayer.ID]
+                            )
                             and (str(r.emoji) in emojiResponses)
                             and (u.id == message.author.id)
                         )
@@ -1309,12 +1325,16 @@ async def on_message(message):
                             )
                         except asyncio.TimeoutError:
                             await message.author.send("Time's up - inventory closed!")
-                            await reactables["playerInventories"][currentPlayer.ID].delete()
+                            await reactables["playerInventories"][
+                                currentPlayer.ID
+                            ].delete()
                             reactables["playerInventories"][currentPlayer.ID] = None
                             currentPlayer.openInventory = False
                             return
                         else:
-                            await reactables["playerInventories"][currentPlayer.ID].delete()
+                            await reactables["playerInventories"][
+                                currentPlayer.ID
+                            ].delete()
                             reactables["playerInventories"][currentPlayer.ID] = None
                             highlightCell = (
                                 emojiResponses.index(str(reactionChoiceOne.emoji)) + 1
@@ -1370,7 +1390,9 @@ async def on_message(message):
                                     "reaction_add", check=check, timeout=20.0
                                 )
                             except asyncio.TimeoutError:
-                                await message.author.send("Time's up - inventory closed!")
+                                await message.author.send(
+                                    "Time's up - inventory closed!"
+                                )
                                 await reactables["playerInventories"][
                                     currentPlayer.ID
                                 ].delete()
@@ -1383,11 +1405,18 @@ async def on_message(message):
                                 ].delete()
                                 reactables["playerInventories"][currentPlayer.ID] = None
                                 highlightCell = 999
-                                slot1 = emojiResponses.index(str(reactionChoiceOne.emoji))
-                                slot2 = emojiResponses.index(str(reactionChoiceTwo.emoji))
+                                slot1 = emojiResponses.index(
+                                    str(reactionChoiceOne.emoji)
+                                )
+                                slot2 = emojiResponses.index(
+                                    str(reactionChoiceTwo.emoji)
+                                )
                                 weaponCount = 0
                                 armourCount = 0
-                                if not players[message.author.id].equipment[0] == "Empty":
+                                if (
+                                    not players[message.author.id].equipment[0]
+                                    == "Empty"
+                                ):
                                     if (
                                         players[message.author.id].equipment[0].type
                                         == "weapon"
@@ -1398,7 +1427,10 @@ async def on_message(message):
                                         == "armour"
                                     ):
                                         armourCount = armourCount + 1
-                                if not players[message.author.id].equipment[1] == "Empty":
+                                if (
+                                    not players[message.author.id].equipment[1]
+                                    == "Empty"
+                                ):
                                     if (
                                         players[message.author.id].equipment[1].type
                                         == "weapon"
@@ -1415,7 +1447,9 @@ async def on_message(message):
                                             players[message.author.id].inventory[slot1]
                                             == "Empty"
                                         ):
-                                            await message.author.send("That slot is empty!")
+                                            await message.author.send(
+                                                "That slot is empty!"
+                                            )
                                         else:
                                             players[message.author.id].giveGold(
                                                 players[message.author.id]
@@ -1441,10 +1475,14 @@ async def on_message(message):
                                             ] = "Empty"
                                     else:
                                         if (
-                                            players[message.author.id].equipment[slot1 - 5]
+                                            players[message.author.id].equipment[
+                                                slot1 - 5
+                                            ]
                                             == "Empty"
                                         ):
-                                            await message.author.send("That slot is empty!")
+                                            await message.author.send(
+                                                "That slot is empty!"
+                                            )
                                         else:
                                             players[message.author.id].giveGold(
                                                 players[message.author.id]
@@ -1479,15 +1517,25 @@ async def on_message(message):
                                         )
                                     elif slot1 > 4 and slot2 > 4:
                                         (
-                                            players[message.author.id].equipment[slot1 - 5],
-                                            players[message.author.id].equipment[slot2 - 5],
+                                            players[message.author.id].equipment[
+                                                slot1 - 5
+                                            ],
+                                            players[message.author.id].equipment[
+                                                slot2 - 5
+                                            ],
                                         ) = (
-                                            players[message.author.id].equipment[slot2 - 5],
-                                            players[message.author.id].equipment[slot1 - 5],
+                                            players[message.author.id].equipment[
+                                                slot2 - 5
+                                            ],
+                                            players[message.author.id].equipment[
+                                                slot1 - 5
+                                            ],
                                         )
                                     elif slot1 > 4 and slot2 < 5:
                                         if (
-                                            not players[message.author.id].inventory[slot2]
+                                            not players[message.author.id].inventory[
+                                                slot2
+                                            ]
                                             == "Empty"
                                         ):
                                             if (
@@ -1535,7 +1583,9 @@ async def on_message(message):
                                                         )
                                                     else:
                                                         swapTo = "Empty"
-                                                    if players[message.author.id].inventory[
+                                                    if players[
+                                                        message.author.id
+                                                    ].inventory[
                                                         slot2
                                                     ].type == "weapon" and (
                                                         weaponCount == 0
@@ -1584,16 +1634,22 @@ async def on_message(message):
                                                 players[message.author.id].equipment[
                                                     slot1 - 5
                                                 ],
-                                                players[message.author.id].inventory[slot2],
+                                                players[message.author.id].inventory[
+                                                    slot2
+                                                ],
                                             ) = (
-                                                players[message.author.id].inventory[slot2],
+                                                players[message.author.id].inventory[
+                                                    slot2
+                                                ],
                                                 players[message.author.id].equipment[
                                                     slot1 - 5
                                                 ],
                                             )
                                     else:
                                         if (
-                                            not players[message.author.id].inventory[slot1]
+                                            not players[message.author.id].inventory[
+                                                slot1
+                                            ]
                                             == "Empty"
                                         ):
                                             if (
@@ -1641,7 +1697,9 @@ async def on_message(message):
                                                         )
                                                     else:
                                                         swapTo = "Empty"
-                                                    if players[message.author.id].inventory[
+                                                    if players[
+                                                        message.author.id
+                                                    ].inventory[
                                                         slot1
                                                     ].type == "weapon" and (
                                                         weaponCount == 0
@@ -1687,7 +1745,9 @@ async def on_message(message):
                                                         )
                                         else:
                                             (
-                                                players[message.author.id].inventory[slot1],
+                                                players[message.author.id].inventory[
+                                                    slot1
+                                                ],
                                                 players[message.author.id].equipment[
                                                     slot2 - 5
                                                 ],
@@ -1695,7 +1755,9 @@ async def on_message(message):
                                                 players[message.author.id].equipment[
                                                     slot2 - 5
                                                 ],
-                                                players[message.author.id].inventory[slot1],
+                                                players[message.author.id].inventory[
+                                                    slot1
+                                                ],
                                             )
                                 loop = True
                     except:
@@ -1801,7 +1863,9 @@ async def on_message(message):
                             alpha_image.composite_channel(
                                 "alpha", mask, "copy_opacity", 0, 0
                             )
-                            image.composite_channel("alpha", alpha_image, "multiply", 0, 0)
+                            image.composite_channel(
+                                "alpha", alpha_image, "multiply", 0, 0
+                            )
 
                     s = statsImage.clone()
                     a = discordImage.clone().convert("png")
@@ -1875,7 +1939,9 @@ async def on_message(message):
                             480,
                             "DFC: " + str(players[message.author.id].DFC),
                         )
-                        draw.text(int(s.width / 2), 580, random.sample(factList, k=1)[0])
+                        draw.text(
+                            int(s.width / 2), 580, random.sample(factList, k=1)[0]
+                        )
                         hpSlots = round(
                             (
                                 players[message.author.id].HP
@@ -2033,7 +2099,9 @@ async def on_reaction_add(reaction, user):
                         else:
                             await user.send("You are already in combat!")
                     else:
-                        await user.send("There is already a full party fighting this mob!")
+                        await user.send(
+                            "There is already a full party fighting this mob!"
+                        )
                 else:
                     pass
 
