@@ -1777,7 +1777,7 @@ async def on_message(message):
                     with open("./Data/Players.pkl", "rb") as f:
                         players = pickle.load(f)
                     await message.channel.send("Manual Load Complete")
-            if message.content == "!load":
+            if message.content == "!shutdown":
                 print("Graceful Shutdown Triggered")
                 if message.author.id == 137451662817230848:
                     print("User Auth OK")
