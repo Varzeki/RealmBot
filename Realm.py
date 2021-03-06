@@ -895,9 +895,9 @@ async def on_ready():
     for msg in msgs:
         await msg.delete(delay=0.2)
     await c.send("Welcome to the travelling caravan! The wares are as below:")
-    await reactables["caravan-weapon-lootbox"] = c.send(file="Data/Resources/Images/LootBoxWeaponBasic.png")
+    reactables["caravan-weapon-lootbox"] = await c.send(file="Data/Resources/Images/LootBoxWeaponBasic.png")
     await reactables["caravan-weapon-lootbox"].add_reaction(emoji_set["moneyBag"])
-    await reactables["caravan-armour-lootbox"] = c.send(file="Data/Resources/Images/LootBoxArmourBasic.png")
+    reactables["caravan-armour-lootbox"] = await c.send(file="Data/Resources/Images/LootBoxArmourBasic.png")
     await reactables["caravan-armour-lootbox"].add_reaction(emoji_set["moneyBag"])
     print("Channel Initialization Complete")
     print("Commencing Cycle")
