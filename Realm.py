@@ -890,7 +890,15 @@ async def on_ready():
             activeMobs[t[:2]].partyMessage = await c.send("Party:\n")
             if "Rat" in activeMobs[t[:2]].name:
                 vc.play(discord.FFmpegPCMAudio("rat.mp3"))
-
+    c = channels["havens"]["the-travelling-caravan"]
+    msgs = await c.history(limit=200).flatten()
+    for msg in msgs:
+        await msg.delete(delay=0.2)
+    await c.send("Welcome to the travelling caravan! The wares are as below:")
+    await reactables["caravan-weapon-lootbox"] = c.send(file="Data/Resources/Images/LootBoxWeaponBasic.png")
+    await reactables["caravan-weapon-lootbox"].add_reaction(emoji_set["moneyBag"])
+    await reactables["caravan-armour-lootbox"] = c.send(file="Data/Resources/Images/LootBoxArmourBasic.png")
+    await reactables["caravan-armour-lootbox"].add_reaction(emoji_set["moneyBag"])
     print("Channel Initialization Complete")
     print("Commencing Cycle")
     while not graceful_exit:
