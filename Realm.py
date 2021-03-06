@@ -2131,7 +2131,7 @@ async def on_reaction_add(reaction, user):
                                     "Uncommon",
                                     "Rare",
                                 ]:
-                                    lootOK = true
+                                    lootOK = True
                             players[user.id].addLoot(lootGen)
                             buyMessage.delete()
                             await user.send("Sold!")
