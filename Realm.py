@@ -1801,13 +1801,13 @@ async def on_message(message):
             if message.content == "!shutdown":
                 print("Graceful Shutdown Triggered")
                 graceful_init = True
-                await message.channel.send("SHUTDOWN IN 3 MINUTES")
+                await channels["help"].send("SHUTDOWN IN 3 MINUTES")
                 await asyncio.sleep(60)
-                await message.channel.send("SHUTDOWN IN 2 MINUTES")
+                await channels["help"].send("SHUTDOWN IN 2 MINUTES")
                 await asyncio.sleep(60)
-                await message.channel.send("SHUTDOWN IN 1 MINUTE")
+                await channels["help"].send("SHUTDOWN IN 1 MINUTE")
                 await asyncio.sleep(60)
-                await message.channel.send("SHUTTING DOWN")
+                await channels["help"].send("SHUTTING DOWN")
                 graceful_exit = True
 
         if message.channel == channels["help"]:
