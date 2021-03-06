@@ -897,7 +897,7 @@ async def on_ready():
         await doHealthRegen()
         await doPlayerFixup()
         await asyncio.sleep(3)
-    bot.close()
+    await bot.close()
 
 
 @bot.event
@@ -1786,7 +1786,7 @@ async def on_message(message):
                     await asyncio.sleep(60)
                     await message.channel.send("SHUTDOWN IN 2 MINUTES")
                     await asyncio.sleep(60)
-                    await message.channel.send("SHUTDOWN IN 1 MINUTES")
+                    await message.channel.send("SHUTDOWN IN 1 MINUTE")
                     await asyncio.sleep(60)
                     await message.channel.send("SHUTTING DOWN")
                     graceful_exit = True
