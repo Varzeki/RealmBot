@@ -2141,8 +2141,9 @@ async def on_reaction_add(reaction, user):
                     else:
                         buyMessage.delete()
                         user.send("You can't afford this!")
-            except:
+            except Exception as e:
                 print("Error during lootbox transaction!")
+                print(e)
         else:
             for cls in classRoles:
                 if message == reactables["class-select-" + cls]:
