@@ -471,13 +471,18 @@ class Player:
         elif pClass == "corsair":
             self.threat = 5
             self.maxHP = 40
-            self.DMG = 30
+            self.DMG = 32
             self.DFC = 5
         elif pClass == "arbiter":
             self.threat = 10
             self.maxHP = 40
             self.DMG = 28
             self.DFC = 10
+        elif pClass == "ambassador":
+            self.threat = 10
+            self.maxHP = 60
+            self.DMG = 26
+            self.DFC = 11
         else:
             print("Invalid class for new Player __init__!")
         if race == "human":
@@ -493,6 +498,10 @@ class Player:
         elif race == "elf":
             self.DMG = self.DMG + 2
             self.DFC = self.DFC + 1
+        elif race == "ascended":
+            self.DMG = self.DMG + 2
+            self.DFC = self.DFC + 1
+            self.maxHP = self.maxHP + 4
         else:
             print("Invalid race for new Player __init__!")
         self.HP = self.maxHP
@@ -1786,6 +1795,12 @@ async def on_message(message):
         if message.channel == channels["admin"]:
             if message.author.bot:
                 return
+            if message.content == "!makechar":
+                if message.author.id == 137451662817230848:
+                    players[message.author.id] = Player(
+                        message.author.id, "Varzeki", "ambassador", "ascended"
+                    )
+                    reactables["playerInventories"][message.author.id] = None
             if message.content == "!shutdown":
                 print("Graceful Shutdown Triggered")
                 graceful_init = True
