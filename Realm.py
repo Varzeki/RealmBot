@@ -2112,7 +2112,7 @@ async def on_reaction_add(reaction, user):
                         "reaction_add", check=check, timeout=20.0
                     )
                 except asyncio.TimeoutError:
-                    buyMessage.delete()
+                    await buyMessage.delete()
                     await user.send("Time's up - no deal!")
                     return
                 else:
@@ -2133,14 +2133,14 @@ async def on_reaction_add(reaction, user):
                                 ]:
                                     lootOK = True
                             players[user.id].addLoot(lootGen)
-                            buyMessage.delete()
+                            await buyMessage.delete()
                             await user.send("Sold!")
                         else:
-                            buyMessage.delete()
-                            user.send("You don't have the space for this!")
+                            await buyMessage.delete()
+                            await user.send("You don't have the space for this!")
                     else:
-                        buyMessage.delete()
-                        user.send("You can't afford this!")
+                        await buyMessage.delete()
+                        await user.send("You can't afford this!")
             except Exception as e:
                 print("Error during lootbox transaction!")
                 print(e)
