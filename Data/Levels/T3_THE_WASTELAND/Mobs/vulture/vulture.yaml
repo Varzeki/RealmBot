@@ -6,7 +6,7 @@ dmgHigh: 12
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
-encounterText: VULTURE ENCOUNTER
-defeatText: VULTURE DEFEAT
+encounterText: A vulture circling overhead suddenly dives at you, razor sharp claws aiming straight for your neck!
+defeatText: The vultures wings give out and it falls to the ground hard. You quickly finish it off and move on.
 weakness: Fyr
 statValue: 108
