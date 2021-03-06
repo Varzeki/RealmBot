@@ -1843,12 +1843,16 @@ async def on_message(message):
                         + " damage!",
                     ]
                     await message.author.avatar_url.save(
-                        "Data/Dynamic/" + str(currentPlayer.ID) + "_UserImage.png"
+                        "Data/Dynamic/"
+                        + str(players[message.author.id])
+                        + "_UserImage.png"
                     )
                     statsImage = Image(filename="Data/Resources/Images/stats.png")
                     discordImage = Image(
                         filename=(
-                            "Data/Dynamic/" + str(currentPlayer.ID) + "_UserImage.png"
+                            "Data/Dynamic/"
+                            + str(players[message.author.id])
+                            + "_UserImage.png"
                         )
                     )
                     maskImage = Image(filename="Data/Resources/Images/mask.png")
