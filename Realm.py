@@ -2093,7 +2093,7 @@ async def on_reaction_add(reaction, user):
                 await user.add_roles(roles["character-creation"])
                 await user.add_roles(roles["class-select"])
         elif message == reactables["caravan-armour-lootbox"]:
-            cost = ceil(300 * (1.1 ^ players[user.id].level))
+            cost = math.ceil(300 * (1.1 ^ players[user.id].level))
             buyMessage = await user.send(
                 "This Basic Weapon Lootbox would cost you " + str(cost) + " gold."
             )
