@@ -1036,10 +1036,7 @@ async def on_message(message):
                     )
                     currentInv[i] = "Empty"
         if message.content == "!inventory":
-            if message.author.id == 137451662817230848:
-                currentPlayer = players[137474665747578880]
-            else:
-                currentPlayer = players[message.author.id]
+            currentPlayer = players[message.author.id]
             currentInv = currentPlayer.inventory
             currentEquipment = currentPlayer.equipment
             if currentPlayer.openInventory:
