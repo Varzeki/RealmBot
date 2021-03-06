@@ -319,7 +319,7 @@ async def doCombat():
                 activeMobs[tier].hpMessage = reactables[tier + "-hpBar"]
                 try:
                     await channels["tiers"][tier + "-main"].send(
-                        file=discord.File("vs.png")
+                        file=discord.File("Data/Resources/Images/vs.png")
                     )
                 except:
                     print("Error sending New VS Image")
@@ -877,7 +877,7 @@ async def on_ready():
             await reactables[t[:2] + "-hpBar"].add_reaction(emoji_set["swords"])
             activeMobs[t[:2]].hpMessage = reactables[t[:2] + "-hpBar"]
             try:
-                await c.send(file=discord.File("vs.png"))
+                await c.send(file=discord.File("Data/Resources/Images/vs.png"))
             except:
                 print("Error sending Initial VS Image for " & str(t[:2]))
             activeMobs[t[:2]].partyMessage = await c.send("Party:\n")
@@ -1009,11 +1009,11 @@ async def on_message(message):
             await message.author.send("Inventory already open!")
         else:
             currentPlayer.openInventory = True
-            inventoryImage = Image(filename="inventory.png")
-            emptySlotImage = Image(filename="emptySlot.png")
-            itemHeldImage = Image(filename="itemHeld.png")
-            itemArmourImage = Image(filename="itemArmour.png")
-            itemTreasureImage = Image(filename="treasure.png")
+            inventoryImage = Image(filename="Data/Resources/Images/inventory.png")
+            emptySlotImage = Image(filename="Data/Resources/Images/emptySlot.png")
+            itemHeldImage = Image(filename="Data/Resources/Images/itemHeld.png")
+            itemArmourImage = Image(filename="Data/Resources/Images/itemArmour.png")
+            itemTreasureImage = Image(filename="Data/Resources/Images/treasure.png")
             inv = inventoryImage.clone()
             es = emptySlotImage.clone()
             ih = itemHeldImage.clone()
@@ -1256,14 +1256,20 @@ async def on_message(message):
                                 draw.text((i * 160) + leftText, downText, "Empty")
                         draw(inv)
                         inv.save(
-                            filename=(str(currentPlayer.ID) + "_InventoryOutput.png")
+                            filename=(
+                                "Data/Dynamic/"
+                                + str(currentPlayer.ID)
+                                + "_InventoryOutput.png"
+                            )
                         )
 
                 await makeInventoryImage()
                 reactables["playerInventories"][
                     currentPlayer.ID
                 ] = await message.author.send(
-                    file=discord.File((str(currentPlayer.ID) + "_InventoryOutput.png"))
+                    file=discord.File(
+                        "Data/Dynamic/" + str(currentPlayer.ID) + "_InventoryOutput.png"
+                    )
                 )
                 emojiResponses = [
                     emoji_set["1"],
@@ -1308,7 +1314,11 @@ async def on_message(message):
                             currentPlayer.ID
                         ] = await message.author.send(
                             file=discord.File(
-                                (str(currentPlayer.ID) + "_InventoryOutput.png")
+                                (
+                                    "Data/Dynamic/"
+                                    + str(currentPlayer.ID)
+                                    + "_InventoryOutput.png"
+                                )
                             )
                         )
                         emojiResponses = [
@@ -1736,13 +1746,25 @@ async def on_message(message):
                     + str(players[message.author.id].STAT_damageReceived)
                     + " damage!",
                 ]
-                await message.author.avatar_url.save("currentUserStats.jpg")
-                statsImage = Image(filename="stats.png")
-                discordImage = Image(filename="currentUserStats.jpg")
-                maskImage = Image(filename="mask.png")
-                greenHPImage = Image(filename="greenHP.png")
-                redHPImage = Image(filename="redHP.png")
-                dot = Image(filename=players[message.author.id].pClass + "Dot.png")
+                await message.author.avatar_url.save(
+                    "Data/Dynamic/" + str(currentPlayer.ID) + "_UserImage.png"
+                )
+                statsImage = Image(filename="Data/Resources/Images/stats.png")
+                discordImage = Image(
+                    filename=(
+                        "Data/Dynamic/" + str(currentPlayer.ID) + "_UserImage.png"
+                    )
+                )
+                maskImage = Image(filename="Data/Resources/Images/mask.png")
+                greenHPImage = Image(filename="Data/Resources/Images/greenHP.png")
+                redHPImage = Image(filename="Data/Resources/Images/redHP.png")
+                dot = Image(
+                    filename=(
+                        "Data/Resources/Images/"
+                        + players[message.author.id].pClass
+                        + "Dot.png"
+                    )
+                )
 
                 def apply_mask(image, mask, invert=False):
                     image.alpha_channel = True
@@ -1887,10 +1909,20 @@ async def on_message(message):
                     )
                     draw(s)
 
-                    s.save(filename="currentUserStatsOutput.png")
+                    s.save(
+                        filename=(
+                            "Data/Dynamic/"
+                            + str(currentPlayer.ID)
+                            + "_UserStatsOutput.png"
+                        )
+                    )
                 try:
                     await message.channel.send(
-                        file=discord.File("currentUserStatsOutput.png")
+                        file=discord.File(
+                            "Data/Dynamic/"
+                            + str(currentPlayer.ID)
+                            + "_UserStatsOutput.png"
+                        )
                     )
                 except:
                     print("Error sending User Stats Image")
