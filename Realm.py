@@ -2109,9 +2109,9 @@ async def on_reaction_add(reaction, user):
                 cost = math.ceil(350 * (1.1 ** players[user.id].level))
             buyMessage = await user.send(
                 "This "
-                + capitalize(boxRarity)
+                + boxRarity.capitalize()
                 + " "
-                + capitalize(boxType)
+                + boxType.capitalize()
                 + " Lootbox would cost you "
                 + str(cost)
                 + " gold."
