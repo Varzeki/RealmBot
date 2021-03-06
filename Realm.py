@@ -332,7 +332,7 @@ async def doCombat():
                     activeMobs[tier].encounterText
                 )
                 if "Rat" in activeMobs[tier].name:
-                    vc.play(discord.FFmpegPCMAudio("rat.mp3"))
+                    vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
             else:
                 hpSlots = round((mob.HP / mob.maxHP) * 10)
                 if not hpSlots > -1:
@@ -889,15 +889,19 @@ async def on_ready():
                 print("Error sending Initial VS Image for " & str(t[:2]))
             activeMobs[t[:2]].partyMessage = await c.send("Party:\n")
             if "Rat" in activeMobs[t[:2]].name:
-                vc.play(discord.FFmpegPCMAudio("rat.mp3"))
+                vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
     c = channels["havens"]["the-travelling-caravan"]
     msgs = await c.history(limit=200).flatten()
     for msg in msgs:
         await msg.delete(delay=0.2)
     await c.send("Welcome to the travelling caravan! The wares are as below:")
-    reactables["caravan-weapon-lootbox"] = await c.send(file="Data/Resources/Images/LootBoxWeaponBasic.png")
+    reactables["caravan-weapon-lootbox"] = await c.send(
+        file="Data/Resources/Images/LootBoxWeaponBasic.png"
+    )
     await reactables["caravan-weapon-lootbox"].add_reaction(emoji_set["moneyBag"])
-    reactables["caravan-armour-lootbox"] = await c.send(file="Data/Resources/Images/LootBoxArmourBasic.png")
+    reactables["caravan-armour-lootbox"] = await c.send(
+        file="Data/Resources/Images/LootBoxArmourBasic.png"
+    )
     await reactables["caravan-armour-lootbox"].add_reaction(emoji_set["moneyBag"])
     print("Channel Initialization Complete")
     print("Commencing Cycle")
