@@ -6,7 +6,7 @@ dmgHigh: 12
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
-encounterText: HYENA ENCOUNTER
-defeatText: HYENA DEFEAT
+encounterText: You hear a strange giggling sound coming from behind you. You turn and see a lone hyena preparing to pounce!
+defeatText: The hyena lets out one last giggle and falls over dead.
 weakness: Fyr
 statValue: 108
