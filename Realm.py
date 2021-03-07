@@ -946,8 +946,9 @@ async def on_ready():
     while not graceful_exit:
         try:
             await doCombat()
-        except:
+        except Exception as e:
             print("Error during combat routine")
+            print(e)
         await doHealthRegen()
         await doPlayerFixup()
         await asyncio.sleep(3)
