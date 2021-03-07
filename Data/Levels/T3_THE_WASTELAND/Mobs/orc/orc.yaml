@@ -6,7 +6,7 @@ dmgHigh: 30
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
-encounterText: ORC ENCOUNTER
-defeatText: ORC DEFEAT
+encounterText: You hear a warhorn blast in the distance. Suddenly you are faced with a very large orc.
+defeatText: The orc stumbles and catches himself but one more hit is enough to send them to an early grave.
 weakness: Aer
 statValue: 109
