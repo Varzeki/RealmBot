@@ -728,7 +728,6 @@ class Mob:
             d = math.floor(damage_payload[0] * 1.25)
         else:
             d = damage_payload[0]
-        print("mob damage taken: " + str(d))
         return d
 
     def getLoot(self):
