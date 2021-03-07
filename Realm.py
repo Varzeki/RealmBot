@@ -194,22 +194,22 @@ async def doCombat():
                     + mob.name
                     + "\n"
                 )
-                if not players[p].follower == "":
-                    followerDamage = mob.getDamageTaken(
-                        players[p].getFollowerDamage(damage)
-                    )
-                    mob.HP = mob.HP - followerDamage
-                    damageLog = (
-                        damageLog
-                        + players[p].name
-                        + "'s "
-                        + players[p].follower
-                        + " deals "
-                        + str(followerDamage)
-                        + " damage to "
-                        + mob.name
-                        + "\n"
-                    )
+                # if not players[p].follower == "":
+                #     followerDamage = mob.getDamageTaken(
+                #         players[p].getFollowerDamage(damage)
+                #     )
+                #     mob.HP = mob.HP - followerDamage
+                #     damageLog = (
+                #         damageLog
+                #         + players[p].name
+                #         + "'s "
+                #         + players[p].follower
+                #         + " deals "
+                #         + str(followerDamage)
+                #         + " damage to "
+                #         + mob.name
+                #         + "\n"
+                #     )
 
                 if p == attackedPlayer:
                     damage = players[p].getDamageTaken(mob.getDamage())
