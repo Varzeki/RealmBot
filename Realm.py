@@ -539,10 +539,10 @@ class Player:
                 d = d + tempEquip[1].damage
         if self.pClass == "arbiter":
             self.STAT_damageDealt = self.STAT_damageDealt + round(d * (r * 0.05))
-            return round(d * (r * 0.05), bonus)
+            return round(d * (r * 0.05), damageTypes)
         else:
             self.STAT_damageDealt = self.STAT_damageDealt + round(d)
-            return round(d, bonus)
+            return round(d, damageTypes)
 
     def getDamageTaken(self, d):
         actualDFC = self.DFC
