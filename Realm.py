@@ -543,7 +543,7 @@ class Player:
             return round(d * (r * 0.05), damageTypes)
         else:
             self.STAT_damageDealt = self.STAT_damageDealt + round(d)
-            return round(d, damageTypes)
+            return round(d), damageTypes
 
     def getDamageTaken(self, d):
         actualDFC = self.DFC
