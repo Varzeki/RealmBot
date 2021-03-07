@@ -16,7 +16,6 @@ from wand.image import Image, COMPOSITE_OPERATORS
 from wand.drawing import Drawing
 from wand.display import display
 from wand.color import Color
-import pyttsx3
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -60,10 +59,7 @@ raceRoles = ["human", "troll", "lizardfolk", "dwarf", "elf"]
 players = {}
 activeMobs = {}
 currentTick = 0
-voiceEngine = pyttsx3.init()
-voiceEngine.setProperty("rate", 90)
-voiceEngine.save_to_file("A rat has spawned", "./Data/Resources/Audio/rat.mp3")
-voiceEngine.runAndWait()
+
 tier_levels = {
     "t1": [1],
     "t2": range(1, 11),
@@ -167,7 +163,6 @@ async def doCombat():
     global activeMobs
     global players
     global currentTick
-    global voiceEngine
     global vc
     currentTick = currentTick + 1
     if currentTick > 10:
@@ -196,6 +191,22 @@ async def doCombat():
                     + mob.name
                     + "\n"
                 )
+                if not players[p].follower == "":
+                    followerDamage = mob.getDamageTaken(
+                        players[p].getFollowerDamage(damage)
+                    )
+                    mob.HP = mob.HP - followerDamage
+                    damageLog = (
+                        damageLog
+                        + players[p].name
+                        + "'s "
+                        + players[p].follower
+                        + " deals "
+                        + str(followerDamage)
+                        + " damage to "
+                        + mob.name
+                        + "\n"
+                    )
 
                 if p == attackedPlayer:
                     damage = players[p].getDamageTaken(mob.getDamage())
@@ -226,9 +237,6 @@ async def doCombat():
                         players[p].gold = players[p].gold - round(
                             0.05 * players[p].gold
                         )
-                        # voiceEngine.save_to_file(deathLine, './death.mp3')
-                        # voiceEngine.runAndWait()
-                        # vc.play(discord.FFmpegPCMAudio("./death.mp3"))
                         players[p].STAT_timesDied = players[p].STAT_timesDied + 1
                         players[p].HP = math.ceil(0.2 * players[p].maxHP)
                         players[p].inCombat = False
@@ -517,19 +525,24 @@ class Player:
 
     def getDamage(self, r):
         d = random.uniform(0.9, 1.1) * float(self.DMG)
+        damageTypes = []
         tempEquip = self.equipment
         if not tempEquip[0] == "Empty":
             if tempEquip[0].type == "weapon":
+                if not tempEquip[0].element == "":
+                    damageTypes.append(tempEquip[0].element)
                 d = d + tempEquip[0].damage
         if not tempEquip[1] == "Empty":
             if tempEquip[1].type == "weapon":
+                if not tempEquip[1].element == "":
+                    damageTypes.append(tempEquip[1].element)
                 d = d + tempEquip[1].damage
         if self.pClass == "arbiter":
             self.STAT_damageDealt = self.STAT_damageDealt + round(d * (r * 0.05))
-            return round(d * (r * 0.05))
+            return round(d * (r * 0.05), bonus)
         else:
             self.STAT_damageDealt = self.STAT_damageDealt + round(d)
-            return round(d)
+            return round(d, bonus)
 
     def getDamageTaken(self, d):
         actualDFC = self.DFC
@@ -709,8 +722,11 @@ class Mob:
     def getDamage(self):
         return random.sample(range(self.dmgLow, self.dmgHigh), k=1)[0]
 
-    def getDamageTaken(self, d, element="None"):
-        return d
+    def getDamageTaken(self, d, damageTypes=[]):
+        if self.weakness in damageTypes:
+            return math.floor(d * 1.25)
+        else:
+            return d
 
     def getLoot(self):
         roll = random.uniform(0, 1)
