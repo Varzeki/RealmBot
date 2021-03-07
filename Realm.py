@@ -16,6 +16,7 @@ from wand.image import Image, COMPOSITE_OPERATORS
 from wand.drawing import Drawing
 from wand.display import display
 from wand.color import Color
+import traceback
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -539,10 +540,10 @@ class Player:
                 d = d + tempEquip[1].damage
         if self.pClass == "arbiter":
             self.STAT_damageDealt = self.STAT_damageDealt + round(d * (r * 0.05))
-            return round(d * (r * 0.05), bonus)
+            return round(d * (r * 0.05), damageTypes)
         else:
             self.STAT_damageDealt = self.STAT_damageDealt + round(d)
-            return round(d, bonus)
+            return round(d), damageTypes
 
     def getDamageTaken(self, d):
         actualDFC = self.DFC
@@ -722,11 +723,12 @@ class Mob:
     def getDamage(self):
         return random.sample(range(self.dmgLow, self.dmgHigh), k=1)[0]
 
-    def getDamageTaken(self, d, damageTypes=[]):
-        if self.weakness in damageTypes:
-            return math.floor(d * 1.25)
+    def getDamageTaken(self, damage_payload):
+        if self.weakness in damage_payload[1]:
+            d = math.floor(damage_payload[0] * 1.25)
         else:
-            return d
+            d = damage_payload[0]
+        return d
 
     def getLoot(self):
         roll = random.uniform(0, 1)
@@ -948,6 +950,7 @@ async def on_ready():
             await doCombat()
         except:
             print("Error during combat routine")
+            print(traceback.format_exc())
         await doHealthRegen()
         await doPlayerFixup()
         await asyncio.sleep(3)
