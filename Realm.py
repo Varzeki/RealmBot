@@ -550,6 +550,9 @@ class Player:
             self.STAT_damageDealt = self.STAT_damageDealt + round(d)
             return round(d), damageTypes
 
+    def getFollowerDamage(self, d):
+        return math.floor(self.followerStatPerc * d)
+
     def getDamageTaken(self, d):
         actualDFC = self.DFC
         tempEquip = self.equipment
