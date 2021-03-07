@@ -6,7 +6,7 @@ dmgHigh: 25
 rewardLow: 3
 rewardHigh: 12
 lootBonus: 0
-encounterText: GIANT SCORPION ENCOUNTER
-defeatText: GIANT SCORPION DEFEATs
+encounterText: You hear the dooting of a trumpet in the darkness around you, suddenly a skeleton comes running out of the darkness and attacks you with its flute.
+defeatText: The Skeleton lets out an extra loud doot, stunning you and walks off dooting his trumpet
 weakness: Alica
 statValue: 90
