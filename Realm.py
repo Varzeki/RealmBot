@@ -725,8 +725,9 @@ class Mob:
 
     def getDamageTaken(self, d, damageTypes=[]):
         if self.weakness in damageTypes:
-            return math.floor(d * 1.25)
+            d = math.floor(d * 1.25)
         else:
+            print("mob damage taken: " + str(d))
             return d
 
     def getLoot(self):
