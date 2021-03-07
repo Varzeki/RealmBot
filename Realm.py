@@ -16,6 +16,7 @@ from wand.image import Image, COMPOSITE_OPERATORS
 from wand.drawing import Drawing
 from wand.display import display
 from wand.color import Color
+import traceback
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -946,9 +947,9 @@ async def on_ready():
     while not graceful_exit:
         try:
             await doCombat()
-        except Exception as e:
+        except:
             print("Error during combat routine")
-            print(e)
+            print(traceback.format_exc())
         await doHealthRegen()
         await doPlayerFixup()
         await asyncio.sleep(3)
