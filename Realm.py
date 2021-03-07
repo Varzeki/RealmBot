@@ -41,6 +41,7 @@ emoji_set = {
     "B": "🅱️",
     "moneyBag": "💰",
     "important": ("\u203C" + "\uFE0F"),
+    "skull": "💀",
 }
 fullHP = emoji_set["greenHP"] * 10
 ratList = ["Rat"]
@@ -180,6 +181,7 @@ async def doCombat():
             )[0]
             mob.combatRound = mob.combatRound + 1
             damageLog = "Round " + str(mob.combatRound) + ":\n"
+            deathEvent = False
             for p in mob.playersEngaged:
                 damage = mob.getDamageTaken(players[p].getDamage(mob.combatRound))
                 mob.HP = mob.HP - damage
@@ -222,6 +224,7 @@ async def doCombat():
                         + "\n"
                     )
                     if players[p].HP < 1:
+                        deathEvent = True
                         damageLog = (
                             damageLog
                             + players[p].name
@@ -271,7 +274,9 @@ async def doCombat():
                     + players[p].hpBar
                     + "\n"
                 )
-            await channels["tiers"][mob.tier + "-log"].send(damageLog)
+            z = await channels["tiers"][mob.tier + "-log"].send(damageLog)
+            if deathEvent:
+                await z.add_reaction(emoji_set["skull"])
             if mob.HP < 1:
                 importantEvent = False
                 lootLog = mob.defeatText + "\n"
