@@ -1869,16 +1869,16 @@ async def on_message(message):
                         message.author.id, "Varzeki", "ambassador", "ascended"
                     )
                     reactables["playerInventories"][message.author.id] = None
-            if message.content == "!shutdown":
-                print("Graceful Shutdown Triggered")
+            if message.content == "!restart":
+                print("Graceful Restart Triggered")
                 graceful_init = True
-                await channels["help"].send("SHUTDOWN IN 3 MINUTES")
+                await channels["help"].send("RESTART IN 3 MINUTES")
                 await asyncio.sleep(60)
-                await channels["help"].send("SHUTDOWN IN 2 MINUTES")
+                await channels["help"].send("RESTART IN 2 MINUTES")
                 await asyncio.sleep(60)
-                await channels["help"].send("SHUTDOWN IN 1 MINUTE")
+                await channels["help"].send("RESTART IN 1 MINUTE")
                 await asyncio.sleep(60)
-                await channels["help"].send("SHUTTING DOWN")
+                await channels["help"].send("RESTARTING NOW")
                 graceful_exit = True
 
         if message.channel == channels["help"]:
