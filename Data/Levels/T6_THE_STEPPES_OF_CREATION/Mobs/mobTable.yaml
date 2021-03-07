@@ -1,7 +1,7 @@
-imp: 8
-giantscorpion: 8
-lizardman: 8
-orc: 15
-vulture: 10
-hyena: 8
+air: 8
+water: 8
+fire: 8
+wisp: 15
+djinn: 10
+earth: 8
 rat: 1
