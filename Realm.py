@@ -912,13 +912,15 @@ async def on_ready():
         await msg.delete(delay=0.2)
     await c.send("Welcome to the travelling caravan! The wares are as below:")
     reactables["vendors"]["caravan-weapon-lootbox"] = await c.send(
-        file=discord.File("Data/Resources/Images/LootBoxWeaponBasic.png")
+        "Basic Weapon Lootbox",
+        file=discord.File("Data/Resources/Images/LootBoxWeaponBasic.png"),
     )
     await reactables["vendors"]["caravan-weapon-lootbox"].add_reaction(
         emoji_set["moneyBag"]
     )
     reactables["vendors"]["caravan-armour-lootbox"] = await c.send(
-        file=discord.File("Data/Resources/Images/LootBoxArmourBasic.png")
+        "Basic Armour Lootbox",
+        file=discord.File("Data/Resources/Images/LootBoxArmourBasic.png"),
     )
     await reactables["vendors"]["caravan-armour-lootbox"].add_reaction(
         emoji_set["moneyBag"]
@@ -2228,7 +2230,9 @@ async def on_reaction_add(reaction, user):
                                     lootOK = True
                             players[user.id].addLoot(lootGen)
                             await buyMessage.delete()
-                            await user.send("Sold!")
+                            await user.send(
+                                "Sold! You have received a " + lootGen.fullName + "."
+                            )
                         else:
                             await buyMessage.delete()
                             await user.send("You don't have the space for this!")
