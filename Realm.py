@@ -723,12 +723,13 @@ class Mob:
     def getDamage(self):
         return random.sample(range(self.dmgLow, self.dmgHigh), k=1)[0]
 
-    def getDamageTaken(self, d, damageTypes=[]):
-        if self.weakness in damageTypes:
-            d = math.floor(d * 1.25)
+    def getDamageTaken(self, damage_payload):
+        if self.weakness in damage_payload[1]:
+            d = math.floor(damage_payload[0] * 1.25)
         else:
-            print("mob damage taken: " + str(d))
-            return d
+            d = damage_payload[0]
+        print("mob damage taken: " + str(d))
+        return d
 
     def getLoot(self):
         roll = random.uniform(0, 1)
