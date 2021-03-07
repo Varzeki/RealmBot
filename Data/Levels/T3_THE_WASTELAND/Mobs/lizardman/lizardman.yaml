@@ -6,7 +6,7 @@ dmgHigh: 18
 rewardLow: 15
 rewardHigh: 25
 lootBonus: 0
-encounterText: LIZARDMAN ENCOUNTER
-defeatText: LIZARDMAN DEFEAT
+encounterText: A strange lizard-man approaches you as you wander the wastes. Suddenly he hisses and swings his blade at you!
+defeatText: Seeing his imminent defeat the lizard-man suddenly lunges forward, knocking you over and sprinting into the wastes.
 weakness: Fyr
 statValue: 111
