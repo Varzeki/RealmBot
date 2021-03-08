@@ -6,7 +6,7 @@ dmgHigh: 18
 rewardLow: 15
 rewardHigh: 25
 lootBonus: 0
-encounterText: LIZARDMAN ENCOUNTER
-defeatText: LIZARDMAN DEFEAT
+encounterText: A paladin approaches you weapon drawn and mumbling about their gods chosen enemy. He goes to swing at you but you manage to dodge away. Its a fight!
+defeatText: As the paladin falls to the ground, soft warm light engulfs their body and they slowly disappear.
 weakness: Fyr
 statValue: 111
