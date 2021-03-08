@@ -6,7 +6,7 @@ dmgHigh: 25
 rewardLow: 3
 rewardHigh: 12
 lootBonus: 0
-encounterText: GIANT SCORPION ENCOUNTER
-defeatText: GIANT SCORPION DEFEAT
+encounterText: A pale faced vampire suddenly appears right in front of you and tries to bite you. Just managing to shove it backwards you manage to gather yourself to fight!
+defeatText: Seeing that they will not be getting their desired prey, the vampire flees into the darkness of the sorrounding area
 weakness: Alica
 statValue: 90

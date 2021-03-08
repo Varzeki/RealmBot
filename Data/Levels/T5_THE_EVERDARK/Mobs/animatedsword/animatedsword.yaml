@@ -6,7 +6,7 @@ dmgHigh: 18
 rewardLow: 15
 rewardHigh: 25
 lootBonus: 0
-encounterText: LIZARDMAN ENCOUNTER
-defeatText: LIZARDMAN DEFEAT
+encounterText: A sword comes flying out of the shadows at you. It readies itself into a fighting stance but there is no one wielding it.
+defeatText: As you parry the swords blow it goes careening off into the darkness!
 weakness: Fyr
 statValue: 111

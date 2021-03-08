@@ -6,7 +6,7 @@ dmgHigh: 12
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
-encounterText: VULTURE ENCOUNTER
-defeatText: VULTURE DEFEAT
+encounterText: A pillar of shadows rises from the ground and a shape emerges. Its a Demon!
+defeatText: As you strike the demon down, the shadows return engulfing it. When the shadows disperse, the demon has disappeared
 weakness: Fyr
 statValue: 108

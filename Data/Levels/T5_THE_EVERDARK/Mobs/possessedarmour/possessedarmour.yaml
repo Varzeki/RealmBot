@@ -6,7 +6,7 @@ dmgHigh: 30
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
-encounterText: ORC ENCOUNTER
-defeatText: ORC DEFEAT
+encounterText: An armoured foe approaches you. As you ready yourself for combat you notice that theres nothing behind the eye slits in the helmet.
+defeatText: Whatever force was holding the armour together seems to disappear as the armour drops into a pile on the ground.
 weakness: Aer
 statValue: 109

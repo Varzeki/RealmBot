@@ -6,7 +6,7 @@ dmgHigh: 16
 rewardLow: 10
 rewardHigh: 20
 lootBonus: 0
-encounterText: IMP ENCOUNTER
-defeatText: IMP DEFEAT
+encounterText: A wizzing arrow through the darkness misses your head by mere centimetres. You peer into the darkness just spotting the drow before another arrow flies straight towards your head!
+defeatText: The drow finally collapses from their wounds. They expire all the while cursing you and your existence.
 weakness: Fyr
 statValue: 88
