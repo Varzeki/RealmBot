@@ -6,7 +6,7 @@ dmgHigh: 12
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
-encounterText: VULTURE ENCOUNTER
-defeatText: VULTURE DEFEATs
+encounterText: An unholy abomination made from flesh and stinking of decay approaches you. A flesh golem!
+defeatText: The flesh golem doesnt so much fall as detiorate into a stinking mass of decaying flesh.
 weakness: Fyr
 statValue: 108

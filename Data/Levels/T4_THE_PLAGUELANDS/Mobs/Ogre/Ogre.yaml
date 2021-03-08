@@ -6,7 +6,7 @@ dmgHigh: 18
 rewardLow: 15
 rewardHigh: 25
 lootBonus: 0
-encounterText: LIZARDMAN ENCOUNTER
-defeatText: LIZARDMAN DEFEATs
+encounterText: You feel the ground shaking beneath your feet as you are faced with an ogre of immense size!
+defeatText: The ogre falls with a large crash and a small shockwave of dust causes you to cough.
 weakness: Fyr
 statValue: 111

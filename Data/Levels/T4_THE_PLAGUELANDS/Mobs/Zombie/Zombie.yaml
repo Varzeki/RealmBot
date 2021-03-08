@@ -6,7 +6,7 @@ dmgHigh: 16
 rewardLow: 10
 rewardHigh: 20
 lootBonus: 0
-encounterText: IMP ENCOUNTER
-defeatText: IMP DEFEATs
+encounterText: A shambling zombie approaches you. It suddenly lunges forward trying to bite you!
+defeatText: The zombie collapses into a heap on the ground. It's still twitching but it is harmless now.
 weakness: Fyr
 statValue: 88
