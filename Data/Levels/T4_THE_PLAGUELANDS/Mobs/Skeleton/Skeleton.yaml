@@ -1,5 +1,5 @@
 name: Skeleton
-healthLow: 5
+healthLow: 10
 healthHigh: 55
 dmgLow: 5
 dmgHigh: 25
