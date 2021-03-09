@@ -1,8 +1,8 @@
 name: Possessed Armour
-healthLow: 10
-healthHigh: 16
-dmgLow: 18
-dmgHigh: 30
+healthLow: 90
+healthHigh: 120
+dmgLow: 5
+dmgHigh: 25
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25

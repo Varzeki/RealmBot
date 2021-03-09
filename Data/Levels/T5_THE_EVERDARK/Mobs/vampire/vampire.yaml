@@ -1,8 +1,8 @@
 name: Vampire
-healthLow: 5
-healthHigh: 55
+healthLow: 50
+healthHigh: 70
 dmgLow: 5
-dmgHigh: 25
+dmgHigh: 20
 rewardLow: 3
 rewardHigh: 12
 lootBonus: 0
