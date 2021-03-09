@@ -1,8 +1,8 @@
 name: Mad Alchemist
 healthLow: 30
 healthHigh: 50
-dmgLow: 12
-dmgHigh: 18
+dmgLow: 15
+dmgHigh: 25
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
