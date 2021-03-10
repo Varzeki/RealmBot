@@ -1,6 +1,6 @@
 name: Djinn
-healthLow: 80
-healthHigh: 100
+healthLow: 60
+healthHigh: 80
 dmgLow: 6
 dmgHigh: 12
 lootBonus: 0

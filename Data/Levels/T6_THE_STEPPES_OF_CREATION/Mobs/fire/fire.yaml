@@ -1,8 +1,8 @@
 name: Fyr Elemental
-healthLow: 45
-healthHigh: 65
-dmgLow: 10
-dmgHigh: 18
+healthLow: 20
+healthHigh: 30
+dmgLow: 15
+dmgHigh: 25
 rewardLow: 15
 rewardHigh: 25
 lootBonus: 0
