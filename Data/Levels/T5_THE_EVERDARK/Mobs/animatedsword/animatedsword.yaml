@@ -1,8 +1,8 @@
 name: Animated Sword
-healthLow: 45
-healthHigh: 65
-dmgLow: 10
-dmgHigh: 18
+healthLow: 10
+healthHigh: 20
+dmgLow: 20
+dmgHigh: 35
 rewardLow: 15
 rewardHigh: 25
 lootBonus: 0
