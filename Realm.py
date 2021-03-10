@@ -1228,8 +1228,6 @@ async def on_message(message):
 
                 await message.channel.send(petOutput)
 
-
-
             elif message.content == "!inventory":
                 currentPlayer = players[message.author.id]
                 currentInv = currentPlayer.inventory
@@ -2062,7 +2060,7 @@ async def on_message(message):
                         )
                         reactables["playerInventories"][message.author.id] = None
                 elif message.content == "!fixinv":
-                    for p in players:
+                    for p in players.values():
                         print(p.fullName)
                         print("INVENTORY")
                         for i in p.inventory:
