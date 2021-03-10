@@ -2061,7 +2061,7 @@ async def on_message(message):
                         reactables["playerInventories"][message.author.id] = None
                 elif message.content == "!fixinv":
                     for p in players.values():
-                        print(p.fullName)
+                        print(p.name)
                         print("INVENTORY")
                         for i in p.inventory:
                             if not i == "Empty":
