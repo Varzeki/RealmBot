@@ -1209,32 +1209,6 @@ async def on_message(message):
                     )
                     currentInv[4] = "Empty"
 
-            elif message.content == "!pet":
-                if players[message.author.id].pClass == "overseer":
-                    minRarity = "Epic"
-                    pet = Pet(minRarity)
-                else:
-                    pet = Pet()
-                petOutput = (
-                    "Name: "
-                    + pet.name
-                    + "\n"
-                    + "Type: "
-                    + pet.petType.capitalize()
-                    + "\n"
-                    + "Rarity: "
-                    + pet.rarity
-                    + "\n"
-                    + "DMG/DFC/GLD: "
-                    + str(pet.damage)
-                    + "/"
-                    + str(pet.defence)
-                    + "/"
-                    + str(pet.gold)
-                )
-
-                await message.channel.send(petOutput)
-
             elif message.content == "!inventory":
                 currentPlayer = players[message.author.id]
                 currentInv = currentPlayer.inventory
@@ -2347,6 +2321,25 @@ async def on_message(message):
                     pt = petTypeImage.clone().convert("png")
                     m = maskImage.clone()
 
+                    commonCol = Color("#B9BBBE")
+                    uncommonCol = Color("#248224")
+                    rareCol = Color("#2C4399")
+                    epicCol = Color("#792482")
+                    legendaryCol = Color("#BA5318")
+                    zekiforgedCol = Color("#C54EA5")
+                    if pet.rarity == "Common":
+                        rarityCol = commonCol
+                    elif pet.rarity == "Uncommon":
+                        rarityCol = uncommonCol
+                    elif pet.rarity == "Rare":
+                        rarityCol = rareCol
+                    elif pet.rarity == "Epic":
+                        rarityCol = epicCol
+                    elif pet.rarity == "Legendary":
+                        rarityCol = legendaryCol
+                    elif pet.rarity == "Zekiforged":
+                        rarityCol = zekiforgedCol
+
                     with Drawing() as draw:
                         pt.resize(128, 128)
                         # g.resize(35, 35)
@@ -2362,14 +2355,14 @@ async def on_message(message):
                         draw.text(
                             int(bg.width / 2),
                             180,
-                            pet.rarity.capitalize() + pet.name,
+                            pet.rarity.capitalize() +" "+ pet.name,
                         )
                         draw.font = "Data/Resources/Fonts/whitneybook.otf"
                         draw.fill_color = Color("#B4B6B9")
                         draw.text(
                             int(bg.width / 2),
                             205,
-                            "Type: " + pet.petType,
+                            "Type: " + pet.petType.capitalize(),
                         )
                         draw.font = "Data/Resources/Fonts/whitneybold.otf"
                         draw.fill_color = Color("#B9BBBE")
@@ -2388,7 +2381,8 @@ async def on_message(message):
                             350,
                             "Gold: " + str(pet.gold),
                         )
-
+                        draw.fill_color = rarityCol
+                        draw.circle(int(bg.width/2),148,int(bg.width/2),20)
                         draw.composite(
                             operator="over",
                             left=int((bg.width / 2) - 64),
