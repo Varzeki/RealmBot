@@ -2410,7 +2410,7 @@ async def on_message(message):
                                 "Data/Dynamic/"
                                 + pet.rarity
                                 + "-"
-                                + pet.name
+                                + pet.name.replace(" ", "").lower()
                                 + "_PetStatsOutput.png"
                             )
                         )
