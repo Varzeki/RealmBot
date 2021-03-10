@@ -2382,7 +2382,7 @@ async def on_message(message):
                             "Gold: " + str(pet.gold),
                         )
                         draw.fill_color = rarityCol
-                        draw.circle((int(bg.width / 2), 148), (int(bg.width / 2), 20))
+                        draw.circle((int(bg.width / 2), 84), (int(bg.width / 2), 20))
                         draw.composite(
                             operator="over",
                             left=int((bg.width / 2) - 64),
