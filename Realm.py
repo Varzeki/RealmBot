@@ -2065,11 +2065,11 @@ async def on_message(message):
                         print("INVENTORY")
                         for i in p.inventory:
                             if not i == "Empty":
-                                print(i.type)
+                                i.lootType = i.type
                         print("EQUIPMENT")
                         for i in p.equipment:
                             if not i == "Empty":
-                                print(i.type)
+                                i.lootType = i.type
                         print("\n")
                 elif message.content == "!restart":
                     print("Graceful Restart Triggered")
