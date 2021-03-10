@@ -2051,18 +2051,7 @@ async def on_message(message):
                             message.author.id, "Varzeki", "ambassador", "ascended"
                         )
                         reactables["playerInventories"][message.author.id] = None
-                elif message.content == "!fixinv":
-                    for p in players.values():
-                        print(p.name)
-                        print("INVENTORY")
-                        for i in p.inventory:
-                            if not i == "Empty":
-                                i.lootType = i.type
-                        print("EQUIPMENT")
-                        for i in p.equipment:
-                            if not i == "Empty":
-                                i.lootType = i.type
-                        print("\n")
+
                 elif message.content == "!restart":
                     print("Graceful Restart Triggered")
                     graceful_init = True
