@@ -2355,7 +2355,7 @@ async def on_message(message):
                         draw.text(
                             int(bg.width / 2),
                             180,
-                            pet.rarity.capitalize() +" "+ pet.name,
+                            pet.rarity.capitalize() + " " + pet.name,
                         )
                         draw.font = "Data/Resources/Fonts/whitneybook.otf"
                         draw.fill_color = Color("#B4B6B9")
@@ -2382,7 +2382,7 @@ async def on_message(message):
                             "Gold: " + str(pet.gold),
                         )
                         draw.fill_color = rarityCol
-                        draw.circle(int(bg.width/2),148,int(bg.width/2),20)
+                        draw.circle((int(bg.width / 2), 148), (int(bg.width / 2), 20))
                         draw.composite(
                             operator="over",
                             left=int((bg.width / 2) - 64),
