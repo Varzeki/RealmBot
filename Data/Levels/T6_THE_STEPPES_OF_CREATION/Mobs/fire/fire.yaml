@@ -6,7 +6,7 @@ dmgHigh: 25
 rewardLow: 15
 rewardHigh: 25
 lootBonus: 0
-encounterText: LIZARDMAN ENCOUNTER
-defeatText: LIZARDMAN DEFEAT
+encounterText: FYR ELEMENTAL ENCOUNTER
+defeatText: FYR ELEMENTAL DEFEAT
 weakness: Fyr
 statValue: 111

@@ -6,7 +6,7 @@ dmgHigh: 18
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
-encounterText: HYENA ENCOUNTER
-defeatText: HYENA DEFEAT
+encounterText: AER ELEMENTAL ENCOUNTER
+defeatText: AER ELEMENTAL DEFEAT
 weakness: Fyr
 statValue: 108

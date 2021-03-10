@@ -6,7 +6,7 @@ dmgHigh: 15
 rewardLow: 3
 rewardHigh: 12
 lootBonus: 0
-encounterText: GIANT SCORPION ENCOUNTER
-defeatText: GIANT SCORPION DEFEAT
+encounterText: EARTH ELEMENTAL ENCOUNTER
+defeatText: EARTH ELEMENTAL DEFEAT
 weakness: Alica
 statValue: 90

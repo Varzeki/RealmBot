@@ -6,7 +6,7 @@ dmgHigh: 12
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
-encounterText: VULTURE ENCOUNTER
-defeatText: VULTURE DEFEAT
+encounterText: DJINN ENCOUNTER
+defeatText: DJINN DEFEAT
 weakness: Fyr
 statValue: 108
