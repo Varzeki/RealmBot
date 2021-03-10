@@ -1,0 +1,16 @@
+name: Blingtron 3000
+damage: 0
+gold: 6
+defence: 0
+type: mechanical
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

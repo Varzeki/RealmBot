@@ -2313,6 +2313,112 @@ async def on_message(message):
                         await message.channel.send(
                             "You don't appear to be registered yet!"
                         )
+                elif message.content == "!spawn_pet":
+                    if players[message.author.id].pClass == "overseer":
+                        minRarity = "Epic"
+                        pet = Pet(minRarity)
+                    else:
+                        pet = Pet()
+                    backgroundImage = Image(filename="Data/Resources/Images/stats.png")
+                    petTypeImage = Image(
+                        filename=("Data/Resources/" + pet.petType + ".png")
+                    )
+                    maskImage = Image(filename="Data/Resources/Images/mask.png")
+
+                    def apply_mask(image, mask, invert=False):
+                        image.alpha_channel = True
+                        if invert:
+                            mask.negate()
+                        with Image(
+                            width=image.width,
+                            height=image.height,
+                            background=Color("transparent"),
+                        ) as alpha_image:
+                            alpha_image.composite_channel(
+                                "alpha", mask, "copy_opacity", 0, 0
+                            )
+                            image.composite_channel(
+                                "alpha", alpha_image, "multiply", 0, 0
+                            )
+
+                    bg = backgroundImage.clone()
+                    pt = petTypeImage.clone().convert("png")
+                    m = maskImage.clone()
+
+                    with Drawing() as draw:
+                        pt.resize(128, 128)
+                        # g.resize(35, 35)
+                        # r.resize(35, 35)
+                        # draw.fill_color = Color("black")
+                        # draw.rectangle(left=int((s.width/2)-64),top=30,width=128,height=128,radius=64)  # 30% rounding?
+                        apply_mask(pt, m)
+                        draw.font = "Data/Resources/Fonts/whitneybold.otf"
+                        draw.font_size = 18
+                        draw.fill_color = Color("white")
+                        draw.text_alignment = "center"
+                        draw.font_weight = 700
+                        draw.text(
+                            int(s.width / 2),
+                            180,
+                            pet.rarity.capitalize() + pet.name,
+                        )
+                        draw.font = "Data/Resources/Fonts/whitneybook.otf"
+                        draw.fill_color = Color("#B4B6B9")
+                        draw.text(
+                            int(s.width / 2),
+                            205,
+                            "Type: " + pet.petType,
+                        )
+                        draw.font = "Data/Resources/Fonts/whitneybold.otf"
+                        draw.fill_color = Color("#B9BBBE")
+                        draw.text(int(s.width / 2) - 110, 270, "STATS")
+                        # draw.text(int(s.width / 2) - 119, 390, "STATS")
+                        # draw.text(int(s.width / 2) - 129, 540, "FACT")
+                        draw.font = "Data/Resources/Fonts/whitneymedium.otf"
+                        draw.text(int(s.width / 2), 310, "Damage: " + str(pet.damage))
+                        draw.text(
+                            int(s.width / 2),
+                            330,
+                            "Defence: " + str(pet.defence),
+                        )
+                        draw.text(
+                            int(s.width / 2),
+                            350,
+                            "Gold: " + str(pet.gold),
+                        )
+
+                        draw.composite(
+                            operator="over",
+                            left=int((s.width / 2) - 64),
+                            top=20,
+                            width=128,
+                            height=128,
+                            image=pt,
+                        )
+                        draw(bg)
+
+                        bg.save(
+                            filename=(
+                                "Data/Dynamic/"
+                                + pet.rarity
+                                + "-"
+                                + pet.name
+                                + "_PetStatsOutput.png"
+                            )
+                        )
+                    try:
+                        await message.channel.send(
+                            file=discord.File(
+                                "Data/Dynamic/"
+                                + pet.rarity
+                                + "-"
+                                + pet.name
+                                + "_PetStatsOutput.png"
+                            )
+                        )
+                    except:
+                        print("Error sending Pet Image")
+                        print(traceback.format_exc())
 
 
 @bot.event
