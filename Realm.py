@@ -2352,7 +2352,7 @@ async def on_message(message):
                         # g.resize(35, 35)
                         # r.resize(35, 35)
                         # draw.fill_color = Color("black")
-                        # draw.rectangle(left=int((s.width/2)-64),top=30,width=128,height=128,radius=64)  # 30% rounding?
+                        # draw.rectangle(left=int((bg.width/2)-64),top=30,width=128,height=128,radius=64)  # 30% rounding?
                         apply_mask(pt, m)
                         draw.font = "Data/Resources/Fonts/whitneybold.otf"
                         draw.font_size = 18
@@ -2360,38 +2360,38 @@ async def on_message(message):
                         draw.text_alignment = "center"
                         draw.font_weight = 700
                         draw.text(
-                            int(s.width / 2),
+                            int(bg.width / 2),
                             180,
                             pet.rarity.capitalize() + pet.name,
                         )
                         draw.font = "Data/Resources/Fonts/whitneybook.otf"
                         draw.fill_color = Color("#B4B6B9")
                         draw.text(
-                            int(s.width / 2),
+                            int(bg.width / 2),
                             205,
                             "Type: " + pet.petType,
                         )
                         draw.font = "Data/Resources/Fonts/whitneybold.otf"
                         draw.fill_color = Color("#B9BBBE")
-                        draw.text(int(s.width / 2) - 110, 270, "STATS")
-                        # draw.text(int(s.width / 2) - 119, 390, "STATS")
-                        # draw.text(int(s.width / 2) - 129, 540, "FACT")
+                        draw.text(int(bg.width / 2) - 110, 270, "STATS")
+                        # draw.text(int(bg.width / 2) - 119, 390, "STATS")
+                        # draw.text(int(bg.width / 2) - 129, 540, "FACT")
                         draw.font = "Data/Resources/Fonts/whitneymedium.otf"
-                        draw.text(int(s.width / 2), 310, "Damage: " + str(pet.damage))
+                        draw.text(int(bg.width / 2), 310, "Damage: " + str(pet.damage))
                         draw.text(
-                            int(s.width / 2),
+                            int(bg.width / 2),
                             330,
                             "Defence: " + str(pet.defence),
                         )
                         draw.text(
-                            int(s.width / 2),
+                            int(bg.width / 2),
                             350,
                             "Gold: " + str(pet.gold),
                         )
 
                         draw.composite(
                             operator="over",
-                            left=int((s.width / 2) - 64),
+                            left=int((bg.width / 2) - 64),
                             top=20,
                             width=128,
                             height=128,
