@@ -2,7 +2,7 @@ name: Terra Elemental
 healthLow: 80
 healthHigh: 100
 dmgLow: 5
-dmgHigh: 20
+dmgHigh: 15
 rewardLow: 3
 rewardHigh: 12
 lootBonus: 0
