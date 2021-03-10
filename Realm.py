@@ -759,7 +759,7 @@ class Pet:
     def __init__(self, minRarity="any"):
         petData = generate_pet()
         self.name = petData["name"]
-        self.dmg = petData["damage"]
+        self.damage = petData["damage"]
         self.defence = petData["defence"]
         self.gold = petData["gold"]
         self.petType = petData["type"]
@@ -1205,9 +1205,28 @@ async def on_message(message):
             elif message.content == "!pet":
                 if players[message.author.id].pClass == "overseer":
                     minRarity == "Epic"
-                    await message.channel.send(str(Pet(minRarity)))
+                    pet = Pet(minRarity)
                 else:
-                    await message.channel.send(str(Pet()))
+                    pet = Pet()
+                petOutput = (
+                    "Name: "
+                    + pet.name
+                    + "\n"
+                    + "Type: "
+                    + pet.petType.capitalize()
+                    + "\n"
+                    + "Rarity: "
+                    + pet.rarity
+                    + "\n"
+                    + "DMG/DFC/GLD: "
+                    + str(pet.damage)
+                    + "/"
+                    + str(pet.defence)
+                    + "/"
+                    + str(pet.gold)
+                )
+
+                await message.channel.send(petOutput)
 
             elif message.content == "!inventory":
                 currentPlayer = players[message.author.id]
