@@ -9,12 +9,10 @@ import discord
 import asyncio
 import math
 import sys
-import emoji
 from discord.ext import commands
 from dotenv import load_dotenv
-from wand.image import Image, COMPOSITE_OPERATORS
+from wand.image import Image
 from wand.drawing import Drawing
-from wand.display import display
 from wand.color import Color
 import traceback
 
@@ -97,6 +95,37 @@ def generate_mob(tier):
         + random.choice(os.listdir(fileMap[tier] + "/" + mobName + "/Art"))
     )
     return [mobStats, mobArt]
+
+
+def generate_loot(tier, level, lootType="any"):
+    fileMap = {
+        "t1": "./Data/Levels/T1_THE_ARBORETUM/Loot",
+        "t2": "./Data/Levels/T2_THE_LOWER_CITY/Loot",
+        "t3": "./Data/Levels/T3_THE_WASTELAND/Loot",
+        "t4": "./Data/Levels/T4_THE_PLAGUELANDS/Loot",
+        "t5": "./Data/Levels/T5_THE_EVERDARK/Loot",
+        "t6": "./Data/Levels/T6_THE_STEPPES_OF_CREATION/Loot",
+        "t7": "./Data/Levels/T7_THE_CITADEL/Loot",
+    }
+    with open(fileMap[tier] + "/dropTable.yaml", "r") as stream:
+        dropTable = yaml.safe_load(stream)
+    if lootType == "any":
+        lootType = random.choices(["equipment", "treasure"], weights=[80, 20], k=1)[0]
+    drop = random.choices(
+        [*dropTable[lootType]], weights=[*dropTable[lootType].values()], k=1
+    )[0]
+    with open(fileMap[tier] + "/" + drop + ".yaml", "r") as stream:
+        dropData = yaml.safe_load(stream)
+    return dropData
+
+
+def generate_pet():
+    with open("Data/Pets/spawnTable.yaml", "r") as stream:
+        spawnTable = yaml.safe_load(stream)
+    pet = random.choices([*spawnTable], weights=[*spawnTable.values()], k=1)[0]
+    with open("Data/Pets/" + drop + ".yaml", "r") as stream:
+        petData = yaml.safe_load(stream)
+    return petData
 
 
 async def doHealthRegen():
@@ -232,12 +261,6 @@ async def doCombat():
                             + str(round(0.05 * players[p].gold))
                             + " gold!\n"
                         )
-                        deathLine = (
-                            players[p].name
-                            + " died and lost "
-                            + str(round(0.05 * players[p].gold))
-                            + " gold!"
-                        )
                         players[p].gold = players[p].gold - round(
                             0.05 * players[p].gold
                         )
@@ -324,6 +347,7 @@ async def doCombat():
                     )
                 except:
                     print("Error sending New Mob Image")
+                    print(traceback.format_exc())
                 reactables[tier + "-hpBar"] = await channels["tiers"][
                     tier + "-main"
                 ].send(
@@ -346,6 +370,7 @@ async def doCombat():
                     )
                 except:
                     print("Error sending New VS Image")
+                    print(traceback.format_exc())
                 activeMobs[tier].partyMessage = await channels["tiers"][
                     tier + "-main"
                 ].send("Party:\n")
@@ -390,30 +415,6 @@ async def doCombat():
                     await mob.partyMessage.edit(content=pMessage)
         elif not pMessage == mob.partyMessage.content:
             await mob.partyMessage.edit(content=pMessage)
-
-
-def generate_loot(tier, level, type="any"):
-    fileMap = {
-        "t1": "./Data/Levels/T1_THE_ARBORETUM/Loot",
-        "t2": "./Data/Levels/T2_THE_LOWER_CITY/Loot",
-        "t3": "./Data/Levels/T3_THE_WASTELAND/Loot",
-        "t4": "./Data/Levels/T4_THE_PLAGUELANDS/Loot",
-        "t5": "./Data/Levels/T5_THE_EVERDARK/Loot",
-        "t6": "./Data/Levels/T6_THE_STEPPES_OF_CREATION/Loot",
-        "t7": "./Data/Levels/T7_THE_CITADEL/Loot",
-    }
-    with open(fileMap[tier] + "/dropTable.yaml", "r") as stream:
-        dropTable = yaml.safe_load(stream)
-    if type == "any":
-        lootType = random.choices(["equipment", "treasure"], weights=[80, 20], k=1)[0]
-    else:
-        lootType = type
-    drop = random.choices(
-        [*dropTable[lootType]], weights=[*dropTable[lootType].values()], k=1
-    )[0]
-    with open(fileMap[tier] + "/" + drop + ".yaml", "r") as stream:
-        dropData = yaml.safe_load(stream)
-    return dropData
 
 
 class Player:
@@ -534,12 +535,12 @@ class Player:
         damageTypes = []
         tempEquip = self.equipment
         if not tempEquip[0] == "Empty":
-            if tempEquip[0].type == "weapon":
+            if tempEquip[0].lootType == "weapon":
                 if not tempEquip[0].element == "":
                     damageTypes.append(tempEquip[0].element)
                 d = d + tempEquip[0].damage
         if not tempEquip[1] == "Empty":
-            if tempEquip[1].type == "weapon":
+            if tempEquip[1].lootType == "weapon":
                 if not tempEquip[1].element == "":
                     damageTypes.append(tempEquip[1].element)
                 d = d + tempEquip[1].damage
@@ -557,10 +558,10 @@ class Player:
         actualDFC = self.DFC
         tempEquip = self.equipment
         if not tempEquip[0] == "Empty":
-            if tempEquip[0].type == "armour":
+            if tempEquip[0].lootType == "armour":
                 actualDFC = actualDFC + tempEquip[0].defence
         if not tempEquip[1] == "Empty":
-            if tempEquip[1].type == "armour":
+            if tempEquip[1].lootType == "armour":
                 actualDFC = actualDFC + tempEquip[0].defence
         if d - actualDFC < 1:
             return 0
@@ -615,14 +616,14 @@ class Player:
 
 
 class Loot:
-    def __init__(self, tier, level, type="any"):
-        lootData = generate_loot(tier, type)
+    def __init__(self, tier, level, lootType="any"):
+        lootData = generate_loot(tier, lootType)
         self.name = lootData["name"]
-        self.type = lootData["type"]
+        self.lootType = lootData["type"]
         self.level = level
         self.value = round(random.uniform(0.9, 1.1) * float(lootData["value"]))
         self.description = lootData["description"]
-        if not self.type == "treasure":
+        if not self.lootType == "treasure":
             self.damage = lootData["damage"]
             self.defence = lootData["defence"]
             if not self.level == 1:
@@ -671,7 +672,7 @@ class Loot:
                     lootData["defaultRarity"]
                 ):
                     self.rarity = lootData["defaultRarity"]
-            if self.type == "weapon":
+            if self.lootType == "weapon":
                 elementRoll = random.uniform(0, 1)
                 if elementRoll < 0.2:
                     self.element = random.sample(
@@ -752,6 +753,55 @@ class Mob:
             round(random.uniform(1, 1.3) * float(self.EXPReward)),
             "Nothing",
         ]
+
+
+class Pet:
+    def __init__(self, minRarity="any"):
+        petData = generate_pet()[0]
+        self.name = petData["name"]
+        self.dmg = petData["damage"]
+        self.defence = petData["defence"]
+        self.gold = petData["gold"]
+        self.petType = petData["type"]
+        rarityRoll = random.uniform(0, 1)
+        rarityList = [
+            "Common",
+            "Uncommon",
+            "Rare",
+            "Epic",
+            "Legendary",
+            "Zekiforged",
+        ]
+        if rarityRoll < 0.6:
+            self.rarity = "Common"
+        elif rarityRoll < 0.865:
+            self.rarity = "Uncommon"
+            self.damage = round(self.damage * 2)
+            self.defence = round(self.defence * 2)
+            self.gold = round(self.gold * 2)
+        elif rarityRoll < 0.94:
+            self.rarity = "Rare"
+            self.damage = round(self.damage * 3)
+            self.defence = round(self.defence * 3)
+            self.gold = round(self.gold * 3)
+        elif rarityRoll < 0.975:
+            self.rarity = "Epic"
+            self.damage = round(self.damage * 4)
+            self.defence = round(self.defence * 4)
+            self.gold = round(self.gold * 4)
+        elif rarityRoll < 0.995:
+            self.rarity = "Legendary"
+            self.damage = round(self.damage * 5)
+            self.defence = round(self.defence * 5)
+            self.gold = round(self.gold * 5)
+        else:
+            self.rarity = "Zekiforged"
+            self.damage = round(self.damage * 6)
+            self.defence = round(self.defence * 6)
+            self.gold = round(self.gold * 6)
+        if minRarity in rarityList:
+            if not rarityList.index(self.rarity) > rarityList.index(minRarity):
+                self.rarity = minRarity
 
 
 @bot.event
@@ -912,6 +962,7 @@ async def on_ready():
                 await c.send(file=activeMobs[t[:2]].image)
             except:
                 print("Error sending Initial Mob Image for " & str(t[:2]))
+                print(traceback.format_exc())
             reactables[t[:2] + "-hpBar"] = await c.send(
                 activeMobs[t[:2]].name
                 + " (LVL: "
@@ -929,6 +980,7 @@ async def on_ready():
                 await c.send(file=discord.File("Data/Resources/Images/vs.png"))
             except:
                 print("Error sending Initial VS Image for " & str(t[:2]))
+                print(traceback.format_exc())
             activeMobs[t[:2]].partyMessage = await c.send("Party:\n")
             if "Rat" in activeMobs[t[:2]].name:
                 vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
@@ -971,544 +1023,533 @@ async def on_message(message):
     global graceful_init
     global graceful_exit
     if not graceful_init:
-        if message.channel == channels["registration"]["name-select"]:
-            if message.author.bot:
-                return
+        if message.channel == channels["help"]:
+            if message.content == "!reset":
+                players[message.author.id].inCombat = False
+                players[message.author.id].HP = players[message.author.id].maxHP
+                players[message.author.id].hpBar = emoji_set["greenHP"] * 10
+                await message.channel.send("Player Reset!")
+        else:
+            if message.channel == channels["registration"]["name-select"]:
+                if message.author.bot:
+                    return
 
-            await message.author.remove_roles(roles["name-select"])
-            if message.author.id in players:
-                print(
-                    "Player attempted __init__ in name-select but was already present!"
-                )
-            else:
-                foundClassRole = False
-                foundRaceRole = False
-                for c in classRoles:
-                    if roles[c] in message.author.roles:
-                        pClass = c
-                        foundClassRole = True
-                        break
-                for r in raceRoles:
-                    if roles[r] in message.author.roles:
-                        pRace = r
-                        foundRaceRole = True
-                        break
-                if not foundClassRole:
-                    await message.author.send(
-                        "Sorry, I tried to register your character but you don't seem to have a class! Please reach out in the help channel to get this fixed up."
-                    )
+                await message.author.remove_roles(roles["name-select"])
+                if message.author.id in players:
                     print(
-                        "Player attempted __init__ in name-select but no class role was found!"
+                        "Player attempted __init__ in name-select but was already present!"
                     )
-                    await message.author.add_roles(roles["name-select"])
-                elif not foundRaceRole:
-                    await message.author.send(
-                        "Sorry, I tried to register your character but you don't seem to have a race! Please reach out in the help channel to get this fixed up."
-                    )
-                    print(
-                        "Player attempted __init__ in name-select but no race role was found!"
-                    )
-                    await message.author.add_roles(roles["name-select"])
                 else:
-                    if not len(message.content) < 13 and len(message.content) > 0:
+                    foundClassRole = False
+                    foundRaceRole = False
+                    for c in classRoles:
+                        if roles[c] in message.author.roles:
+                            pClass = c
+                            foundClassRole = True
+                            break
+                    for r in raceRoles:
+                        if roles[r] in message.author.roles:
+                            pRace = r
+                            foundRaceRole = True
+                            break
+                    if not foundClassRole:
                         await message.author.send(
-                            "Sorry, that name is an improper length! It should be between 1 and 12 characters."
+                            "Sorry, I tried to register your character but you don't seem to have a class! Please reach out in the help channel to get this fixed up."
                         )
                         print(
-                            "Player attempted __init__ in name-select but name length was incorrect!"
+                            "Player attempted __init__ in name-select but no class role was found!"
                         )
                         await message.author.add_roles(roles["name-select"])
-                    elif re.match("^[a-zA-Z ]*$", message.content) is None:
+                    elif not foundRaceRole:
                         await message.author.send(
-                            "Sorry, that name includes invalid characters! It should contain only letters and spaces."
+                            "Sorry, I tried to register your character but you don't seem to have a race! Please reach out in the help channel to get this fixed up."
                         )
                         print(
-                            "Player attempted __init__ in name-select but name characters were invalid!"
+                            "Player attempted __init__ in name-select but no race role was found!"
                         )
                         await message.author.add_roles(roles["name-select"])
                     else:
-                        players[message.author.id] = Player(
-                            message.author.id, message.content, pClass, pRace
-                        )
-                        reactables["playerInventories"][message.author.id] = None
-                        await message.author.edit(
-                            nick=(
-                                players[message.author.id].name
-                                + players[message.author.id].title
+                        if not len(message.content) < 13 and len(message.content) > 0:
+                            await message.author.send(
+                                "Sorry, that name is an improper length! It should be between 1 and 12 characters."
                             )
-                        )
-                        await message.author.remove_roles(roles["character-creation"])
-                        await message.author.add_roles(roles["registered"])
-                        await message.author.send("Character registered!")
-                        await message.author.send(
-                            "Class: " + players[message.author.id].pClass
-                        )
-                        await message.author.send(
-                            "Race: " + players[message.author.id].race
-                        )
-                        await message.author.send(
-                            "Name: " + players[message.author.id].name
-                        )
-                        await message.author.send(
-                            "DMG: " + str(players[message.author.id].DMG)
-                        )
-                        await message.author.send(
-                            "DFC: " + str(players[message.author.id].DFC)
-                        )
-                        await message.author.send(
-                            "MaxHP: " + str(players[message.author.id].maxHP)
-                        )
-                        with open("./Data/Players.pkl", "w+b") as f:
-                            pickle.dump(players, f, pickle.HIGHEST_PROTOCOL)
+                            print(
+                                "Player attempted __init__ in name-select but name length was incorrect!"
+                            )
+                            await message.author.add_roles(roles["name-select"])
+                        elif re.match("^[a-zA-Z ]*$", message.content) is None:
+                            await message.author.send(
+                                "Sorry, that name includes invalid characters! It should contain only letters and spaces."
+                            )
+                            print(
+                                "Player attempted __init__ in name-select but name characters were invalid!"
+                            )
+                            await message.author.add_roles(roles["name-select"])
+                        else:
+                            players[message.author.id] = Player(
+                                message.author.id, message.content, pClass, pRace
+                            )
+                            reactables["playerInventories"][message.author.id] = None
+                            await message.author.edit(
+                                nick=(
+                                    players[message.author.id].name
+                                    + players[message.author.id].title
+                                )
+                            )
+                            await message.author.remove_roles(
+                                roles["character-creation"]
+                            )
+                            await message.author.add_roles(roles["registered"])
+                            await message.author.send("Character registered!")
+                            await message.author.send(
+                                "Class: " + players[message.author.id].pClass
+                            )
+                            await message.author.send(
+                                "Race: " + players[message.author.id].race
+                            )
+                            await message.author.send(
+                                "Name: " + players[message.author.id].name
+                            )
+                            await message.author.send(
+                                "DMG: " + str(players[message.author.id].DMG)
+                            )
+                            await message.author.send(
+                                "DFC: " + str(players[message.author.id].DFC)
+                            )
+                            await message.author.send(
+                                "MaxHP: " + str(players[message.author.id].maxHP)
+                            )
+                            with open("./Data/Players.pkl", "w+b") as f:
+                                pickle.dump(players, f, pickle.HIGHEST_PROTOCOL)
+                await message.delete()
 
-            await message.delete()
-        if message.content == "!sell_all":
-            currentInv = players[message.author.id].inventory
-            for i in range(0, len(currentInv)):
-                if not currentInv[i] == "Empty":
-                    players[message.author.id].giveGold(currentInv[i].value, True)
+            elif message.content == "!sell_all":
+                currentInv = players[message.author.id].inventory
+                for i, v in enumerate(currentInv):
+                    if not v == "Empty":
+                        players[message.author.id].giveGold(v.value, True)
+                        await message.author.send(
+                            "You sold a "
+                            + v.fullName
+                            + " for "
+                            + str(v.value)
+                            + " gold"
+                        )
+                        currentInv[i] = "Empty"
+
+            elif message.content == "!sell_1":
+                currentInv = players[message.author.id].inventory
+                if not currentInv[0] == "Empty":
+                    players[message.author.id].giveGold(currentInv[0].value, True)
                     await message.author.send(
                         "You sold a "
-                        + currentInv[i].fullName
+                        + currentInv[0].fullName
                         + " for "
-                        + str(currentInv[i].value)
+                        + str(currentInv[0].value)
                         + " gold"
                     )
-                    currentInv[i] = "Empty"
-        if message.content == "!sell_1":
-            currentInv = players[message.author.id].inventory
-            if not currentInv[0] == "Empty":
-                players[message.author.id].giveGold(currentInv[0].value, True)
-                await message.author.send(
-                    "You sold a "
-                    + currentInv[0].fullName
-                    + " for "
-                    + str(currentInv[0].value)
-                    + " gold"
-                )
-                currentInv[0] = "Empty"
-        if message.content == "!sell_2":
-            currentInv = players[message.author.id].inventory
-            if not currentInv[1] == "Empty":
-                players[message.author.id].giveGold(currentInv[1].value, True)
-                await message.author.send(
-                    "You sold a "
-                    + currentInv[1].fullName
-                    + " for "
-                    + str(currentInv[1].value)
-                    + " gold"
-                )
-                currentInv[1] = "Empty"
-        if message.content == "!sell_3":
-            currentInv = players[message.author.id].inventory
-            if not currentInv[2] == "Empty":
-                players[message.author.id].giveGold(currentInv[2].value, True)
-                await message.author.send(
-                    "You sold a "
-                    + currentInv[2].fullName
-                    + " for "
-                    + str(currentInv[2].value)
-                    + " gold"
-                )
-                currentInv[2] = "Empty"
-        if message.content == "!sell_4":
-            currentInv = players[message.author.id].inventory
-            if not currentInv[3] == "Empty":
-                players[message.author.id].giveGold(currentInv[3].value, True)
-                await message.author.send(
-                    "You sold a "
-                    + currentInv[3].fullName
-                    + " for "
-                    + str(currentInv[3].value)
-                    + " gold"
-                )
-                currentInv[3] = "Empty"
-        if message.content == "!sell_5":
-            currentInv = players[message.author.id].inventory
-            if not currentInv[4] == "Empty":
-                players[message.author.id].giveGold(currentInv[4].value, True)
-                await message.author.send(
-                    "You sold a "
-                    + currentInv[4].fullName
-                    + " for "
-                    + str(currentInv[4].value)
-                    + " gold"
-                )
-                currentInv[4] = "Empty"
-        if message.content == "!inventory":
-            currentPlayer = players[message.author.id]
-            currentInv = currentPlayer.inventory
-            currentEquipment = currentPlayer.equipment
-            if currentPlayer.openInventory:
-                await message.author.send("Inventory already open!")
-            else:
-                currentPlayer.openInventory = True
-                inventoryImage = Image(filename="Data/Resources/Images/inventory.png")
-                emptySlotImage = Image(filename="Data/Resources/Images/emptySlot.png")
-                itemHeldImage = Image(filename="Data/Resources/Images/itemHeld.png")
-                itemArmourImage = Image(filename="Data/Resources/Images/itemArmour.png")
-                itemTreasureImage = Image(filename="Data/Resources/Images/treasure.png")
-                inv = inventoryImage.clone()
-                es = emptySlotImage.clone()
-                ih = itemHeldImage.clone()
-                ia = itemArmourImage.clone()
-                it = itemTreasureImage.clone()
-                emptyCol = Color("#2E3035")
-                commonCol = Color("#B9BBBE")
-                uncommonCol = Color("#248224")
-                rareCol = Color("#2C4399")
-                epicCol = Color("#792482")
-                legendaryCol = Color("#BA5318")
-                zekiforgedCol = Color("#C54EA5")
-                treasureCol = Color("#CA961D")
-                colorList = [
-                    commonCol,
-                    uncommonCol,
-                    rareCol,
-                    epicCol,
-                    legendaryCol,
-                    zekiforgedCol,
-                    treasureCol,
-                ]
-                borderCol = Color("#202225")
-                highlightCol = Color("#C63721")
-                highlightCell = 999
-                loop = True
-                while loop:
-                    loop = False
+                    currentInv[0] = "Empty"
 
-                    async def makeInventoryImage():
-                        inv = inventoryImage.clone()
-                        with Drawing() as draw:
-                            draw.font = "Data/Resources/Fonts/whitneybold.otf"
-                            draw.font_size = 28
-                            draw.fill_color = Color("white")
-                            draw.text_alignment = "center"
-                            draw.text(100, 60, "Inventory")
-                            draw.font_size = 18
-                            draw.font = "Data/Resources/Fonts/whitneybold.otf"
-                            draw.fill_color = commonCol
-                            draw.text(75, 140, "STORAGE")
-                            draw.text(930, 140, "EQUIPMENT")
-                            draw.font = "Data/Resources/Fonts/whitneymedium.otf"
-                            for i in range(1, 6):
-                                if i == highlightCell:
-                                    draw.fill_color = highlightCol
-                                else:
-                                    draw.fill_color = borderCol
-                                draw.rectangle(
-                                    left=(i * 160) - 128, top=189, width=149, height=149
-                                )
-                                if currentInv[i - 1] == "Empty":
-                                    rarityCol = emptyCol
-                                    boxImg = es
-                                else:
-                                    if currentInv[i - 1].type == "treasure":
-                                        boxImg = it
-                                        rarityCol = treasureCol
-                                    else:
-                                        if currentInv[i - 1].type == "weapon":
-                                            boxImg = ih
-                                        else:
-                                            boxImg = ia
-                                        itemRarity = currentInv[i - 1].fullName.split(
-                                            " "
-                                        )[0]
-                                        rarityCol = commonCol
-                                        if itemRarity == "Common":
-                                            pass
-                                        elif itemRarity == "Uncommon":
-                                            rarityCol = uncommonCol
-                                        elif itemRarity == "Rare":
-                                            rarityCol = rareCol
-                                        elif itemRarity == "Epic":
-                                            rarityCol = epicCol
-                                        elif itemRarity == "Legendary":
-                                            rarityCol = legendaryCol
-                                        elif itemRarity == "Zekiforged":
-                                            rarityCol = zekiforgedCol
-                                draw.fill_color = rarityCol
-                                draw.rectangle(
-                                    left=(i * 160) - 123, top=194, width=139, height=139
-                                )
-                                draw.composite(
-                                    operator="over",
-                                    left=(i * 160) - 120,
-                                    top=200,
-                                    width=128,
-                                    height=128,
-                                    image=boxImg,
-                                )
-                                if not currentInv[i - 1] == "Empty":
-                                    draw.fill_color = Color("#B4B6B9")
-                                    leftText = 55
-                                    downText = 370
-                                    draw.text(
-                                        (i * 160) - leftText,
-                                        downText,
-                                        currentInv[i - 1].name,
-                                    )
-                                    if not currentInv[i - 1].type == "treasure":
-                                        draw.text(
-                                            (i * 160) - leftText,
-                                            downText + 30,
-                                            "DMG: " + str(currentInv[i - 1].damage),
-                                        )
-                                        draw.text(
-                                            (i * 160) - leftText,
-                                            downText + 50,
-                                            "DFC: " + str(currentInv[i - 1].defence),
-                                        )
-                                        draw.text(
-                                            (i * 160) - leftText,
-                                            downText + 70,
-                                            "Level: " + str(currentInv[i - 1].level),
-                                        )
-                                        draw.text(
-                                            (i * 160) - leftText,
-                                            downText + 90,
-                                            "Value: " + str(currentInv[i - 1].value),
-                                        )
-                                        # draw.text((i*160)-leftText, 440, currentInv[i-1].description)
-                                        if currentInv[i - 1].type == "weapon":
-                                            if not currentInv[i - 1].element == "":
-                                                draw.text(
-                                                    (i * 160) - leftText,
-                                                    downText + 110,
-                                                    "Element: "
-                                                    + currentInv[i - 1].element,
-                                                )
-                                    else:
-                                        draw.text(
-                                            (i * 160) - leftText,
-                                            downText + 30,
-                                            "Value: " + str(currentInv[i - 1].value),
-                                        )
-                                        # draw.text((i*160)-leftText, 380, currentInv[i-1].description)
-                                else:
-                                    draw.fill_color = Color("#B4B6B9")
-                                    leftText = 55
-                                    downText = 370
-                                    draw.text((i * 160) - leftText, downText, "Empty")
-                            for i in range(1, 3):
-                                if i + 5 == highlightCell:
-                                    draw.fill_color = highlightCol
-                                else:
-                                    draw.fill_color = borderCol
-                                draw.rectangle(
-                                    left=(i * 160) + 717, top=189, width=149, height=149
-                                )
-                                if currentEquipment[i - 1] == "Empty":
-                                    rarityCol = emptyCol
-                                    boxImg = es
-                                else:
-                                    if currentEquipment[i - 1].type == "treasure":
-                                        boxImg = it
-                                        rarityCol = treasureCol
-                                    else:
-                                        if currentEquipment[i - 1].type == "weapon":
-                                            boxImg = ih
-                                        else:
-                                            boxImg = ia
-                                        itemRarity = currentEquipment[
-                                            i - 1
-                                        ].fullName.split(" ")[0]
-                                        rarityCol = commonCol
-                                        if itemRarity == "Common":
-                                            pass
-                                        elif itemRarity == "Uncommon":
-                                            rarityCol = uncommonCol
-                                        elif itemRarity == "Rare":
-                                            rarityCol = rareCol
-                                        elif itemRarity == "Epic":
-                                            rarityCol = epicCol
-                                        elif itemRarity == "Legendary":
-                                            rarityCol = legendaryCol
-                                        elif itemRarity == "Zekiforged":
-                                            rarityCol = zekiforgedCol
-                                draw.fill_color = rarityCol
-                                draw.rectangle(
-                                    left=(i * 160) + 722, top=194, width=139, height=139
-                                )
-                                draw.composite(
-                                    operator="over",
-                                    left=(i * 160) + 730,
-                                    top=200,
-                                    width=128,
-                                    height=128,
-                                    image=boxImg,
-                                )
-                                if not currentEquipment[i - 1] == "Empty":
-                                    draw.fill_color = Color("#B4B6B9")
-                                    leftText = 795
-                                    downText = 370
-                                    draw.text(
-                                        (i * 160) + leftText,
-                                        downText,
-                                        currentEquipment[i - 1].name,
-                                    )
-                                    if not currentEquipment[i - 1].type == "treasure":
-                                        draw.text(
-                                            (i * 160) + leftText,
-                                            downText + 30,
-                                            "DMG: "
-                                            + str(currentEquipment[i - 1].damage),
-                                        )
-                                        draw.text(
-                                            (i * 160) + leftText,
-                                            downText + 50,
-                                            "DFC: "
-                                            + str(currentEquipment[i - 1].defence),
-                                        )
-                                        draw.text(
-                                            (i * 160) + leftText,
-                                            downText + 70,
-                                            "Level: "
-                                            + str(currentEquipment[i - 1].level),
-                                        )
-                                        draw.text(
-                                            (i * 160) + leftText,
-                                            downText + 90,
-                                            "Value: "
-                                            + str(currentEquipment[i - 1].value),
-                                        )
-                                        # draw.text((i*160)-leftText, 440, currentEquipment[i-1].description)
-                                        if currentEquipment[i - 1].type == "weapon":
-                                            if (
-                                                not currentEquipment[i - 1].element
-                                                == ""
-                                            ):
-                                                draw.text(
-                                                    (i * 160) + leftText,
-                                                    downText + 110,
-                                                    "Element: "
-                                                    + currentEquipment[i - 1].element,
-                                                )
-                                    else:
-                                        draw.text(
-                                            (i * 160) + leftText,
-                                            downText + 30,
-                                            "Value: "
-                                            + str(currentEquipment[i - 1].value),
-                                        )
-                                        # draw.text((i*160)-leftText, 380, currentEquipment[i-1].description)
-                                else:
-                                    draw.fill_color = Color("#B4B6B9")
-                                    leftText = 795
-                                    downText = 370
-                                    draw.text((i * 160) + leftText, downText, "Empty")
-                            draw(inv)
-                            inv.save(
-                                filename=(
-                                    "Data/Dynamic/"
-                                    + str(currentPlayer.ID)
-                                    + "_InventoryOutput.png"
-                                )
-                            )
-
-                    await makeInventoryImage()
-                    reactables["playerInventories"][
-                        currentPlayer.ID
-                    ] = await message.author.send(
-                        file=discord.File(
-                            "Data/Dynamic/"
-                            + str(currentPlayer.ID)
-                            + "_InventoryOutput.png"
-                        )
+            elif message.content == "!sell_2":
+                currentInv = players[message.author.id].inventory
+                if not currentInv[1] == "Empty":
+                    players[message.author.id].giveGold(currentInv[1].value, True)
+                    await message.author.send(
+                        "You sold a "
+                        + currentInv[1].fullName
+                        + " for "
+                        + str(currentInv[1].value)
+                        + " gold"
                     )
-                    emojiResponses = [
-                        emoji_set["1"],
-                        emoji_set["2"],
-                        emoji_set["3"],
-                        emoji_set["4"],
-                        emoji_set["5"],
-                        emoji_set["A"],
-                        emoji_set["B"],
-                    ]
-                    for i in range(7):
-                        await reactables["playerInventories"][
-                            currentPlayer.ID
-                        ].add_reaction(emojiResponses[i])
+                    currentInv[1] = "Empty"
 
-                    def check(r, u):
-                        return (
-                            (
-                                r.message
-                                == reactables["playerInventories"][currentPlayer.ID]
-                            )
-                            and (str(r.emoji) in emojiResponses)
-                            and (u.id == message.author.id)
-                        )
+            elif message.content == "!sell_3":
+                currentInv = players[message.author.id].inventory
+                if not currentInv[2] == "Empty":
+                    players[message.author.id].giveGold(currentInv[2].value, True)
+                    await message.author.send(
+                        "You sold a "
+                        + currentInv[2].fullName
+                        + " for "
+                        + str(currentInv[2].value)
+                        + " gold"
+                    )
+                    currentInv[2] = "Empty"
 
-                    try:
-                        try:
-                            reactionChoiceOne, usr = await bot.wait_for(
-                                "reaction_add", check=check, timeout=20.0
-                            )
-                        except asyncio.TimeoutError:
-                            await message.author.send("Time's up - inventory closed!")
-                            await reactables["playerInventories"][
-                                currentPlayer.ID
-                            ].delete()
-                            reactables["playerInventories"][currentPlayer.ID] = None
-                            currentPlayer.openInventory = False
-                            return
-                        else:
-                            await reactables["playerInventories"][
-                                currentPlayer.ID
-                            ].delete()
-                            reactables["playerInventories"][currentPlayer.ID] = None
-                            highlightCell = (
-                                emojiResponses.index(str(reactionChoiceOne.emoji)) + 1
-                            )
-                            await makeInventoryImage()
-                            reactables["playerInventories"][
-                                currentPlayer.ID
-                            ] = await message.author.send(
-                                file=discord.File(
-                                    (
+            elif message.content == "!sell_4":
+                currentInv = players[message.author.id].inventory
+                if not currentInv[3] == "Empty":
+                    players[message.author.id].giveGold(currentInv[3].value, True)
+                    await message.author.send(
+                        "You sold a "
+                        + currentInv[3].fullName
+                        + " for "
+                        + str(currentInv[3].value)
+                        + " gold"
+                    )
+                    currentInv[3] = "Empty"
+
+            elif message.content == "!sell_5":
+                currentInv = players[message.author.id].inventory
+                if not currentInv[4] == "Empty":
+                    players[message.author.id].giveGold(currentInv[4].value, True)
+                    await message.author.send(
+                        "You sold a "
+                        + currentInv[4].fullName
+                        + " for "
+                        + str(currentInv[4].value)
+                        + " gold"
+                    )
+                    currentInv[4] = "Empty"
+
+            elif message.content == "!pet":
+                if players[message.author.id].pClass == "overseer":
+                    minRarity == "Epic"
+                    message.channel.send(str(Pet(minRarity)))
+                else:
+                    message.channel.send(str(Pet()))
+
+            elif message.content == "!inventory":
+                currentPlayer = players[message.author.id]
+                currentInv = currentPlayer.inventory
+                currentEquipment = currentPlayer.equipment
+                if currentPlayer.openInventory:
+                    await message.author.send("Inventory already open!")
+                else:
+                    currentPlayer.openInventory = True
+                    inventoryImage = Image(
+                        filename="Data/Resources/Images/inventory.png"
+                    )
+                    emptySlotImage = Image(
+                        filename="Data/Resources/Images/emptySlot.png"
+                    )
+                    itemHeldImage = Image(filename="Data/Resources/Images/itemHeld.png")
+                    itemArmourImage = Image(
+                        filename="Data/Resources/Images/itemArmour.png"
+                    )
+                    itemTreasureImage = Image(
+                        filename="Data/Resources/Images/treasure.png"
+                    )
+                    inv = inventoryImage.clone()
+                    es = emptySlotImage.clone()
+                    ih = itemHeldImage.clone()
+                    ia = itemArmourImage.clone()
+                    it = itemTreasureImage.clone()
+                    emptyCol = Color("#2E3035")
+                    commonCol = Color("#B9BBBE")
+                    uncommonCol = Color("#248224")
+                    rareCol = Color("#2C4399")
+                    epicCol = Color("#792482")
+                    legendaryCol = Color("#BA5318")
+                    zekiforgedCol = Color("#C54EA5")
+                    treasureCol = Color("#CA961D")
+                    borderCol = Color("#202225")
+                    highlightCol = Color("#C63721")
+                    highlightCell = 999
+                    loop = True
+                    while loop:
+                        loop = False
+
+                        async def makeInventoryImage():
+                            inv = inventoryImage.clone()
+                            with Drawing() as draw:
+                                draw.font = "Data/Resources/Fonts/whitneybold.otf"
+                                draw.font_size = 28
+                                draw.fill_color = Color("white")
+                                draw.text_alignment = "center"
+                                draw.text(100, 60, "Inventory")
+                                draw.font_size = 18
+                                draw.font = "Data/Resources/Fonts/whitneybold.otf"
+                                draw.fill_color = commonCol
+                                draw.text(75, 140, "STORAGE")
+                                draw.text(930, 140, "EQUIPMENT")
+                                draw.font = "Data/Resources/Fonts/whitneymedium.otf"
+                                for i in range(1, 6):
+                                    if i == highlightCell:
+                                        draw.fill_color = highlightCol
+                                    else:
+                                        draw.fill_color = borderCol
+                                    draw.rectangle(
+                                        left=(i * 160) - 128,
+                                        top=189,
+                                        width=149,
+                                        height=149,
+                                    )
+                                    if currentInv[i - 1] == "Empty":
+                                        rarityCol = emptyCol
+                                        boxImg = es
+                                    else:
+                                        if currentInv[i - 1].lootType == "treasure":
+                                            boxImg = it
+                                            rarityCol = treasureCol
+                                        else:
+                                            if currentInv[i - 1].lootType == "weapon":
+                                                boxImg = ih
+                                            else:
+                                                boxImg = ia
+                                            itemRarity = currentInv[
+                                                i - 1
+                                            ].fullName.split(" ")[0]
+                                            rarityCol = commonCol
+                                            if itemRarity == "Common":
+                                                pass
+                                            elif itemRarity == "Uncommon":
+                                                rarityCol = uncommonCol
+                                            elif itemRarity == "Rare":
+                                                rarityCol = rareCol
+                                            elif itemRarity == "Epic":
+                                                rarityCol = epicCol
+                                            elif itemRarity == "Legendary":
+                                                rarityCol = legendaryCol
+                                            elif itemRarity == "Zekiforged":
+                                                rarityCol = zekiforgedCol
+                                    draw.fill_color = rarityCol
+                                    draw.rectangle(
+                                        left=(i * 160) - 123,
+                                        top=194,
+                                        width=139,
+                                        height=139,
+                                    )
+                                    draw.composite(
+                                        operator="over",
+                                        left=(i * 160) - 120,
+                                        top=200,
+                                        width=128,
+                                        height=128,
+                                        image=boxImg,
+                                    )
+                                    if not currentInv[i - 1] == "Empty":
+                                        draw.fill_color = Color("#B4B6B9")
+                                        leftText = 55
+                                        downText = 370
+                                        draw.text(
+                                            (i * 160) - leftText,
+                                            downText,
+                                            currentInv[i - 1].name,
+                                        )
+                                        if not currentInv[i - 1].lootType == "treasure":
+                                            draw.text(
+                                                (i * 160) - leftText,
+                                                downText + 30,
+                                                "DMG: " + str(currentInv[i - 1].damage),
+                                            )
+                                            draw.text(
+                                                (i * 160) - leftText,
+                                                downText + 50,
+                                                "DFC: "
+                                                + str(currentInv[i - 1].defence),
+                                            )
+                                            draw.text(
+                                                (i * 160) - leftText,
+                                                downText + 70,
+                                                "Level: "
+                                                + str(currentInv[i - 1].level),
+                                            )
+                                            draw.text(
+                                                (i * 160) - leftText,
+                                                downText + 90,
+                                                "Value: "
+                                                + str(currentInv[i - 1].value),
+                                            )
+                                            # draw.text((i*160)-leftText, 440, currentInv[i-1].description)
+                                            if currentInv[i - 1].lootType == "weapon":
+                                                if not currentInv[i - 1].element == "":
+                                                    draw.text(
+                                                        (i * 160) - leftText,
+                                                        downText + 110,
+                                                        "Element: "
+                                                        + currentInv[i - 1].element,
+                                                    )
+                                        else:
+                                            draw.text(
+                                                (i * 160) - leftText,
+                                                downText + 30,
+                                                "Value: "
+                                                + str(currentInv[i - 1].value),
+                                            )
+                                            # draw.text((i*160)-leftText, 380, currentInv[i-1].description)
+                                    else:
+                                        draw.fill_color = Color("#B4B6B9")
+                                        leftText = 55
+                                        downText = 370
+                                        draw.text(
+                                            (i * 160) - leftText, downText, "Empty"
+                                        )
+                                for i in range(1, 3):
+                                    if i + 5 == highlightCell:
+                                        draw.fill_color = highlightCol
+                                    else:
+                                        draw.fill_color = borderCol
+                                    draw.rectangle(
+                                        left=(i * 160) + 717,
+                                        top=189,
+                                        width=149,
+                                        height=149,
+                                    )
+                                    if currentEquipment[i - 1] == "Empty":
+                                        rarityCol = emptyCol
+                                        boxImg = es
+                                    else:
+                                        if (
+                                            currentEquipment[i - 1].lootType
+                                            == "treasure"
+                                        ):
+                                            boxImg = it
+                                            rarityCol = treasureCol
+                                        else:
+                                            if (
+                                                currentEquipment[i - 1].lootType
+                                                == "weapon"
+                                            ):
+                                                boxImg = ih
+                                            else:
+                                                boxImg = ia
+                                            itemRarity = currentEquipment[
+                                                i - 1
+                                            ].fullName.split(" ")[0]
+                                            rarityCol = commonCol
+                                            if itemRarity == "Common":
+                                                pass
+                                            elif itemRarity == "Uncommon":
+                                                rarityCol = uncommonCol
+                                            elif itemRarity == "Rare":
+                                                rarityCol = rareCol
+                                            elif itemRarity == "Epic":
+                                                rarityCol = epicCol
+                                            elif itemRarity == "Legendary":
+                                                rarityCol = legendaryCol
+                                            elif itemRarity == "Zekiforged":
+                                                rarityCol = zekiforgedCol
+                                    draw.fill_color = rarityCol
+                                    draw.rectangle(
+                                        left=(i * 160) + 722,
+                                        top=194,
+                                        width=139,
+                                        height=139,
+                                    )
+                                    draw.composite(
+                                        operator="over",
+                                        left=(i * 160) + 730,
+                                        top=200,
+                                        width=128,
+                                        height=128,
+                                        image=boxImg,
+                                    )
+                                    if not currentEquipment[i - 1] == "Empty":
+                                        draw.fill_color = Color("#B4B6B9")
+                                        leftText = 795
+                                        downText = 370
+                                        draw.text(
+                                            (i * 160) + leftText,
+                                            downText,
+                                            currentEquipment[i - 1].name,
+                                        )
+                                        if (
+                                            not currentEquipment[i - 1].lootType
+                                            == "treasure"
+                                        ):
+                                            draw.text(
+                                                (i * 160) + leftText,
+                                                downText + 30,
+                                                "DMG: "
+                                                + str(currentEquipment[i - 1].damage),
+                                            )
+                                            draw.text(
+                                                (i * 160) + leftText,
+                                                downText + 50,
+                                                "DFC: "
+                                                + str(currentEquipment[i - 1].defence),
+                                            )
+                                            draw.text(
+                                                (i * 160) + leftText,
+                                                downText + 70,
+                                                "Level: "
+                                                + str(currentEquipment[i - 1].level),
+                                            )
+                                            draw.text(
+                                                (i * 160) + leftText,
+                                                downText + 90,
+                                                "Value: "
+                                                + str(currentEquipment[i - 1].value),
+                                            )
+                                            # draw.text((i*160)-leftText, 440, currentEquipment[i-1].description)
+                                            if (
+                                                currentEquipment[i - 1].lootType
+                                                == "weapon"
+                                            ):
+                                                if (
+                                                    not currentEquipment[i - 1].element
+                                                    == ""
+                                                ):
+                                                    draw.text(
+                                                        (i * 160) + leftText,
+                                                        downText + 110,
+                                                        "Element: "
+                                                        + currentEquipment[
+                                                            i - 1
+                                                        ].element,
+                                                    )
+                                        else:
+                                            draw.text(
+                                                (i * 160) + leftText,
+                                                downText + 30,
+                                                "Value: "
+                                                + str(currentEquipment[i - 1].value),
+                                            )
+                                            # draw.text((i*160)-leftText, 380, currentEquipment[i-1].description)
+                                    else:
+                                        draw.fill_color = Color("#B4B6B9")
+                                        leftText = 795
+                                        downText = 370
+                                        draw.text(
+                                            (i * 160) + leftText, downText, "Empty"
+                                        )
+                                draw(inv)
+                                inv.save(
+                                    filename=(
                                         "Data/Dynamic/"
                                         + str(currentPlayer.ID)
                                         + "_InventoryOutput.png"
                                     )
                                 )
+
+                        await makeInventoryImage()
+                        reactables["playerInventories"][
+                            currentPlayer.ID
+                        ] = await message.author.send(
+                            file=discord.File(
+                                "Data/Dynamic/"
+                                + str(currentPlayer.ID)
+                                + "_InventoryOutput.png"
                             )
-                            emojiResponses = [
-                                emoji_set["1"],
-                                emoji_set["2"],
-                                emoji_set["3"],
-                                emoji_set["4"],
-                                emoji_set["5"],
-                                emoji_set["A"],
-                                emoji_set["B"],
-                                emoji_set["moneyBag"],
-                            ]
+                        )
+                        emojiResponses = [
+                            emoji_set["1"],
+                            emoji_set["2"],
+                            emoji_set["3"],
+                            emoji_set["4"],
+                            emoji_set["5"],
+                            emoji_set["A"],
+                            emoji_set["B"],
+                        ]
+                        for i in range(7):
                             await reactables["playerInventories"][
                                 currentPlayer.ID
-                            ].add_reaction(emojiResponses[0])
-                            await reactables["playerInventories"][
-                                currentPlayer.ID
-                            ].add_reaction(emojiResponses[1])
-                            await reactables["playerInventories"][
-                                currentPlayer.ID
-                            ].add_reaction(emojiResponses[2])
-                            await reactables["playerInventories"][
-                                currentPlayer.ID
-                            ].add_reaction(emojiResponses[3])
-                            await reactables["playerInventories"][
-                                currentPlayer.ID
-                            ].add_reaction(emojiResponses[4])
-                            await reactables["playerInventories"][
-                                currentPlayer.ID
-                            ].add_reaction(emojiResponses[5])
-                            await reactables["playerInventories"][
-                                currentPlayer.ID
-                            ].add_reaction(emojiResponses[6])
-                            await reactables["playerInventories"][
-                                currentPlayer.ID
-                            ].add_reaction(emojiResponses[7])
+                            ].add_reaction(emojiResponses[i])
+
+                        def check(r, u):
+                            return (
+                                (
+                                    r.message
+                                    == reactables["playerInventories"][currentPlayer.ID]
+                                )
+                                and (str(r.emoji) in emojiResponses)
+                                and (u.id == message.author.id)
+                            )
+
+                        try:
                             try:
-                                reactionChoiceTwo, usr = await bot.wait_for(
+                                reactionChoiceOne, usr = await bot.wait_for(
                                     "reaction_add", check=check, timeout=20.0
                                 )
                             except asyncio.TimeoutError:
@@ -1526,349 +1567,212 @@ async def on_message(message):
                                     currentPlayer.ID
                                 ].delete()
                                 reactables["playerInventories"][currentPlayer.ID] = None
-                                highlightCell = 999
-                                slot1 = emojiResponses.index(
-                                    str(reactionChoiceOne.emoji)
+                                highlightCell = (
+                                    emojiResponses.index(str(reactionChoiceOne.emoji))
+                                    + 1
                                 )
-                                slot2 = emojiResponses.index(
-                                    str(reactionChoiceTwo.emoji)
+                                await makeInventoryImage()
+                                reactables["playerInventories"][
+                                    currentPlayer.ID
+                                ] = await message.author.send(
+                                    file=discord.File(
+                                        (
+                                            "Data/Dynamic/"
+                                            + str(currentPlayer.ID)
+                                            + "_InventoryOutput.png"
+                                        )
+                                    )
                                 )
-                                weaponCount = 0
-                                armourCount = 0
-                                if (
-                                    not players[message.author.id].equipment[0]
-                                    == "Empty"
-                                ):
+                                emojiResponses = [
+                                    emoji_set["1"],
+                                    emoji_set["2"],
+                                    emoji_set["3"],
+                                    emoji_set["4"],
+                                    emoji_set["5"],
+                                    emoji_set["A"],
+                                    emoji_set["B"],
+                                    emoji_set["moneyBag"],
+                                ]
+                                await reactables["playerInventories"][
+                                    currentPlayer.ID
+                                ].add_reaction(emojiResponses[0])
+                                await reactables["playerInventories"][
+                                    currentPlayer.ID
+                                ].add_reaction(emojiResponses[1])
+                                await reactables["playerInventories"][
+                                    currentPlayer.ID
+                                ].add_reaction(emojiResponses[2])
+                                await reactables["playerInventories"][
+                                    currentPlayer.ID
+                                ].add_reaction(emojiResponses[3])
+                                await reactables["playerInventories"][
+                                    currentPlayer.ID
+                                ].add_reaction(emojiResponses[4])
+                                await reactables["playerInventories"][
+                                    currentPlayer.ID
+                                ].add_reaction(emojiResponses[5])
+                                await reactables["playerInventories"][
+                                    currentPlayer.ID
+                                ].add_reaction(emojiResponses[6])
+                                await reactables["playerInventories"][
+                                    currentPlayer.ID
+                                ].add_reaction(emojiResponses[7])
+                                try:
+                                    reactionChoiceTwo, usr = await bot.wait_for(
+                                        "reaction_add", check=check, timeout=20.0
+                                    )
+                                except asyncio.TimeoutError:
+                                    await message.author.send(
+                                        "Time's up - inventory closed!"
+                                    )
+                                    await reactables["playerInventories"][
+                                        currentPlayer.ID
+                                    ].delete()
+                                    reactables["playerInventories"][
+                                        currentPlayer.ID
+                                    ] = None
+                                    currentPlayer.openInventory = False
+                                    return
+                                else:
+                                    await reactables["playerInventories"][
+                                        currentPlayer.ID
+                                    ].delete()
+                                    reactables["playerInventories"][
+                                        currentPlayer.ID
+                                    ] = None
+                                    highlightCell = 999
+                                    slot1 = emojiResponses.index(
+                                        str(reactionChoiceOne.emoji)
+                                    )
+                                    slot2 = emojiResponses.index(
+                                        str(reactionChoiceTwo.emoji)
+                                    )
+                                    weaponCount = 0
+                                    armourCount = 0
                                     if (
-                                        players[message.author.id].equipment[0].type
-                                        == "weapon"
+                                        not players[message.author.id].equipment[0]
+                                        == "Empty"
                                     ):
-                                        weaponCount = weaponCount + 1
-                                    if (
-                                        players[message.author.id].equipment[0].type
-                                        == "armour"
-                                    ):
-                                        armourCount = armourCount + 1
-                                if (
-                                    not players[message.author.id].equipment[1]
-                                    == "Empty"
-                                ):
-                                    if (
-                                        players[message.author.id].equipment[1].type
-                                        == "weapon"
-                                    ):
-                                        weaponCount = weaponCount + 1
-                                    if (
-                                        players[message.author.id].equipment[1].type
-                                        == "armour"
-                                    ):
-                                        armourCount = armourCount + 1
-                                if slot2 == 7:
-                                    if slot1 < 5:
                                         if (
-                                            players[message.author.id].inventory[slot1]
-                                            == "Empty"
+                                            players[message.author.id]
+                                            .equipment[0]
+                                            .lootType
+                                            == "weapon"
                                         ):
-                                            await message.author.send(
-                                                "That slot is empty!"
-                                            )
-                                        else:
-                                            players[message.author.id].giveGold(
-                                                players[message.author.id]
-                                                .inventory[slot1]
-                                                .value,
-                                                True,
-                                            )
-                                            await message.author.send(
-                                                "You sold a "
-                                                + players[message.author.id]
-                                                .inventory[slot1]
-                                                .fullName
-                                                + " for "
-                                                + str(
+                                            weaponCount = weaponCount + 1
+                                        if (
+                                            players[message.author.id]
+                                            .equipment[0]
+                                            .lootType
+                                            == "armour"
+                                        ):
+                                            armourCount = armourCount + 1
+                                    if (
+                                        not players[message.author.id].equipment[1]
+                                        == "Empty"
+                                    ):
+                                        if (
+                                            players[message.author.id]
+                                            .equipment[1]
+                                            .lootType
+                                            == "weapon"
+                                        ):
+                                            weaponCount = weaponCount + 1
+                                        if (
+                                            players[message.author.id]
+                                            .equipment[1]
+                                            .lootType
+                                            == "armour"
+                                        ):
+                                            armourCount = armourCount + 1
+                                    if slot2 == 7:
+                                        if slot1 < 5:
+                                            if (
+                                                players[message.author.id].inventory[
+                                                    slot1
+                                                ]
+                                                == "Empty"
+                                            ):
+                                                await message.author.send(
+                                                    "That slot is empty!"
+                                                )
+                                            else:
+                                                players[message.author.id].giveGold(
                                                     players[message.author.id]
                                                     .inventory[slot1]
-                                                    .value
+                                                    .value,
+                                                    True,
                                                 )
-                                                + " gold"
-                                            )
-                                            players[message.author.id].inventory[
-                                                slot1
-                                            ] = "Empty"
-                                    else:
-                                        if (
-                                            players[message.author.id].equipment[
-                                                slot1 - 5
-                                            ]
-                                            == "Empty"
-                                        ):
-                                            await message.author.send(
-                                                "That slot is empty!"
-                                            )
-                                        else:
-                                            players[message.author.id].giveGold(
-                                                players[message.author.id]
-                                                .equipment[slot1 - 5]
-                                                .value,
-                                                True,
-                                            )
-                                            await message.author.send(
-                                                "You sold a "
-                                                + players[message.author.id]
-                                                .equipment[slot1 - 5]
-                                                .fullName
-                                                + " for "
-                                                + str(
-                                                    players[message.author.id]
-                                                    .equipment[slot1 - 5]
-                                                    .value
-                                                )
-                                                + " gold"
-                                            )
-                                            players[message.author.id].equipment[
-                                                slot1 - 5
-                                            ] = "Empty"
-                                else:
-                                    if slot1 < 5 and slot2 < 5:
-                                        (
-                                            players[message.author.id].inventory[slot1],
-                                            players[message.author.id].inventory[slot2],
-                                        ) = (
-                                            players[message.author.id].inventory[slot2],
-                                            players[message.author.id].inventory[slot1],
-                                        )
-                                    elif slot1 > 4 and slot2 > 4:
-                                        (
-                                            players[message.author.id].equipment[
-                                                slot1 - 5
-                                            ],
-                                            players[message.author.id].equipment[
-                                                slot2 - 5
-                                            ],
-                                        ) = (
-                                            players[message.author.id].equipment[
-                                                slot2 - 5
-                                            ],
-                                            players[message.author.id].equipment[
-                                                slot1 - 5
-                                            ],
-                                        )
-                                    elif slot1 > 4 and slot2 < 5:
-                                        if (
-                                            not players[message.author.id].inventory[
-                                                slot2
-                                            ]
-                                            == "Empty"
-                                        ):
-                                            if (
-                                                not players[message.author.id]
-                                                .inventory[slot2]
-                                                .type
-                                                == "treasure"
-                                            ):
-                                                if (
-                                                    players[message.author.id].pClass
-                                                    == "corsair"
-                                                ):
-                                                    if (
-                                                        players[message.author.id]
-                                                        .inventory[slot2]
-                                                        .type
-                                                        == "weapon"
-                                                    ):
-                                                        (
-                                                            players[
-                                                                message.author.id
-                                                            ].equipment[slot1 - 5],
-                                                            players[
-                                                                message.author.id
-                                                            ].inventory[slot2],
-                                                        ) = (
-                                                            players[
-                                                                message.author.id
-                                                            ].inventory[slot2],
-                                                            players[
-                                                                message.author.id
-                                                            ].equipment[slot1 - 5],
-                                                        )
-                                                else:
-                                                    if (
-                                                        not players[
-                                                            message.author.id
-                                                        ].equipment[slot1 - 5]
-                                                        == "Empty"
-                                                    ):
-                                                        swapTo = (
-                                                            players[message.author.id]
-                                                            .equipment[slot1 - 5]
-                                                            .type
-                                                        )
-                                                    else:
-                                                        swapTo = "Empty"
-                                                    if players[
-                                                        message.author.id
-                                                    ].inventory[
-                                                        slot2
-                                                    ].type == "weapon" and (
-                                                        weaponCount == 0
-                                                        or swapTo == "weapon"
-                                                    ):
-                                                        (
-                                                            players[
-                                                                message.author.id
-                                                            ].equipment[slot1 - 5],
-                                                            players[
-                                                                message.author.id
-                                                            ].inventory[slot2],
-                                                        ) = (
-                                                            players[
-                                                                message.author.id
-                                                            ].inventory[slot2],
-                                                            players[
-                                                                message.author.id
-                                                            ].equipment[slot1 - 5],
-                                                        )
-                                                    elif players[
-                                                        message.author.id
-                                                    ].inventory[
-                                                        slot2
-                                                    ].type == "armour" and (
-                                                        armourCount == 0
-                                                        or swapTo == "armour"
-                                                    ):
-                                                        (
-                                                            players[
-                                                                message.author.id
-                                                            ].equipment[slot1 - 5],
-                                                            players[
-                                                                message.author.id
-                                                            ].inventory[slot2],
-                                                        ) = (
-                                                            players[
-                                                                message.author.id
-                                                            ].inventory[slot2],
-                                                            players[
-                                                                message.author.id
-                                                            ].equipment[slot1 - 5],
-                                                        )
-                                        else:
-                                            (
-                                                players[message.author.id].equipment[
-                                                    slot1 - 5
-                                                ],
-                                                players[message.author.id].inventory[
-                                                    slot2
-                                                ],
-                                            ) = (
-                                                players[message.author.id].inventory[
-                                                    slot2
-                                                ],
-                                                players[message.author.id].equipment[
-                                                    slot1 - 5
-                                                ],
-                                            )
-                                    else:
-                                        if (
-                                            not players[message.author.id].inventory[
-                                                slot1
-                                            ]
-                                            == "Empty"
-                                        ):
-                                            if (
-                                                not players[message.author.id]
-                                                .inventory[slot1]
-                                                .type
-                                                == "treasure"
-                                            ):
-                                                if (
-                                                    players[message.author.id].pClass
-                                                    == "corsair"
-                                                ):
-                                                    if (
+                                                await message.author.send(
+                                                    "You sold a "
+                                                    + players[message.author.id]
+                                                    .inventory[slot1]
+                                                    .fullName
+                                                    + " for "
+                                                    + str(
                                                         players[message.author.id]
                                                         .inventory[slot1]
-                                                        .type
-                                                        == "weapon"
-                                                    ):
-                                                        (
-                                                            players[
-                                                                message.author.id
-                                                            ].inventory[slot1],
-                                                            players[
-                                                                message.author.id
-                                                            ].equipment[slot2 - 5],
-                                                        ) = (
-                                                            players[
-                                                                message.author.id
-                                                            ].equipment[slot2 - 5],
-                                                            players[
-                                                                message.author.id
-                                                            ].inventory[slot1],
-                                                        )
-                                                else:
-                                                    if (
-                                                        not players[
-                                                            message.author.id
-                                                        ].equipment[slot2 - 5]
-                                                        == "Empty"
-                                                    ):
-                                                        swapTo = (
-                                                            players[message.author.id]
-                                                            .equipment[slot2 - 5]
-                                                            .type
-                                                        )
-                                                    else:
-                                                        swapTo = "Empty"
-                                                    if players[
-                                                        message.author.id
-                                                    ].inventory[
-                                                        slot1
-                                                    ].type == "weapon" and (
-                                                        weaponCount == 0
-                                                        or swapTo == "weapon"
-                                                    ):
-                                                        (
-                                                            players[
-                                                                message.author.id
-                                                            ].inventory[slot1],
-                                                            players[
-                                                                message.author.id
-                                                            ].equipment[slot2 - 5],
-                                                        ) = (
-                                                            players[
-                                                                message.author.id
-                                                            ].equipment[slot2 - 5],
-                                                            players[
-                                                                message.author.id
-                                                            ].inventory[slot1],
-                                                        )
-                                                    elif players[
-                                                        message.author.id
-                                                    ].inventory[
-                                                        slot1
-                                                    ].type == "armour" and (
-                                                        armourCount == 0
-                                                        or swapTo == "armour"
-                                                    ):
-                                                        (
-                                                            players[
-                                                                message.author.id
-                                                            ].inventory[slot1],
-                                                            players[
-                                                                message.author.id
-                                                            ].equipment[slot2 - 5],
-                                                        ) = (
-                                                            players[
-                                                                message.author.id
-                                                            ].equipment[slot2 - 5],
-                                                            players[
-                                                                message.author.id
-                                                            ].inventory[slot1],
-                                                        )
+                                                        .value
+                                                    )
+                                                    + " gold"
+                                                )
+                                                players[message.author.id].inventory[
+                                                    slot1
+                                                ] = "Empty"
                                         else:
+                                            if (
+                                                players[message.author.id].equipment[
+                                                    slot1 - 5
+                                                ]
+                                                == "Empty"
+                                            ):
+                                                await message.author.send(
+                                                    "That slot is empty!"
+                                                )
+                                            else:
+                                                players[message.author.id].giveGold(
+                                                    players[message.author.id]
+                                                    .equipment[slot1 - 5]
+                                                    .value,
+                                                    True,
+                                                )
+                                                await message.author.send(
+                                                    "You sold a "
+                                                    + players[message.author.id]
+                                                    .equipment[slot1 - 5]
+                                                    .fullName
+                                                    + " for "
+                                                    + str(
+                                                        players[message.author.id]
+                                                        .equipment[slot1 - 5]
+                                                        .value
+                                                    )
+                                                    + " gold"
+                                                )
+                                                players[message.author.id].equipment[
+                                                    slot1 - 5
+                                                ] = "Empty"
+                                    else:
+                                        if slot1 < 5 and slot2 < 5:
                                             (
                                                 players[message.author.id].inventory[
                                                     slot1
+                                                ],
+                                                players[message.author.id].inventory[
+                                                    slot2
+                                                ],
+                                            ) = (
+                                                players[message.author.id].inventory[
+                                                    slot2
+                                                ],
+                                                players[message.author.id].inventory[
+                                                    slot1
+                                                ],
+                                            )
+                                        elif slot1 > 4 and slot2 > 4:
+                                            (
+                                                players[message.author.id].equipment[
+                                                    slot1 - 5
                                                 ],
                                                 players[message.author.id].equipment[
                                                     slot2 - 5
@@ -1877,269 +1781,507 @@ async def on_message(message):
                                                 players[message.author.id].equipment[
                                                     slot2 - 5
                                                 ],
-                                                players[message.author.id].inventory[
-                                                    slot1
+                                                players[message.author.id].equipment[
+                                                    slot1 - 5
                                                 ],
                                             )
-                                loop = True
-                    except:
-                        print("Error in inventory management!")
-                        await reactables["playerInventories"][currentPlayer.ID].delete()
-                        currentPlayer.openInventory = False
-                        reactables["playerInventories"][currentPlayer.ID] = None
-                        print(sys.exc_info()[0])
+                                        elif slot1 > 4 and slot2 < 5:
+                                            if (
+                                                not players[
+                                                    message.author.id
+                                                ].inventory[slot2]
+                                                == "Empty"
+                                            ):
+                                                if (
+                                                    not players[message.author.id]
+                                                    .inventory[slot2]
+                                                    .lootType
+                                                    == "treasure"
+                                                ):
+                                                    if (
+                                                        players[
+                                                            message.author.id
+                                                        ].pClass
+                                                        == "corsair"
+                                                    ):
+                                                        if (
+                                                            players[message.author.id]
+                                                            .inventory[slot2]
+                                                            .lootType
+                                                            == "weapon"
+                                                        ):
+                                                            (
+                                                                players[
+                                                                    message.author.id
+                                                                ].equipment[slot1 - 5],
+                                                                players[
+                                                                    message.author.id
+                                                                ].inventory[slot2],
+                                                            ) = (
+                                                                players[
+                                                                    message.author.id
+                                                                ].inventory[slot2],
+                                                                players[
+                                                                    message.author.id
+                                                                ].equipment[slot1 - 5],
+                                                            )
+                                                    else:
+                                                        if (
+                                                            not players[
+                                                                message.author.id
+                                                            ].equipment[slot1 - 5]
+                                                            == "Empty"
+                                                        ):
+                                                            swapTo = (
+                                                                players[
+                                                                    message.author.id
+                                                                ]
+                                                                .equipment[slot1 - 5]
+                                                                .lootType
+                                                            )
+                                                        else:
+                                                            swapTo = "Empty"
+                                                        if players[
+                                                            message.author.id
+                                                        ].inventory[
+                                                            slot2
+                                                        ].lootType == "weapon" and (
+                                                            weaponCount == 0
+                                                            or swapTo == "weapon"
+                                                        ):
+                                                            (
+                                                                players[
+                                                                    message.author.id
+                                                                ].equipment[slot1 - 5],
+                                                                players[
+                                                                    message.author.id
+                                                                ].inventory[slot2],
+                                                            ) = (
+                                                                players[
+                                                                    message.author.id
+                                                                ].inventory[slot2],
+                                                                players[
+                                                                    message.author.id
+                                                                ].equipment[slot1 - 5],
+                                                            )
+                                                        elif players[
+                                                            message.author.id
+                                                        ].inventory[
+                                                            slot2
+                                                        ].lootType == "armour" and (
+                                                            armourCount == 0
+                                                            or swapTo == "armour"
+                                                        ):
+                                                            (
+                                                                players[
+                                                                    message.author.id
+                                                                ].equipment[slot1 - 5],
+                                                                players[
+                                                                    message.author.id
+                                                                ].inventory[slot2],
+                                                            ) = (
+                                                                players[
+                                                                    message.author.id
+                                                                ].inventory[slot2],
+                                                                players[
+                                                                    message.author.id
+                                                                ].equipment[slot1 - 5],
+                                                            )
+                                            else:
+                                                (
+                                                    players[
+                                                        message.author.id
+                                                    ].equipment[slot1 - 5],
+                                                    players[
+                                                        message.author.id
+                                                    ].inventory[slot2],
+                                                ) = (
+                                                    players[
+                                                        message.author.id
+                                                    ].inventory[slot2],
+                                                    players[
+                                                        message.author.id
+                                                    ].equipment[slot1 - 5],
+                                                )
+                                        else:
+                                            if (
+                                                not players[
+                                                    message.author.id
+                                                ].inventory[slot1]
+                                                == "Empty"
+                                            ):
+                                                if (
+                                                    not players[message.author.id]
+                                                    .inventory[slot1]
+                                                    .lootType
+                                                    == "treasure"
+                                                ):
+                                                    if (
+                                                        players[
+                                                            message.author.id
+                                                        ].pClass
+                                                        == "corsair"
+                                                    ):
+                                                        if (
+                                                            players[message.author.id]
+                                                            .inventory[slot1]
+                                                            .lootType
+                                                            == "weapon"
+                                                        ):
+                                                            (
+                                                                players[
+                                                                    message.author.id
+                                                                ].inventory[slot1],
+                                                                players[
+                                                                    message.author.id
+                                                                ].equipment[slot2 - 5],
+                                                            ) = (
+                                                                players[
+                                                                    message.author.id
+                                                                ].equipment[slot2 - 5],
+                                                                players[
+                                                                    message.author.id
+                                                                ].inventory[slot1],
+                                                            )
+                                                    else:
+                                                        if (
+                                                            not players[
+                                                                message.author.id
+                                                            ].equipment[slot2 - 5]
+                                                            == "Empty"
+                                                        ):
+                                                            swapTo = (
+                                                                players[
+                                                                    message.author.id
+                                                                ]
+                                                                .equipment[slot2 - 5]
+                                                                .lootType
+                                                            )
+                                                        else:
+                                                            swapTo = "Empty"
+                                                        if players[
+                                                            message.author.id
+                                                        ].inventory[
+                                                            slot1
+                                                        ].lootType == "weapon" and (
+                                                            weaponCount == 0
+                                                            or swapTo == "weapon"
+                                                        ):
+                                                            (
+                                                                players[
+                                                                    message.author.id
+                                                                ].inventory[slot1],
+                                                                players[
+                                                                    message.author.id
+                                                                ].equipment[slot2 - 5],
+                                                            ) = (
+                                                                players[
+                                                                    message.author.id
+                                                                ].equipment[slot2 - 5],
+                                                                players[
+                                                                    message.author.id
+                                                                ].inventory[slot1],
+                                                            )
+                                                        elif players[
+                                                            message.author.id
+                                                        ].inventory[
+                                                            slot1
+                                                        ].lootType == "armour" and (
+                                                            armourCount == 0
+                                                            or swapTo == "armour"
+                                                        ):
+                                                            (
+                                                                players[
+                                                                    message.author.id
+                                                                ].inventory[slot1],
+                                                                players[
+                                                                    message.author.id
+                                                                ].equipment[slot2 - 5],
+                                                            ) = (
+                                                                players[
+                                                                    message.author.id
+                                                                ].equipment[slot2 - 5],
+                                                                players[
+                                                                    message.author.id
+                                                                ].inventory[slot1],
+                                                            )
+                                            else:
+                                                (
+                                                    players[
+                                                        message.author.id
+                                                    ].inventory[slot1],
+                                                    players[
+                                                        message.author.id
+                                                    ].equipment[slot2 - 5],
+                                                ) = (
+                                                    players[
+                                                        message.author.id
+                                                    ].equipment[slot2 - 5],
+                                                    players[
+                                                        message.author.id
+                                                    ].inventory[slot1],
+                                                )
+                                    loop = True
+                        except:
+                            print("Error in inventory management!")
+                            await reactables["playerInventories"][
+                                currentPlayer.ID
+                            ].delete()
+                            currentPlayer.openInventory = False
+                            reactables["playerInventories"][currentPlayer.ID] = None
+                            print(traceback.format_exc())
 
-        if message.channel == channels["admin"]:
-            if message.author.bot:
-                return
-            if message.content == "!makechar":
-                if message.author.id == 137451662817230848:
-                    players[message.author.id] = Player(
-                        message.author.id, "Varzeki", "ambassador", "ascended"
-                    )
-                    reactables["playerInventories"][message.author.id] = None
-            if message.content == "!restart":
-                print("Graceful Restart Triggered")
-                graceful_init = True
-                await channels["help"].send("RESTART IN 3 MINUTES")
-                await asyncio.sleep(60)
-                await channels["help"].send("RESTART IN 2 MINUTES")
-                await asyncio.sleep(60)
-                await channels["help"].send("RESTART IN 1 MINUTE")
-                await asyncio.sleep(60)
-                await channels["help"].send("RESTARTING NOW")
-                graceful_exit = True
+            elif message.channel == channels["admin"]:
+                if message.author.bot:
+                    return
+                if message.content == "!makechar":
+                    if message.author.id == 137451662817230848:
+                        players[message.author.id] = Player(
+                            message.author.id, "Varzeki", "ambassador", "ascended"
+                        )
+                        reactables["playerInventories"][message.author.id] = None
+                if message.content == "!restart":
+                    print("Graceful Restart Triggered")
+                    graceful_init = True
+                    await channels["help"].send("RESTART IN 3 MINUTES")
+                    await asyncio.sleep(60)
+                    await channels["help"].send("RESTART IN 2 MINUTES")
+                    await asyncio.sleep(60)
+                    await channels["help"].send("RESTART IN 1 MINUTE")
+                    await asyncio.sleep(60)
+                    await channels["help"].send("RESTARTING NOW")
+                    graceful_exit = True
 
-        if message.channel == channels["help"]:
-            if message.content == "!reset":
-                players[message.author.id].inCombat = False
-                players[message.author.id].HP = players[message.author.id].maxHP
-                players[message.author.id].hpBar = emoji_set["greenHP"] * 10
-                await message.channel.send("Player Reset!")
-
-        if message.channel == channels["havens"]["the-tavern"]:
-            if message.content == "!stats":
-                if message.author.id in players:
-                    factList = [
-                        players[message.author.id].name
-                        + " has died "
-                        + str(players[message.author.id].STAT_timesDied)
-                        + " times!",
-                        players[message.author.id].name
-                        + " has killed "
-                        + str(players[message.author.id].STAT_mobsKilled)
-                        + " mobs!",
-                        players[message.author.id].name
-                        + " has bested "
-                        + str(players[message.author.id].STAT_ratsBeaten)
-                        + " rats!",
-                        players[message.author.id].name
-                        + " has received "
-                        + str(players[message.author.id].STAT_itemsLooted)
-                        + " drops!",
-                        players[message.author.id].name
-                        + " has looted "
-                        + str(players[message.author.id].STAT_goldLooted)
-                        + " gold!",
-                        players[message.author.id].name
-                        + " has collected "
-                        + str(players[message.author.id].STAT_titlesCollected)
-                        + " titles!",
-                        players[message.author.id].name
-                        + " has dealt out "
-                        + str(players[message.author.id].STAT_damageDealt)
-                        + " damage!",
-                        players[message.author.id].name
-                        + " has taken "
-                        + str(players[message.author.id].STAT_damageReceived)
-                        + " damage!",
-                    ]
-                    await message.author.avatar_url.save(
-                        "Data/Dynamic/" + str(message.author.id) + "_UserImage.png"
-                    )
-                    statsImage = Image(filename="Data/Resources/Images/stats.png")
-                    discordImage = Image(
-                        filename=(
+            if message.channel == channels["havens"]["the-tavern"]:
+                if message.content == "!stats":
+                    if message.author.id in players:
+                        factList = [
+                            players[message.author.id].name
+                            + " has died "
+                            + str(players[message.author.id].STAT_timesDied)
+                            + " times!",
+                            players[message.author.id].name
+                            + " has killed "
+                            + str(players[message.author.id].STAT_mobsKilled)
+                            + " mobs!",
+                            players[message.author.id].name
+                            + " has bested "
+                            + str(players[message.author.id].STAT_ratsBeaten)
+                            + " rats!",
+                            players[message.author.id].name
+                            + " has received "
+                            + str(players[message.author.id].STAT_itemsLooted)
+                            + " drops!",
+                            players[message.author.id].name
+                            + " has looted "
+                            + str(players[message.author.id].STAT_goldLooted)
+                            + " gold!",
+                            players[message.author.id].name
+                            + " has collected "
+                            + str(players[message.author.id].STAT_titlesCollected)
+                            + " titles!",
+                            players[message.author.id].name
+                            + " has dealt out "
+                            + str(players[message.author.id].STAT_damageDealt)
+                            + " damage!",
+                            players[message.author.id].name
+                            + " has taken "
+                            + str(players[message.author.id].STAT_damageReceived)
+                            + " damage!",
+                        ]
+                        await message.author.avatar_url.save(
                             "Data/Dynamic/" + str(message.author.id) + "_UserImage.png"
                         )
-                    )
-                    maskImage = Image(filename="Data/Resources/Images/mask.png")
-                    greenHPImage = Image(filename="Data/Resources/Images/greenHP.png")
-                    redHPImage = Image(filename="Data/Resources/Images/redHP.png")
-                    dot = Image(
-                        filename=(
-                            "Data/Resources/Images/"
-                            + players[message.author.id].pClass
-                            + "Dot.png"
-                        )
-                    )
-
-                    def apply_mask(image, mask, invert=False):
-                        image.alpha_channel = True
-                        if invert:
-                            mask.negate()
-                        with Image(
-                            width=image.width,
-                            height=image.height,
-                            background=Color("transparent"),
-                        ) as alpha_image:
-                            alpha_image.composite_channel(
-                                "alpha", mask, "copy_opacity", 0, 0
-                            )
-                            image.composite_channel(
-                                "alpha", alpha_image, "multiply", 0, 0
-                            )
-
-                    s = statsImage.clone()
-                    a = discordImage.clone().convert("png")
-                    m = maskImage.clone()
-                    d = dot.clone()
-                    g = greenHPImage.clone()
-                    r = redHPImage.clone()
-                    with Drawing() as draw:
-                        a.resize(128, 128)
-                        g.resize(35, 35)
-                        r.resize(35, 35)
-                        # draw.fill_color = Color("black")
-                        # draw.rectangle(left=int((s.width/2)-64),top=30,width=128,height=128,radius=64)  # 30% rounding?
-                        apply_mask(a, m)
-                        draw.font = "Data/Resources/Fonts/whitneybold.otf"
-                        draw.font_size = 18
-                        draw.fill_color = Color("white")
-                        draw.text_alignment = "center"
-                        draw.font_weight = 700
-                        draw.text(
-                            int(s.width / 2),
-                            180,
-                            players[message.author.id].name
-                            + players[message.author.id].title,
-                        )
-                        draw.font = "Data/Resources/Fonts/whitneybook.otf"
-                        draw.fill_color = Color("#B4B6B9")
-                        draw.text(
-                            int(s.width / 2),
-                            205,
-                            "Level: " + str(players[message.author.id].level),
-                        )
-                        draw.font = "Data/Resources/Fonts/whitneybold.otf"
-                        draw.fill_color = Color("#B9BBBE")
-                        draw.text(int(s.width / 2) - 110, 270, "HEALTH")
-                        draw.text(int(s.width / 2) - 119, 390, "STATS")
-                        draw.text(int(s.width / 2) - 129, 540, "FACT")
-                        draw.font = "Data/Resources/Fonts/whitneymedium.otf"
-                        draw.text(
-                            int(s.width / 2),
-                            350,
-                            str(players[message.author.id].HP)
-                            + "/"
-                            + str(players[message.author.id].maxHP)
-                            + "HP",
-                        )
-                        draw.text(
-                            int(s.width / 2),
-                            440,
-                            "Gold: " + str(players[message.author.id].gold),
-                        )
-                        draw.text(
-                            int(s.width / 2),
-                            420,
-                            "Next Level: "
-                            + str(
-                                round(
-                                    players[message.author.id].nextLevelEXP
-                                    - players[message.author.id].EXP
-                                )
-                            )
-                            + "EXP",
-                        )
-                        draw.text(
-                            int(s.width / 2),
-                            460,
-                            "DMG: " + str(players[message.author.id].DMG),
-                        )
-                        draw.text(
-                            int(s.width / 2),
-                            480,
-                            "DFC: " + str(players[message.author.id].DFC),
-                        )
-                        draw.text(
-                            int(s.width / 2), 580, random.sample(factList, k=1)[0]
-                        )
-                        hpSlots = round(
-                            (
-                                players[message.author.id].HP
-                                / players[message.author.id].maxHP
-                            )
-                            * 10
-                        )
-                        if not hpSlots == 0:
-                            if not hpSlots == 10:
-                                for i in range(1, hpSlots + 1):
-                                    draw.composite(
-                                        operator="over",
-                                        left=int(((s.width / 2) - 180) + 33 * i),
-                                        top=290,
-                                        width=35,
-                                        height=35,
-                                        image=g,
-                                    )
-                            else:
-                                for i in range(1, hpSlots):
-                                    draw.composite(
-                                        operator="over",
-                                        left=int(((s.width / 2) - 180) + 33 * i),
-                                        top=290,
-                                        width=35,
-                                        height=35,
-                                        image=g,
-                                    )
-                        if not 10 - hpSlots == 0:
-                            for i in range(hpSlots + 1, 10):
-                                draw.composite(
-                                    operator="over",
-                                    left=int(((s.width / 2) - 180) + 33 * i),
-                                    top=290,
-                                    width=35,
-                                    height=35,
-                                    image=r,
-                                )
-                        draw.composite(
-                            operator="over",
-                            left=int((s.width / 2) - 64),
-                            top=20,
-                            width=128,
-                            height=128,
-                            image=a,
-                        )
-                        draw.composite(
-                            operator="over",
-                            left=int((s.width / 2) + 22),
-                            top=112,
-                            width=40,
-                            height=40,
-                            image=d,
-                        )
-                        draw(s)
-
-                        s.save(
+                        statsImage = Image(filename="Data/Resources/Images/stats.png")
+                        discordImage = Image(
                             filename=(
                                 "Data/Dynamic/"
                                 + str(message.author.id)
-                                + "_UserStatsOutput.png"
+                                + "_UserImage.png"
                             )
                         )
-                    try:
+                        maskImage = Image(filename="Data/Resources/Images/mask.png")
+                        greenHPImage = Image(
+                            filename="Data/Resources/Images/greenHP.png"
+                        )
+                        redHPImage = Image(filename="Data/Resources/Images/redHP.png")
+                        dot = Image(
+                            filename=(
+                                "Data/Resources/Images/"
+                                + players[message.author.id].pClass
+                                + "Dot.png"
+                            )
+                        )
+
+                        def apply_mask(image, mask, invert=False):
+                            image.alpha_channel = True
+                            if invert:
+                                mask.negate()
+                            with Image(
+                                width=image.width,
+                                height=image.height,
+                                background=Color("transparent"),
+                            ) as alpha_image:
+                                alpha_image.composite_channel(
+                                    "alpha", mask, "copy_opacity", 0, 0
+                                )
+                                image.composite_channel(
+                                    "alpha", alpha_image, "multiply", 0, 0
+                                )
+
+                        s = statsImage.clone()
+                        a = discordImage.clone().convert("png")
+                        m = maskImage.clone()
+                        d = dot.clone()
+                        g = greenHPImage.clone()
+                        r = redHPImage.clone()
+                        with Drawing() as draw:
+                            a.resize(128, 128)
+                            g.resize(35, 35)
+                            r.resize(35, 35)
+                            # draw.fill_color = Color("black")
+                            # draw.rectangle(left=int((s.width/2)-64),top=30,width=128,height=128,radius=64)  # 30% rounding?
+                            apply_mask(a, m)
+                            draw.font = "Data/Resources/Fonts/whitneybold.otf"
+                            draw.font_size = 18
+                            draw.fill_color = Color("white")
+                            draw.text_alignment = "center"
+                            draw.font_weight = 700
+                            draw.text(
+                                int(s.width / 2),
+                                180,
+                                players[message.author.id].name
+                                + players[message.author.id].title,
+                            )
+                            draw.font = "Data/Resources/Fonts/whitneybook.otf"
+                            draw.fill_color = Color("#B4B6B9")
+                            draw.text(
+                                int(s.width / 2),
+                                205,
+                                "Level: " + str(players[message.author.id].level),
+                            )
+                            draw.font = "Data/Resources/Fonts/whitneybold.otf"
+                            draw.fill_color = Color("#B9BBBE")
+                            draw.text(int(s.width / 2) - 110, 270, "HEALTH")
+                            draw.text(int(s.width / 2) - 119, 390, "STATS")
+                            draw.text(int(s.width / 2) - 129, 540, "FACT")
+                            draw.font = "Data/Resources/Fonts/whitneymedium.otf"
+                            draw.text(
+                                int(s.width / 2),
+                                350,
+                                str(players[message.author.id].HP)
+                                + "/"
+                                + str(players[message.author.id].maxHP)
+                                + "HP",
+                            )
+                            draw.text(
+                                int(s.width / 2),
+                                440,
+                                "Gold: " + str(players[message.author.id].gold),
+                            )
+                            draw.text(
+                                int(s.width / 2),
+                                420,
+                                "Next Level: "
+                                + str(
+                                    round(
+                                        players[message.author.id].nextLevelEXP
+                                        - players[message.author.id].EXP
+                                    )
+                                )
+                                + "EXP",
+                            )
+                            draw.text(
+                                int(s.width / 2),
+                                460,
+                                "DMG: " + str(players[message.author.id].DMG),
+                            )
+                            draw.text(
+                                int(s.width / 2),
+                                480,
+                                "DFC: " + str(players[message.author.id].DFC),
+                            )
+                            draw.text(
+                                int(s.width / 2), 580, random.sample(factList, k=1)[0]
+                            )
+                            hpSlots = round(
+                                (
+                                    players[message.author.id].HP
+                                    / players[message.author.id].maxHP
+                                )
+                                * 10
+                            )
+                            if not hpSlots == 0:
+                                if not hpSlots == 10:
+                                    for i in range(1, hpSlots + 1):
+                                        draw.composite(
+                                            operator="over",
+                                            left=int(((s.width / 2) - 180) + 33 * i),
+                                            top=290,
+                                            width=35,
+                                            height=35,
+                                            image=g,
+                                        )
+                                else:
+                                    for i in range(1, hpSlots):
+                                        draw.composite(
+                                            operator="over",
+                                            left=int(((s.width / 2) - 180) + 33 * i),
+                                            top=290,
+                                            width=35,
+                                            height=35,
+                                            image=g,
+                                        )
+                            if not 10 - hpSlots == 0:
+                                for i in range(hpSlots + 1, 10):
+                                    draw.composite(
+                                        operator="over",
+                                        left=int(((s.width / 2) - 180) + 33 * i),
+                                        top=290,
+                                        width=35,
+                                        height=35,
+                                        image=r,
+                                    )
+                            draw.composite(
+                                operator="over",
+                                left=int((s.width / 2) - 64),
+                                top=20,
+                                width=128,
+                                height=128,
+                                image=a,
+                            )
+                            draw.composite(
+                                operator="over",
+                                left=int((s.width / 2) + 22),
+                                top=112,
+                                width=40,
+                                height=40,
+                                image=d,
+                            )
+                            draw(s)
+
+                            s.save(
+                                filename=(
+                                    "Data/Dynamic/"
+                                    + str(message.author.id)
+                                    + "_UserStatsOutput.png"
+                                )
+                            )
+                        try:
+                            await message.channel.send(
+                                file=discord.File(
+                                    "Data/Dynamic/"
+                                    + str(message.author.id)
+                                    + "_UserStatsOutput.png"
+                                )
+                            )
+                        except:
+                            print("Error sending User Stats Image")
+                            print(traceback.format_exc())
+                    else:
                         await message.channel.send(
-                            file=discord.File(
-                                "Data/Dynamic/"
-                                + str(message.author.id)
-                                + "_UserStatsOutput.png"
-                            )
+                            "You don't appear to be registered yet!"
                         )
-                    except:
-                        print("Error sending User Stats Image")
-                else:
-                    await message.channel.send("You don't appear to be registered yet!")
 
 
 @bot.event
@@ -2251,7 +2393,7 @@ async def on_reaction_add(reaction, user):
                                     "equipment",
                                 )
                                 if (
-                                    lootGen.type == boxType
+                                    lootGen.lootType == boxType
                                     and lootGen.rarity in possibleRarities
                                 ):
                                     lootOK = True
@@ -2266,9 +2408,9 @@ async def on_reaction_add(reaction, user):
                     else:
                         await buyMessage.delete()
                         await user.send("You can't afford this!")
-            except Exception as e:
+            except:
                 print("Error during lootbox transaction!")
-                print(e)
+                print(traceback.format_exc())
         else:
             for cls in classRoles:
                 if message == reactables["class-select-" + cls]:

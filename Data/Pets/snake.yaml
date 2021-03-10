@@ -1,0 +1,16 @@
+name: Snake
+damage: 4
+gold: 1
+defence: 1
+type: beast
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic
