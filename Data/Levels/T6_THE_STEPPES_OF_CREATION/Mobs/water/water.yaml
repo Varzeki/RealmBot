@@ -6,7 +6,7 @@ dmgHigh: 16
 rewardLow: 10
 rewardHigh: 20
 lootBonus: 0
-encounterText: IMP ENCOUNTER
-defeatText: IMP DEFEAT
+encounterText: WATER ELEMENTAL ENCOUNTER
+defeatText: WATER ELEMENTAL DEFEAT
 weakness: Fyr
 statValue: 88

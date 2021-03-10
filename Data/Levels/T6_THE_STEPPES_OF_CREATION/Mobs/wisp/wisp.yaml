@@ -6,7 +6,7 @@ dmgHigh: 30
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
-encounterText: ORC ENCOUNTER
-defeatText: ORC DEFEAT
+encounterText: WISP ENCOUNTER
+defeatText: WISP DEFEAT
 weakness: Aer
 statValue: 109
