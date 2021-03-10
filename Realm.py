@@ -2293,7 +2293,9 @@ async def on_message(message):
                         pet = Pet(minRarity)
                     else:
                         pet = Pet()
-                    backgroundImage = Image(filename="Data/Resources/Images/stats.png")
+                    backgroundImage = Image(
+                        filename="Data/Resources/Images/petStats.png"
+                    )
                     petTypeImage = Image(
                         filename=(
                             "Data/Resources/Images/" + pet.petType + "_petType.png"
@@ -2398,7 +2400,7 @@ async def on_message(message):
                                 "Data/Dynamic/"
                                 + pet.rarity
                                 + "-"
-                                + pet.name
+                                + pet.name.replace(" ", "").lower()
                                 + "_PetStatsOutput.png"
                             )
                         )
