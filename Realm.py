@@ -757,7 +757,7 @@ class Mob:
 
 class Pet:
     def __init__(self, minRarity="any"):
-        petData = generate_pet()[0]
+        petData = generate_pet()
         self.name = petData["name"]
         self.dmg = petData["damage"]
         self.defence = petData["defence"]
