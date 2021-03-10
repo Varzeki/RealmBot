@@ -1196,7 +1196,7 @@ async def on_message(message):
 
             elif message.content == "!pet":
                 if players[message.author.id].pClass == "overseer":
-                    minRarity == "Epic"
+                    minRarity = "Epic"
                     pet = Pet(minRarity)
                 else:
                     pet = Pet()
@@ -1763,7 +1763,7 @@ async def on_message(message):
                                                 players[message.author.id].equipment[
                                                     slot1 - 5
                                                 ] = "Empty"
-                                    else:
+                                    else: #BOTH IN INVENTORY
                                         if slot1 < 5 and slot2 < 5:
                                             (
                                                 players[message.author.id].inventory[
@@ -1780,7 +1780,7 @@ async def on_message(message):
                                                     slot1
                                                 ],
                                             )
-                                        elif slot1 > 4 and slot2 > 4:
+                                        elif slot1 > 4 and slot2 > 4: #BOTH IN EQUIPMENT
                                             (
                                                 players[message.author.id].equipment[
                                                     slot1 - 5
@@ -1796,7 +1796,7 @@ async def on_message(message):
                                                     slot1 - 5
                                                 ],
                                             )
-                                        elif slot1 > 4 and slot2 < 5:
+                                        elif slot1 > 4 and slot2 < 5: #FIRSTCLICK IN EQUIPMENT SECONDCLICK IN INVENTORY
                                             if (
                                                 not players[
                                                     message.author.id
