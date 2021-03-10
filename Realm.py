@@ -636,34 +636,40 @@ class Loot:
                 self.rarity = "Common"
             elif rarityRoll < 0.865:
                 self.rarity = "Uncommon"
-                self.damage = round(self.damage * 1.2)
-                self.defence = round(self.defence * 1.2)
-                self.value = round(self.value * 1.2)
             elif rarityRoll < 0.94:
                 self.rarity = "Rare"
-                self.damage = round(self.damage * 1.4)
-                self.defence = round(self.defence * 1.4)
-                self.value = round(self.value * 1.4)
             elif rarityRoll < 0.975:
                 self.rarity = "Epic"
-                self.damage = round(self.damage * 1.6)
-                self.defence = round(self.defence * 1.6)
-                self.value = round(self.value * 1.6)
             elif rarityRoll < 0.995:
                 self.rarity = "Legendary"
-                self.damage = round(self.damage * 2)
-                self.defence = round(self.defence * 2)
-                self.value = round(self.value * 4)
             else:
                 self.rarity = "Zekiforged"
-                self.damage = round(self.damage * 4)
-                self.defence = round(self.defence * 4)
-                self.value = round(self.value * 8)
+
             if lootData["defaultRarity"] in rarityList:
                 if not rarityList.index(self.rarity) > rarityList.index(
                     lootData["defaultRarity"]
                 ):
                     self.rarity = lootData["defaultRarity"]
+            if self.rarity == "Uncommon":
+                self.damage = round(self.damage * 1.2)
+                self.defence = round(self.defence * 1.2)
+                self.value = round(self.value * 1.2)
+            elif self.rarity == "Rare":
+                self.damage = round(self.damage * 1.4)
+                self.defence = round(self.defence * 1.4)
+                self.value = round(self.value * 1.4)
+            elif self.rarity == "Epic":
+                self.damage = round(self.damage * 1.6)
+                self.defence = round(self.defence * 1.6)
+                self.value = round(self.value * 1.6)
+            elif self.rarity == "Legendary":
+                self.damage = round(self.damage * 2)
+                self.defence = round(self.defence * 2)
+                self.value = round(self.value * 4)
+            else:
+                self.damage = round(self.damage * 4)
+                self.defence = round(self.defence * 4)
+                self.value = round(self.value * 8)
             if self.lootType == "weapon":
                 elementRoll = random.uniform(0, 1)
                 if elementRoll < 0.2:
@@ -768,32 +774,41 @@ class Pet:
             self.rarity = "Common"
         elif rarityRoll < 0.865:
             self.rarity = "Uncommon"
+
+        elif rarityRoll < 0.94:
+            self.rarity = "Rare"
+
+        elif rarityRoll < 0.975:
+            self.rarity = "Epic"
+
+        elif rarityRoll < 0.995:
+            self.rarity = "Legendary"
+        else:
+            self.rarity = "Zekiforged"
+
+        if minRarity in rarityList:
+            if not rarityList.index(self.rarity) > rarityList.index(minRarity):
+                self.rarity = minRarity
+        if self.rarity == "Uncommon":
             self.damage = round(self.damage * 2)
             self.defence = round(self.defence * 2)
             self.gold = round(self.gold * 2)
-        elif rarityRoll < 0.94:
-            self.rarity = "Rare"
+        elif self.rarity == "Rare":
             self.damage = round(self.damage * 3)
             self.defence = round(self.defence * 3)
             self.gold = round(self.gold * 3)
-        elif rarityRoll < 0.975:
-            self.rarity = "Epic"
+        elif self.rarity == "Epic":
             self.damage = round(self.damage * 4)
             self.defence = round(self.defence * 4)
             self.gold = round(self.gold * 4)
-        elif rarityRoll < 0.995:
-            self.rarity = "Legendary"
+        elif self.rarity == "Legendary":
             self.damage = round(self.damage * 5)
             self.defence = round(self.defence * 5)
             self.gold = round(self.gold * 5)
         else:
-            self.rarity = "Zekiforged"
             self.damage = round(self.damage * 6)
             self.defence = round(self.defence * 6)
             self.gold = round(self.gold * 6)
-        if minRarity in rarityList:
-            if not rarityList.index(self.rarity) > rarityList.index(minRarity):
-                self.rarity = minRarity
 
 
 @bot.event
@@ -1763,7 +1778,7 @@ async def on_message(message):
                                                 players[message.author.id].equipment[
                                                     slot1 - 5
                                                 ] = "Empty"
-                                    else: #BOTH IN INVENTORY
+                                    else:  # BOTH IN INVENTORY
                                         if slot1 < 5 and slot2 < 5:
                                             (
                                                 players[message.author.id].inventory[
@@ -1780,7 +1795,9 @@ async def on_message(message):
                                                     slot1
                                                 ],
                                             )
-                                        elif slot1 > 4 and slot2 > 4: #BOTH IN EQUIPMENT
+                                        elif (
+                                            slot1 > 4 and slot2 > 4
+                                        ):  # BOTH IN EQUIPMENT
                                             (
                                                 players[message.author.id].equipment[
                                                     slot1 - 5
@@ -1796,7 +1813,9 @@ async def on_message(message):
                                                     slot1 - 5
                                                 ],
                                             )
-                                        elif slot1 > 4 and slot2 < 5: #FIRSTCLICK IN EQUIPMENT SECONDCLICK IN INVENTORY
+                                        elif (
+                                            slot1 > 4 and slot2 < 5
+                                        ):  # FIRSTCLICK IN EQUIPMENT SECONDCLICK IN INVENTORY
                                             if (
                                                 not players[
                                                     message.author.id
