@@ -123,7 +123,7 @@ def generate_pet():
     with open("Data/Pets/spawnTable.yaml", "r") as stream:
         spawnTable = yaml.safe_load(stream)
     pet = random.choices([*spawnTable], weights=[*spawnTable.values()], k=1)[0]
-    with open("Data/Pets/" + drop + ".yaml", "r") as stream:
+    with open("Data/Pets/" + pet + ".yaml", "r") as stream:
         petData = yaml.safe_load(stream)
     return petData
 
