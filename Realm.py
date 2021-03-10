@@ -131,12 +131,17 @@ def generate_pet():
 async def doHealthRegen():
     global activeMobs
     global players
+    global emoji_set
     for p in players.values():
         if not p.inCombat:
             if not p.HP == p.maxHP:
                 p.HP = p.HP + round((0.1 * p.maxHP))
                 if p.HP > p.maxHP:
                     p.HP = p.maxHP
+                hpSlots = round((p.HP / p.maxHP) * 10)
+                p.hpBar = (emoji_set["greenHP"] * hpSlots) + (
+                    emoji_set["redHP"] * (10 - hpSlots)
+                )
     for m in activeMobs.values():
         if len(m.playersEngaged) == 0:
             if not m.HP == m.maxHP:
@@ -223,22 +228,6 @@ async def doCombat():
                     + mob.name
                     + "\n"
                 )
-                # if not players[p].follower == "":
-                #     followerDamage = mob.getDamageTaken(
-                #         players[p].getFollowerDamage(damage)
-                #     )
-                #     mob.HP = mob.HP - followerDamage
-                #     damageLog = (
-                #         damageLog
-                #         + players[p].name
-                #         + "'s "
-                #         + players[p].follower
-                #         + " deals "
-                #         + str(followerDamage)
-                #         + " damage to "
-                #         + mob.name
-                #         + "\n"
-                #     )
 
                 if p == attackedPlayer:
                     damage = players[p].getDamageTaken(mob.getDamage())
@@ -267,7 +256,10 @@ async def doCombat():
                         players[p].STAT_timesDied = players[p].STAT_timesDied + 1
                         players[p].HP = math.ceil(0.2 * players[p].maxHP)
                         players[p].inCombat = False
-                        players[p].hpBar = emoji_set["greenHP"] * 10
+                        hpSlots = round((players[p].HP / players[p].maxHP) * 10)
+                        players[p].hpBar = (emoji_set["greenHP"] * hpSlots) + (
+                            emoji_set["redHP"] * (10 - hpSlots)
+                        )
                         if not mob.HP < 1:
                             mob.playersEngaged.remove(p)
                     else:
