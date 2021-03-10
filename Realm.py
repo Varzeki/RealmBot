@@ -666,7 +666,7 @@ class Loot:
                 self.damage = round(self.damage * 2)
                 self.defence = round(self.defence * 2)
                 self.value = round(self.value * 4)
-            else:
+            elif self.rarity == "Zekiforged":
                 self.damage = round(self.damage * 4)
                 self.defence = round(self.defence * 4)
                 self.value = round(self.value * 8)
@@ -802,13 +802,13 @@ class Pet:
             self.defence = round(self.defence * 4)
             self.gold = round(self.gold * 4)
         elif self.rarity == "Legendary":
-            self.damage = round(self.damage * 5)
-            self.defence = round(self.defence * 5)
-            self.gold = round(self.gold * 5)
-        else:
-            self.damage = round(self.damage * 6)
-            self.defence = round(self.defence * 6)
-            self.gold = round(self.gold * 6)
+            self.damage = round(self.damage * 7)
+            self.defence = round(self.defence * 7)
+            self.gold = round(self.gold * 7)
+        elif self.rarity == "Zekiforged":
+            self.damage = round(self.damage * 11)
+            self.defence = round(self.defence * 11)
+            self.gold = round(self.gold * 11)
 
 
 @bot.event
