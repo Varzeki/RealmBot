@@ -1205,9 +1205,9 @@ async def on_message(message):
             elif message.content == "!pet":
                 if players[message.author.id].pClass == "overseer":
                     minRarity == "Epic"
-                    message.channel.send(str(Pet(minRarity)))
+                    await message.channel.send(str(Pet(minRarity)))
                 else:
-                    message.channel.send(str(Pet()))
+                    await message.channel.send(str(Pet()))
 
             elif message.content == "!inventory":
                 currentPlayer = players[message.author.id]
