@@ -2321,7 +2321,9 @@ async def on_message(message):
                         pet = Pet()
                     backgroundImage = Image(filename="Data/Resources/Images/stats.png")
                     petTypeImage = Image(
-                        filename=("Data/Resources/" + pet.petType + ".png")
+                        filename=(
+                            "Data/Resources/Images/" + pet.petType + "_petType.png"
+                        )
                     )
                     maskImage = Image(filename="Data/Resources/Images/mask.png")
 
