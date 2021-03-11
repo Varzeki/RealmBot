@@ -1,0 +1,16 @@
+name: Goose
+damage: 6
+gold: 0
+defence: 0
+type: mechanical
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic
