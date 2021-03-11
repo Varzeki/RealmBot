@@ -1,0 +1,16 @@
+name: Drunkard
+damage: 0
+gold: 2
+defence: 4
+type: humanoid
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

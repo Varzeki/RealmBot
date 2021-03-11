@@ -1,0 +1,16 @@
+name: Wyrmling
+damage: 5
+gold: 0
+defence: 1
+type: magical
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

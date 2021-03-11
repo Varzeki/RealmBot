@@ -1,0 +1,16 @@
+name: Kraken
+damage: 6
+gold: 0
+defence: 0
+type: magical
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

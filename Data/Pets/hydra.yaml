@@ -1,0 +1,16 @@
+name: Hydra
+damage: 4
+gold: 0
+defence: 2
+type: magical
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

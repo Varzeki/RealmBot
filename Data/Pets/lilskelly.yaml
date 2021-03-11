@@ -1,0 +1,16 @@
+name: Lil' Skelly
+damage: 4
+gold: 2
+defence: 0
+type: undead
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

@@ -1,0 +1,16 @@
+name: Baby Wyvern
+damage: 5
+gold: 1
+defence: 0
+type: draconic
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

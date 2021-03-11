@@ -1,0 +1,16 @@
+name: Squire
+damage: 2
+gold: 2
+defence: 2
+type: humanoid
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

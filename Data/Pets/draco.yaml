@@ -1,0 +1,16 @@
+name: Draco
+damage: 3
+gold: 2
+defence: 1
+type: dragonic
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

@@ -1,0 +1,16 @@
+name: Hound
+damage: 3
+gold: 1
+defence: 2
+type: undead
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

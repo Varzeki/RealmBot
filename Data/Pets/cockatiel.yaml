@@ -1,0 +1,16 @@
+name: Cockatiel 
+damage: 1
+gold: 3
+defence: 2
+type: beast
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

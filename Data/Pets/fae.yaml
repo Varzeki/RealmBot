@@ -1,0 +1,16 @@
+name: Fae
+damage: 1
+gold: 4
+defence: 1
+type: draconic
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

@@ -1,0 +1,16 @@
+name: Earth
+damage: 2
+gold: 0
+defence: 4
+type: elemental
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

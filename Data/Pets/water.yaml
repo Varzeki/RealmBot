@@ -1,0 +1,16 @@
+name: Water
+damage: 2
+gold: 1
+defence: 3
+type: elemental
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

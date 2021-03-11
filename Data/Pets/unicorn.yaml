@@ -1,0 +1,16 @@
+name: Unicorn
+damage: 0
+gold: 4
+defence: 2
+type: magical
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

@@ -1,0 +1,16 @@
+name: Fire
+damage: 5
+gold: 1
+defence: 0
+type: elemental
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

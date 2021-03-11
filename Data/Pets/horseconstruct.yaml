@@ -1,0 +1,16 @@
+name: Horse Construct
+damage: 1
+gold: 1
+defence: 4
+type: mechanical
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

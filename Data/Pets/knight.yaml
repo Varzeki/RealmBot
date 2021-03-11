@@ -1,0 +1,16 @@
+name: Knight
+damage: 3
+gold: 0
+defence: 3
+type: humanoid
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

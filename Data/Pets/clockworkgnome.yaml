@@ -1,0 +1,16 @@
+name: Clockwork Gnome
+damage: 3
+gold: 1
+defence: 2
+type: mechanical
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

@@ -1,0 +1,16 @@
+name: Air
+damage: 1
+gold: 3
+defence: 2
+type: elemental
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

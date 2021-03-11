@@ -1,0 +1,16 @@
+name: Bloat
+damage: 1
+gold: 1
+defence: 4
+type: undead
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

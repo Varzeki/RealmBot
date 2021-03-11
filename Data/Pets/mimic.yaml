@@ -1,0 +1,16 @@
+name: Mimic
+damage: 0
+gold: 0
+defence: 6
+type: mechanical
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic

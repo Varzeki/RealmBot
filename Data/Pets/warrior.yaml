@@ -1,0 +1,16 @@
+name: Warrior
+damage: 5
+gold: 0
+defence: 1
+type: humanoid
+
+
+#Types:
+
+#beast
+#magical
+#humanoid
+#mechanical
+#elemental
+#undead
+#draconic
