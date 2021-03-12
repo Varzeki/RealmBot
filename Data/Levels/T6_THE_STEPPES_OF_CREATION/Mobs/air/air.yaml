@@ -8,5 +8,5 @@ rewardLow: 15
 rewardHigh: 25
 encounterText: AER ELEMENTAL ENCOUNTER
 defeatText: AER ELEMENTAL DEFEAT
-weakness: Fyr
+weakness: Terra
 statValue: 108

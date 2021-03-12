@@ -8,5 +8,5 @@ rewardLow: 15
 rewardHigh: 25
 encounterText: WISP ENCOUNTER
 defeatText: WISP DEFEAT
-weakness: Aer
+weakness: Alica
 statValue: 109
