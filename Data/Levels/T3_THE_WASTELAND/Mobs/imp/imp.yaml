@@ -8,5 +8,5 @@ rewardHigh: 20
 lootBonus: 0
 encounterText: As you wander the wasteland you see a red shape dart across the sun. The shape turns and dives towards you, it's an imp!
 defeatText: The imps wings give out and it lazily drifts down to the ground, dead before it lands.
-weakness: Fyr
+weakness: Alica
 statValue: 88
