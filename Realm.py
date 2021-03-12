@@ -549,9 +549,6 @@ async def doCombat():
                 if not pMessage == mob.partyMessage.content:
                     await mob.partyMessage.edit(content=pMessage)
         elif not pMessage == mob.partyMessage.content:
-            print("EDIT")
-            print(pMessage)
-            print(mob.partyMessage.content)
             await mob.partyMessage.edit(content=pMessage)
 
 
@@ -1162,26 +1159,14 @@ async def on_ready():
     print("Channel Initialization Complete")
     print("Commencing Cycle")
     while not graceful_exit:
-        tic = time.perf_counter()
         try:
             await doCombat()
         except:
             print("Error during combat routine")
             print(traceback.format_exc())
-        toc = time.perf_counter()
-        print(f"Combat complete in {toc - tic:0.4f} seconds")
-        tic = time.perf_counter()
         await doHealthRegen()
-        toc = time.perf_counter()
-        print(f"Health regen complete in {toc - tic:0.4f} seconds")
-        tic = time.perf_counter()
         await doPetEvents()
-        toc = time.perf_counter()
-        print(f"Pet events complete in {toc - tic:0.4f} seconds")
-        tic = time.perf_counter()
         await doPlayerFixup()
-        toc = time.perf_counter()
-        print(f"Player fixup complete in {toc - tic:0.4f} seconds")
         await asyncio.sleep(3)
     await bot.close()
 
