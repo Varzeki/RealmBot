@@ -132,7 +132,7 @@ def generate_pet():
 async def doPetEvents():
     global activePets
     for chan in channels["pet-zones"].values():
-        if random.uniform(0, 1) > 0.7:
+        if random.uniform(0, 1) > 0.8:
             pet = Pet()
             backgroundImage = Image(filename="Data/Resources/Images/petStats.png")
             petTypeImage = Image(
@@ -264,11 +264,7 @@ async def doPetEvents():
             except:
                 print("Tried to modify pet timer but did not exist!")
                 print(traceback.format_exc())
-        print("before")
-        print(activePets)
         activePets = [petData for petData in activePets if petData[2] > 0]
-        print("after")
-        print(activePets)
 
 
 async def doHealthRegen():
@@ -345,9 +341,12 @@ async def doCombat():
     global vc
     currentTick = currentTick + 1
     if currentTick > 10:
+        tic = time.perf_counter()
         with open("./Data/Players.pkl", "w+b") as f:
             pickle.dump(players, f, pickle.HIGHEST_PROTOCOL)
         currentTick = 0
+        toc = time.perf_counter()
+        print(f"Player save complete in {toc - tic:0.4f} seconds")
     for mob in list(activeMobs.values()):
         pMessage = "Party:\n"
         if not mob.playersEngaged == []:
@@ -549,6 +548,7 @@ async def doCombat():
                 if not pMessage == mob.partyMessage.content:
                     await mob.partyMessage.edit(content=pMessage)
         elif not pMessage == mob.partyMessage.content:
+            print("EDIT")
             await mob.partyMessage.edit(content=pMessage)
 
 
