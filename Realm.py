@@ -252,23 +252,23 @@ async def doPetEvents():
                 print("Tried to send pet message but failed!")
                 print(traceback.format_exc())
 
-            for p in activePets:
-                try:
-                    p[2] = p[2] - 1
-                    if p[2] < 1:
-                        try:
-                            await p[0].delete()
-                        except:
-                            print("Tried to time-out pet but did not exist!")
-                            print(traceback.format_exc())
-                except:
-                    print("Tried to modify pet timer but did not exist!")
-                    print(traceback.format_exc())
-            print("before")
-            print(activePets)
-            activePets = [petData for petData in activePets if petData[2] > 0]
-            print("after")
-            print(activePets)
+        for p in activePets:
+            try:
+                p[2] = p[2] - 1
+                if p[2] < 1:
+                    try:
+                        await p[0].delete()
+                    except:
+                        print("Tried to time-out pet but did not exist!")
+                        print(traceback.format_exc())
+            except:
+                print("Tried to modify pet timer but did not exist!")
+                print(traceback.format_exc())
+        print("before")
+        print(activePets)
+        activePets = [petData for petData in activePets if petData[2] > 0]
+        print("after")
+        print(activePets)
 
 
 async def doHealthRegen():
