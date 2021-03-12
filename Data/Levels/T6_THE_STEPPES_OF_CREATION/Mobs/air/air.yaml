@@ -1,8 +1,8 @@
 name: Aer Elemental
 healthLow: 50
 healthHigh: 80
-dmgLow: 12
-dmgHigh: 18
+dmgLow: 10
+dmgHigh: 15
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25

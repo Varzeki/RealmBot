@@ -1,8 +1,8 @@
 name: Aques Elemental
 healthLow: 30
 healthHigh: 50
-dmgLow: 8
-dmgHigh: 16
+dmgLow: 15
+dmgHigh: 20
 rewardLow: 10
 rewardHigh: 20
 lootBonus: 0
