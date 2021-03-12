@@ -58,6 +58,7 @@ classRoles = [
 raceRoles = ["human", "troll", "lizardfolk", "dwarf", "elf"]
 players = {}
 activeMobs = {}
+activePets = []
 currentTick = 0
 
 tier_levels = {
@@ -129,6 +130,7 @@ def generate_pet():
 
 
 async def doPetEvents():
+    global activePets
     for chan in channels["pet-zones"].values():
         if random.uniform(0, 1) > 0.7:
             pet = Pet()
@@ -245,25 +247,23 @@ async def doPetEvents():
                         + "_PetStatsOutput.png"
                     )
                 )
-
-                def check(r, u):
-                    return r.message == petMsg
-
-                try:
-                    reaction, usr = await bot.wait_for(
-                        "reaction_add", check=check, timeout=20.0
-                    )
-                except asyncio.TimeoutError:
-                    await petMsg.delete()
-                else:
-                    await usr.send(
-                        "You would have caught this if I programmed the rest of this code!"
-                    )
-                    await petMsg.delete()
-
+                activePets.append([petMsg, pet, 5])
             except:
-                print("Error sending Pet Image")
+                print("Tried to send pet message but failed!")
                 print(traceback.format_exc())
+
+            for p in activePets:
+                try:
+                    p[2] = p[2] - 1
+                    if p[2] < 1:
+                        try:
+                            await p[0].delete()
+                        except:
+                            print("Tried to time-out pet but did not exist!")
+                            print(traceback.format_exc())
+                except:
+                    print("Tried to modify pet timer but did not exist!")
+                    print(traceback.format_exc())
 
 
 async def doHealthRegen():
