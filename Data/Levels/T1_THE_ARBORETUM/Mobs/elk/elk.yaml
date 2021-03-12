@@ -8,5 +8,5 @@ rewardHigh: 25
 lootBonus: 0
 encounterText: You hear grunting, and turn to see an angry Elk beginning it's charge!
 defeatText: The Elk stumbles away into the trees, then collapses dead.
-weakness: Fyr
+weakness: Terra
 statValue: 111

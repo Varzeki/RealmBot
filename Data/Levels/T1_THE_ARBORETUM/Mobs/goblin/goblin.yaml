@@ -8,5 +8,5 @@ rewardHigh: 20
 lootBonus: 0
 encounterText: A goblin springs from a nearby bush, charging at you with a crude spear!
 defeatText: The goblin slumps to the ground, losing it's grip on the weapon as the life leaves it's body.
-weakness: Fyr
+weakness: Aques
 statValue: 88
