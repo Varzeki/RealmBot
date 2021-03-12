@@ -8,5 +8,5 @@ rewardHigh: 25
 lootBonus: 0
 encounterText: You feel the ground shaking beneath your feet as you are faced with an ogre of immense size!
 defeatText: The ogre falls with a large crash and a small shockwave of dust causes you to cough.
-weakness: Fyr
+weakness: Aer
 statValue: 111

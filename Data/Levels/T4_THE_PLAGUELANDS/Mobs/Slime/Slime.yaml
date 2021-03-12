@@ -8,5 +8,5 @@ rewardLow: 15
 rewardHigh: 25
 encounterText: You step in a puddle and suddenly it lurches up at you temporarly engulfing you in slime
 defeatText: the slime collapses back into a puddle. It doesnt move even as you prod it with your foot
-weakness: Aer
+weakness: Terra
 statValue: 109

@@ -8,5 +8,5 @@ rewardLow: 15
 rewardHigh: 25
 encounterText: a glass bottle shatters on the ground next to you slightly melting the ground. You are faced with a mad alchemist.
 defeatText: The mad alchemist throws another bottle on the ground between you and runs away.
-weakness: Fyr
+weakness: Aques
 statValue: 108
