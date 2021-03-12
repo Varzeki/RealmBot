@@ -132,13 +132,9 @@ def doPetEvents():
     for chan in channels["pet-zones"].values():
         if random.uniform(0, 1) > 0.7:
             pet = Pet()
-            backgroundImage = Image(
-                filename="Data/Resources/Images/petStats.png"
-            )
+            backgroundImage = Image(filename="Data/Resources/Images/petStats.png")
             petTypeImage = Image(
-                filename=(
-                    "Data/Resources/Images/" + pet.petType + "_petType.png"
-                )
+                filename=("Data/Resources/Images/" + pet.petType + "_petType.png")
             )
             maskImage = Image(filename="Data/Resources/Images/mask.png")
 
@@ -151,12 +147,8 @@ def doPetEvents():
                     height=image.height,
                     background=Color("transparent"),
                 ) as alpha_image:
-                    alpha_image.composite_channel(
-                        "alpha", mask, "copy_opacity", 0, 0
-                    )
-                    image.composite_channel(
-                        "alpha", alpha_image, "multiply", 0, 0
-                    )
+                    alpha_image.composite_channel("alpha", mask, "copy_opacity", 0, 0)
+                    image.composite_channel("alpha", alpha_image, "multiply", 0, 0)
 
             bg = backgroundImage.clone()
             pt = petTypeImage.clone().convert("png")
@@ -244,28 +236,35 @@ def doPetEvents():
                     )
                 )
             try:
-                petMsg = chan.send(file=discord.File("Data/Dynamic/"+ pet.rarity+ "-"+ pet.name.replace(" ", "").lower()+ "_PetStatsOutput.png"))
-                def check(r, u):
-                    return (
-                        (
-                            r.message
-                            == petMsg
-                        )
+                petMsg = await chan.send(
+                    file=discord.File(
+                        "Data/Dynamic/"
+                        + pet.rarity
+                        + "-"
+                        + pet.name.replace(" ", "").lower()
+                        + "_PetStatsOutput.png"
                     )
+                )
+
+                def check(r, u):
+                    return r.message == petMsg
 
                 try:
-                    try:
-                        reaction, usr = await bot.wait_for(
-                            "reaction_add", check=check, timeout=20.0
-                        )
-                    except asyncio.TimeoutError:
-                        await petMsg.delete()
-                    else:
-                        await usr.send("You would have caught this if I programmed the rest of this code!")
-                        await petMsg.delete()
+                    reaction, usr = await bot.wait_for(
+                        "reaction_add", check=check, timeout=20.0
+                    )
+                except asyncio.TimeoutError:
+                    await petMsg.delete()
+                else:
+                    await usr.send(
+                        "You would have caught this if I programmed the rest of this code!"
+                    )
+                    await petMsg.delete()
+
             except:
                 print("Error sending Pet Image")
                 print(traceback.format_exc())
+
 
 async def doHealthRegen():
     global activeMobs
