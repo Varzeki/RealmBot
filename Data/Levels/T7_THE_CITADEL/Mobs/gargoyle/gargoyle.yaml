@@ -8,5 +8,5 @@ rewardLow: 15
 rewardHigh: 25
 encounterText: As you're passing a mansion one of the ugly monstrosities comes to life and swoops down at you. The gargoyle seems to be protecting its mansion from any percieved threat.
 defeatText: You shatter the gargoyle into a thousand pieces as the magic that animated it ceases to function.
-weakness: Aer
+weakness: Alica
 statValue: 109

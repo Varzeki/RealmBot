@@ -8,5 +8,5 @@ rewardHigh: 12
 lootBonus: 0
 encounterText: A huge steel Golem is waiting in an alley as you pass. It surprisingly quickly launches itself at you knocking you over. You quickly stand up and prepare to dodge the next charge.
 defeatText: The steel golem ceases to function as you land one last mighty attack on it.
-weakness: Alica
+weakness: Aques
 statValue: 90

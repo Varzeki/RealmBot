@@ -7,6 +7,6 @@ lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
 encounterText: You narrowly dodge an explosion centered over your head! An archmage has decided you are his plaything for today.
-defeatText: Seeing that he has clearly underestimated your abilities he quickly throws one last spell and teleports away. 
-weakness: Fyr
+defeatText: Seeing that he has clearly underestimated your abilities he quickly throws one last spell and teleports away.
+weakness: Terra
 statValue: 108
