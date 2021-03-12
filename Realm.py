@@ -348,8 +348,9 @@ async def doCombat():
         toc = time.perf_counter()
         print(f"Player save complete in {toc - tic:0.4f} seconds")
     for mob in list(activeMobs.values()):
-        pMessage = "Party:\n"
+        pMessage = "Party:"
         if not mob.playersEngaged == []:
+            pMessage = pMessage + "\n"
             attackedPlayer = random.choices(
                 mob.playersEngaged,
                 weights=[p.threat for p in [players[k] for k in mob.playersEngaged]],
