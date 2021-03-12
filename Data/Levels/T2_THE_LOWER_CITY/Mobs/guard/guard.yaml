@@ -8,5 +8,5 @@ rewardLow: 15
 rewardHigh: 25
 encounterText: A guard approaches you weapon drawn. They seemed determined to stop you.
 defeatText: The guard falls over dead. You step over their body, ignoring the picture of their family that slipped out of their pocket.
-weakness: Fyr
+weakness: Terra
 statValue: 108

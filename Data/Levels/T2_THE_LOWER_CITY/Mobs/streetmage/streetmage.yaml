@@ -8,5 +8,5 @@ rewardLow: 15
 rewardHigh: 25
 encounterText: A blast of fire melts the wall next to your head. You turn and see a streetmage preparing their next attack
 defeatText: The streetmage slumps against a wall as arcane energy rushes out of their body
-weakness: Aer
+weakness: Aques
 statValue: 109

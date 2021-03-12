@@ -8,5 +8,5 @@ rewardHigh: 12
 lootBonus: 0
 encounterText: You hear a bleating behind you. You turn and see a satyr charging you head down and horns forward.
 defeatText: The Satyr falls to the ground, bloody and bruised. It expires in a pool of its own blood.
-weakness: Alica
+weakness: Aer
 statValue: 90
