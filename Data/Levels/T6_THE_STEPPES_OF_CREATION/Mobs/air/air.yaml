@@ -1,5 +1,5 @@
 name: Aer Elemental
-healthLow: 30
+healthLow: 50
 healthHigh: 80
 dmgLow: 12
 dmgHigh: 18
