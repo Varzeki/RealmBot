@@ -128,7 +128,7 @@ def generate_pet():
     return petData
 
 
-def doPetEvents():
+async def doPetEvents():
     for chan in channels["pet-zones"].values():
         if random.uniform(0, 1) > 0.7:
             pet = Pet()
