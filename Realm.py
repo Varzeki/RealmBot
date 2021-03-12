@@ -264,6 +264,7 @@ async def doPetEvents():
                 except:
                     print("Tried to modify pet timer but did not exist!")
                     print(traceback.format_exc())
+            activePets = [petData for petData in activePets if petData[2]>0]
 
 
 async def doHealthRegen():
