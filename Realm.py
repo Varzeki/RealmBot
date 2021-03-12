@@ -128,6 +128,145 @@ def generate_pet():
     return petData
 
 
+def doPetEvents():
+    for chan in channels["pet-zones"].values():
+        if random.uniform(0, 1) > 0.7:
+            pet = Pet()
+            backgroundImage = Image(
+                filename="Data/Resources/Images/petStats.png"
+            )
+            petTypeImage = Image(
+                filename=(
+                    "Data/Resources/Images/" + pet.petType + "_petType.png"
+                )
+            )
+            maskImage = Image(filename="Data/Resources/Images/mask.png")
+
+            def apply_mask(image, mask, invert=False):
+                image.alpha_channel = True
+                if invert:
+                    mask.negate()
+                with Image(
+                    width=image.width,
+                    height=image.height,
+                    background=Color("transparent"),
+                ) as alpha_image:
+                    alpha_image.composite_channel(
+                        "alpha", mask, "copy_opacity", 0, 0
+                    )
+                    image.composite_channel(
+                        "alpha", alpha_image, "multiply", 0, 0
+                    )
+
+            bg = backgroundImage.clone()
+            pt = petTypeImage.clone().convert("png")
+            m = maskImage.clone()
+
+            commonCol = Color("#B9BBBE")
+            uncommonCol = Color("#248224")
+            rareCol = Color("#2C4399")
+            epicCol = Color("#792482")
+            legendaryCol = Color("#BA5318")
+            zekiforgedCol = Color("#C54EA5")
+            if pet.rarity == "Common":
+                rarityCol = commonCol
+            elif pet.rarity == "Uncommon":
+                rarityCol = uncommonCol
+            elif pet.rarity == "Rare":
+                rarityCol = rareCol
+            elif pet.rarity == "Epic":
+                rarityCol = epicCol
+            elif pet.rarity == "Legendary":
+                rarityCol = legendaryCol
+            elif pet.rarity == "Zekiforged":
+                rarityCol = zekiforgedCol
+
+            with Drawing() as draw:
+                pt.resize(128, 128)
+                # g.resize(35, 35)
+                # r.resize(35, 35)
+                # draw.fill_color = Color("black")
+                # draw.rectangle(left=int((bg.width/2)-64),top=30,width=128,height=128,radius=64)  # 30% rounding?
+                apply_mask(pt, m)
+                draw.font = "Data/Resources/Fonts/whitneybold.otf"
+                draw.font_size = 18
+                draw.fill_color = Color("white")
+                draw.text_alignment = "center"
+                draw.font_weight = 700
+                draw.text(
+                    int(bg.width / 2),
+                    180,
+                    pet.rarity.capitalize() + " " + pet.name,
+                )
+                draw.font = "Data/Resources/Fonts/whitneybook.otf"
+                draw.fill_color = Color("#B4B6B9")
+                draw.text(
+                    int(bg.width / 2),
+                    205,
+                    "Type: " + pet.petType.capitalize(),
+                )
+                draw.font = "Data/Resources/Fonts/whitneybold.otf"
+                draw.fill_color = Color("#B9BBBE")
+                draw.text(int(bg.width / 2) - 110, 270, "STATS")
+                # draw.text(int(bg.width / 2) - 119, 390, "STATS")
+                # draw.text(int(bg.width / 2) - 129, 540, "FACT")
+                draw.font = "Data/Resources/Fonts/whitneymedium.otf"
+                draw.text(int(bg.width / 2), 310, "Damage: " + str(pet.damage))
+                draw.text(
+                    int(bg.width / 2),
+                    330,
+                    "Defence: " + str(pet.defence),
+                )
+                draw.text(
+                    int(bg.width / 2),
+                    350,
+                    "Gold: " + str(pet.gold),
+                )
+                draw.fill_color = rarityCol
+                draw.circle((int(bg.width / 2), 84), (int(bg.width / 2), 20))
+                draw.composite(
+                    operator="over",
+                    left=int((bg.width / 2) - 64),
+                    top=20,
+                    width=128,
+                    height=128,
+                    image=pt,
+                )
+                draw(bg)
+
+                bg.save(
+                    filename=(
+                        "Data/Dynamic/"
+                        + pet.rarity
+                        + "-"
+                        + pet.name.replace(" ", "").lower()
+                        + "_PetStatsOutput.png"
+                    )
+                )
+            try:
+                petMsg = chan.send(file=discord.File("Data/Dynamic/"+ pet.rarity+ "-"+ pet.name.replace(" ", "").lower()+ "_PetStatsOutput.png"))
+                def check(r, u):
+                    return (
+                        (
+                            r.message
+                            == petMsg
+                        )
+                    )
+
+                try:
+                    try:
+                        reaction, usr = await bot.wait_for(
+                            "reaction_add", check=check, timeout=20.0
+                        )
+                    except asyncio.TimeoutError:
+                        await petMsg.delete()
+                    else:
+                        await usr.send("You would have caught this if I programmed the rest of this code!")
+                        await petMsg.delete()
+            except:
+                print("Error sending Pet Image")
+                print(traceback.format_exc())
+
 async def doHealthRegen():
     global activeMobs
     global players
@@ -852,6 +991,9 @@ async def on_ready():
             "the-tavern": realm.get_channel(763300003095117846),
             "the-travelling-caravan": realm.get_channel(817631855603089439),
         },
+        "pet-zones": {
+            "the-menagerie": realm.get_channel(818311959047831552),
+        },
     }
     print("Channel IDs Set")
     roles = {
@@ -1019,6 +1161,7 @@ async def on_ready():
             print("Error during combat routine")
             print(traceback.format_exc())
         await doHealthRegen()
+        await doPetEvents()
         await doPlayerFixup()
         await asyncio.sleep(3)
     await bot.close()
