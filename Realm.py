@@ -341,12 +341,9 @@ async def doCombat():
     global vc
     currentTick = currentTick + 1
     if currentTick > 10:
-        tic = time.perf_counter()
         with open("./Data/Players.pkl", "w+b") as f:
             pickle.dump(players, f, pickle.HIGHEST_PROTOCOL)
         currentTick = 0
-        toc = time.perf_counter()
-        print(f"Player save complete in {toc - tic:0.4f} seconds")
     for mob in list(activeMobs.values()):
         pMessage = "Party:"
         if not mob.playersEngaged == []:
