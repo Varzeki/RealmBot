@@ -549,6 +549,8 @@ async def doCombat():
                     await mob.partyMessage.edit(content=pMessage)
         elif not pMessage == mob.partyMessage.content:
             print("EDIT")
+            print(pMessage)
+            print(mob.partyMessage.content)
             await mob.partyMessage.edit(content=pMessage)
 
 
