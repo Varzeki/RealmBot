@@ -8,5 +8,5 @@ rewardLow: 15
 rewardHigh: 25
 encounterText: You hear a chilling scream that paralyzes you for a few seconds as a banshee rushes towards you. You manage shake it off just before the banshee strikes!
 defeatText: The banshee hits the ground turning into a pile of extoplasm that you carefully step around.
-weakness: Fyr
+weakness: Aer
 statValue: 108
