@@ -678,7 +678,7 @@ class Player:
                 d = d + tempEquip[1].damage
         if self.pClass == "arbiter":
             self.STAT_damageDealt = self.STAT_damageDealt + round(d * (r * 0.05))
-            return round(d * (r * 0.05), damageTypes)
+            return round(d+ (d * (r * 0.05))), damageTypes
         else:
             self.STAT_damageDealt = self.STAT_damageDealt + round(d)
             return round(d), damageTypes
