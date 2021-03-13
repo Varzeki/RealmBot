@@ -1,8 +1,8 @@
 name: Archmage
 healthLow: 60
 healthHigh: 80
-dmgLow: 50
-dmgHigh: 70
+dmgLow: 30
+dmgHigh: 40
 lootBonus: 0
 rewardLow: 20
 rewardHigh: 30

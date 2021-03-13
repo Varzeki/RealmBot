@@ -1,8 +1,8 @@
 name: Gargoyle
 healthLow: 80
 healthHigh: 100
-dmgLow: 40
-dmgHigh: 50
+dmgLow: 30
+dmgHigh: 40
 lootBonus: 0
 rewardLow: 20
 rewardHigh: 30

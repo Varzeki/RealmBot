@@ -2,7 +2,7 @@ name: Paladin
 healthLow: 100
 healthHigh: 120
 dmgLow: 30
-dmgHigh: 50
+dmgHigh: 40
 rewardLow: 20
 rewardHigh: 30
 lootBonus: 0
