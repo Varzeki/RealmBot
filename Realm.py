@@ -2741,7 +2741,7 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
     print("XP COMMAND")
     global players
     if passedMember.id in players:
-        players[passedMember.id].giveEXP(passedXP)
+        players[passedMember.id].giveEXP(passedXP, players[passedMember.id].level)
         await ctx.send(
             "Gave " + players[passedMember.id].name + " " + str(passedXP) + "XP"
         )
