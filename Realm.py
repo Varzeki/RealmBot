@@ -2561,7 +2561,7 @@ async def on_message(message):
                     except:
                         print("Error sending Pet Image")
                         print(traceback.format_exc())
-    bot.process_commands(message)
+    await bot.process_commands(message)
 
 
 @bot.event
