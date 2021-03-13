@@ -758,7 +758,7 @@ class Player:
             if self.equipment[1].lootType == "armour":
                 bonusDFC = bonusDFC + self.equipment[0].defence
             elif self.equipment[1].lootType == "weapon":
-                bonusDMG = bonusDMG + tempEquip[1].damage
+                bonusDMG = bonusDMG + self.equipment[1].damage
         return [bonusDFC, bonusDMG]
 
 
