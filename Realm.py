@@ -2735,7 +2735,7 @@ async def on_reaction_add(reaction, user):
                         pass
 
 
-@bot.command
+@bot.command()
 async def addxp(ctx, passedMember: discord.Member, passedXP: int):
     print("XP COMMAND")
     global players
