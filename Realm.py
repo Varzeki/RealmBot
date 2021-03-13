@@ -749,15 +749,15 @@ class Player:
     def getBonusStats(self):
         bonusDFC = 0
         bonusDMG = 0
-        if not tempEquip[0] == "Empty":
-            if tempEquip[0].lootType == "armour":
-                bonusDFC = bonusDFC + tempEquip[0].defence
-            elif tempEquip[0].lootType == "weapon":
-                bonusDMG = bonusDMG + tempEquip[0].damage
-        if not tempEquip[1] == "Empty":
-            if tempEquip[1].lootType == "armour":
-                bonusDFC = bonusDFC + tempEquip[0].defence
-            elif tempEquip[1].lootType == "weapon":
+        if not self.equipment[0] == "Empty":
+            if self.equipment[0].lootType == "armour":
+                bonusDFC = bonusDFC + self.equipment[0].defence
+            elif self.equipment[0].lootType == "weapon":
+                bonusDMG = bonusDMG + self.equipment[0].damage
+        if not self.equipment[1] == "Empty":
+            if self.equipment[1].lootType == "armour":
+                bonusDFC = bonusDFC + self.equipment[0].defence
+            elif self.equipment[1].lootType == "weapon":
                 bonusDMG = bonusDMG + tempEquip[1].damage
         return [bonusDFC, bonusDMG]
 
