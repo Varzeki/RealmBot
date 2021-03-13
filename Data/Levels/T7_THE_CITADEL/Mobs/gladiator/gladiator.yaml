@@ -1,12 +1,12 @@
 name: Gladiator
-healthLow: 30
-healthHigh: 50
-dmgLow: 8
-dmgHigh: 16
-rewardLow: 10
-rewardHigh: 20
+healthLow: 80
+healthHigh: 100
+dmgLow: 20
+dmgHigh: 40
+rewardLow: 15
+rewardHigh: 25
 lootBonus: 0
 encounterText: You are passing near the arena when you hear shouting. Upon investigation you see a gladiator dismembering another one. He spots you and charges weapon raised!
-defeatText: As you cut down the gladiator, the other one gets up as though he wasnt just dismembered and walks off in another direction. 
+defeatText: As you cut down the gladiator, the other one gets up as though he wasnt just dismembered and walks off in another direction.
 weakness: Fyr
 statValue: 88

@@ -1,10 +1,10 @@
 name: Steel Golem
-healthLow: 5
-healthHigh: 55
-dmgLow: 5
-dmgHigh: 25
-rewardLow: 3
-rewardHigh: 12
+healthLow: 100
+healthHigh: 150
+dmgLow: 10
+dmgHigh: 20
+rewardLow: 15
+rewardHigh: 25
 lootBonus: 0
 encounterText: A huge steel Golem is waiting in an alley as you pass. It surprisingly quickly launches itself at you knocking you over. You quickly stand up and prepare to dodge the next charge.
 defeatText: The steel golem ceases to function as you land one last mighty attack on it.
