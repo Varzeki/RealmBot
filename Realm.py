@@ -2561,6 +2561,7 @@ async def on_message(message):
                     except:
                         print("Error sending Pet Image")
                         print(traceback.format_exc())
+    bot.process_commands(message)
 
 
 @bot.event
@@ -2741,9 +2742,11 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
     global players
     if passedMember.id in players:
         players[passedMember.id].giveEXP(passedXP)
-        ctx.send("Gave " + players[passedMember.id].name + " " + str(passedXP) + "XP")
+        await ctx.send(
+            "Gave " + players[passedMember.id].name + " " + str(passedXP) + "XP"
+        )
     else:
-        ctx.send("Not a registered player")
+        await ctx.send("Not a registered player")
 
 
 bot.run(TOKEN)
