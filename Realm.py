@@ -694,7 +694,7 @@ class Player:
                 actualDFC = actualDFC + tempEquip[0].defence
         if not tempEquip[1] == "Empty":
             if tempEquip[1].lootType == "armour":
-                actualDFC = actualDFC + tempEquip[0].defence
+                actualDFC = actualDFC + tempEquip[1].defence
         if d - actualDFC < 1:
             return 0
         else:
@@ -750,13 +750,14 @@ class Player:
         bonusDFC = 0
         bonusDMG = 0
         if not self.equipment[0] == "Empty":
+            print("SLOT1")
             if self.equipment[0].lootType == "armour":
                 bonusDFC = bonusDFC + self.equipment[0].defence
             elif self.equipment[0].lootType == "weapon":
                 bonusDMG = bonusDMG + self.equipment[0].damage
         if not self.equipment[1] == "Empty":
             if self.equipment[1].lootType == "armour":
-                bonusDFC = bonusDFC + self.equipment[0].defence
+                bonusDFC = bonusDFC + self.equipment[1].defence
             elif self.equipment[1].lootType == "weapon":
                 bonusDMG = bonusDMG + self.equipment[1].damage
         return [bonusDFC, bonusDMG]
