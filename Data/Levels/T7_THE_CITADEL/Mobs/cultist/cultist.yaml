@@ -1,11 +1,11 @@
 name: Cultist
 healthLow: 60
 healthHigh: 80
-dmgLow: 15
-dmgHigh: 25
+dmgLow: 30
+dmgHigh: 40
 lootBonus: 0
-rewardLow: 15
-rewardHigh: 25
+rewardLow: 20
+rewardHigh: 30
 encounterText: As you pass an alley, a dagger narrowly missing your head, you turn and see a cultist. They seem determined to sacrifice you!
 defeatText: As you strike the cultist down. you see three more that were waiting in ambush turn and sprint away.
 weakness: Fyr

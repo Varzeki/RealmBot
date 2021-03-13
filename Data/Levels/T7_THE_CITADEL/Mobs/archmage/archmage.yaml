@@ -1,11 +1,11 @@
 name: Archmage
-healthLow: 40
-healthHigh: 60
-dmgLow: 20
-dmgHigh: 30
+healthLow: 60
+healthHigh: 80
+dmgLow: 30
+dmgHigh: 40
 lootBonus: 0
-rewardLow: 15
-rewardHigh: 25
+rewardLow: 20
+rewardHigh: 30
 encounterText: You narrowly dodge an explosion centered over your head! An archmage has decided you are his plaything for today.
 defeatText: Seeing that he has clearly underestimated your abilities he quickly throws one last spell and teleports away.
 weakness: Terra
