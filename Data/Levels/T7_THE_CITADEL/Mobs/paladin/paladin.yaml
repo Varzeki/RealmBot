@@ -1,10 +1,10 @@
 name: Paladin
 healthLow: 100
 healthHigh: 120
-dmgLow: 20
-dmgHigh: 40
-rewardLow: 15
-rewardHigh: 25
+dmgLow: 30
+dmgHigh: 50
+rewardLow: 20
+rewardHigh: 30
 lootBonus: 0
 encounterText: A paladin approaches you weapon drawn and mumbling about their gods chosen enemy. He goes to swing at you but you manage to dodge away. Its a fight!
 defeatText: As the paladin falls to the ground, soft warm light engulfs their body and they slowly disappear.

@@ -1,10 +1,10 @@
 name: Gladiator
-healthLow: 80
-healthHigh: 100
-dmgLow: 20
-dmgHigh: 40
-rewardLow: 15
-rewardHigh: 25
+healthLow: 40
+healthHigh: 150
+dmgLow: 30
+dmgHigh: 60
+rewardLow: 20
+rewardHigh: 30
 lootBonus: 0
 encounterText: You are passing near the arena when you hear shouting. Upon investigation you see a gladiator dismembering another one. He spots you and charges weapon raised!
 defeatText: As you cut down the gladiator, the other one gets up as though he wasnt just dismembered and walks off in another direction.
