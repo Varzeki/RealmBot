@@ -2746,5 +2746,4 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
         ctx.send("Not a registered player")
 
 
-bot.add_command(addxp)
 bot.run(TOKEN)
