@@ -2362,7 +2362,7 @@ async def on_message(message):
                                 "DMG: "
                                 + str(players[message.author.id].DMG)
                                 + "+"
-                                + statBlock[1],
+                                + str(statBlock[1]),
                             )
                             draw.text(
                                 int(s.width / 2),
@@ -2370,7 +2370,7 @@ async def on_message(message):
                                 "DFC: "
                                 + str(players[message.author.id].DFC)
                                 + "+"
-                                + statBlock[0],
+                                + str(statBlock[0]),
                             )
                             draw.text(
                                 int(s.width / 2), 580, random.sample(factList, k=1)[0]
