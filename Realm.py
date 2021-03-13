@@ -740,7 +740,7 @@ class Player:
                 + loot.fullName
                 + " they couldn't carry for "
                 + str(g)
-                + " gold\n"
+                + " gold"
             )
         else:
             self.inventory[self.inventory.index("Empty")] = loot
@@ -2734,8 +2734,10 @@ async def on_reaction_add(reaction, user):
                     else:
                         pass
 
-@bot.command()
+
+@bot.command
 async def addxp(ctx, passedMember: discord.Member, passedXP: int):
+    print("XP COMMAND")
     global players
     if passedMember.id in players:
         players[passedMember.id].giveEXP(passedXP)
@@ -2743,4 +2745,6 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
     else:
         ctx.send("Not a registered player")
 
+
+bot.add_command(addxp)
 bot.run(TOKEN)
