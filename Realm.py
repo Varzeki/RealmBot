@@ -742,7 +742,7 @@ class Player:
             return [x, self.name + " has gained a level!\n"]
         return [x, ""]
 
-    def prestige():
+    def prestige(self):
         self.level = 1
         self.EXP = 0
         self.nextLevelEXP = 100
@@ -2859,6 +2859,7 @@ async def stats(ctx, passedMember: discord.Member):
         else:
             await ctx.send("This user doesn't appear to be registered yet!")
 
+
 @bot.command()
 async def prestige(ctx, passedMember: discord.Member):
     print("ADMIN: Prestige command used by " + str(ctx.author.name))
@@ -2866,9 +2867,7 @@ async def prestige(ctx, passedMember: discord.Member):
     if ctx.channel == channels["admin"]:
         if passedMember.id in players:
             players[passedMember.id].prestige()
-            await ctx.send(
-                "Forced prestige on " + str(players[passedMember.id].name)
-            )
+            await ctx.send("Forced prestige on " + str(players[passedMember.id].name))
         else:
             await ctx.send("Not a registered player")
 
