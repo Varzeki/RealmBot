@@ -1127,7 +1127,7 @@ async def on_ready():
         "lizardfolk": realm.get_role(763382889345450075),
         "dwarf": realm.get_role(763382890733633566),
         "elf": realm.get_role(763382893812121610),
-        "tier access": realm.get_role(770537052454125569),
+        "tier-access": realm.get_role(770537052454125569),
     }
     print("Role IDs Set")
     channel = discord.utils.get(realm.channels, name="the-discordium")
@@ -2524,7 +2524,7 @@ async def on_message(message):
                     except:
                         print("Error sending Pet Image")
                         print(traceback.format_exc())
-    await bot.process_commands(message)
+        await bot.process_commands(message)
 
 
 @bot.event
@@ -2964,7 +2964,8 @@ async def prestige(ctx, passedMember: discord.Member):
 async def stop(ctx):
     print("ADMIN: Stop command used by " + str(ctx.author.name))
     if ctx.channel == channels["admin"]:
-        await bot.close()
+        global graceful_exit
+        graceful_exit = True
 
 
 bot.run(TOKEN)
