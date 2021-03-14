@@ -1146,7 +1146,7 @@ async def on_ready():
     msgs = await c.history(limit=200).flatten()
     for msg in msgs:
         await msg.delete(delay=0.2)
-    c.send(
+    await c.send(
         "**Rules**\n1: No NSFW or obscene content outside of marked channels. This includes text, images, or links featuring nudity, sex, hard violence, or other graphically disturbing content.\n2: Treat everyone with respect. Absolutely no harassment, witch hunting, sexism, racism, or hate speech will be tolerated.\n3: If you see something against the rules or something that makes you feel unsafe, let staff know. We want this server to be a welcoming space!"
     )
     for c in channels["registration"].values():
