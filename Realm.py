@@ -384,8 +384,14 @@ async def doCombat():
                         + " health to the party!"
                         + "\n"
                     )
-                    for p in mob.playersEngaged:
-                        players[p].heal(heal)
+                    for g in mob.playersEngaged:
+                        players[g].heal(heal)
+                        hpSlots = round((players[g].HP / players[g].maxHP) * 10)
+                        if not hpSlots > -1:
+                            hpSlots = 0
+                        players[g].hpBar = (emoji_set["greenHP"] * hpSlots) + (
+                            emoji_set["redHP"] * (10 - hpSlots)
+                        )
 
                 if p == attackedPlayer:
                     damage = players[p].getDamageTaken(mob.getDamage())
