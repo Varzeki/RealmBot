@@ -10,14 +10,12 @@ import asyncio
 import math
 import sys
 from discord.ext import commands
-from dotenv import load_dotenv
 from wand.image import Image
 from wand.drawing import Drawing
 from wand.color import Color
 import traceback
 
-load_dotenv()
-TOKEN = os.getenv("DISCORD_TOKEN")
+
 graceful_init = False
 graceful_exit = False
 intents = discord.Intents.default()
@@ -2910,6 +2908,3 @@ async def stop(ctx):
     print("ADMIN: Stop command used by " + str(ctx.author.name))
     if ctx.channel == channels["admin"]:
         await bot.close()
-
-
-bot.run(TOKEN)
