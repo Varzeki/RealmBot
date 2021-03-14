@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
-import Realm
+from Realm import *
 
 repo = git.Repo("./")
 
