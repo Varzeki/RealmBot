@@ -755,60 +755,60 @@ class Player:
         if not "The Prestigious" in self.titles:
             self.titles["The Prestigious"] = ", the Prestigious"
             self.STAT_titlesCollected = len(self.titles)
-        if pClass == "arcanist":
+        if self.pClass == "arcanist":
             self.maxHP = 30
             self.DMG = 38
             self.DFC = 5
-        elif pClass == "overseer":
+        elif self.pClass == "overseer":
             self.maxHP = 50
             self.DMG = 25
             self.DFC = 10
-        elif pClass == "warden":
+        elif self.pClass == "warden":
             self.threat = 20
             self.maxHP = 80
             self.DMG = 15
             self.DFC = 12
-        elif pClass == "mender":
+        elif self.pClass == "mender":
             self.maxHP = 40
             self.DMG = 26
             self.DFC = 8
-        elif pClass == "curator":
+        elif self.pClass == "curator":
             self.maxHP = 60
             self.DMG = 22
             self.DFC = 10
-        elif pClass == "corsair":
+        elif self.pClass == "corsair":
             self.maxHP = 40
             self.DMG = 32
             self.DFC = 5
-        elif pClass == "arbiter":
+        elif self.pClass == "arbiter":
             self.maxHP = 40
             self.DMG = 28
             self.DFC = 10
-        elif pClass == "ambassador":
+        elif self.pClass == "ambassador":
             self.maxHP = 60
             self.DMG = 26
             self.DFC = 11
         else:
             print("Invalid class for new player prestige!")
-        if race == "human":
+        if self.race == "human":
             self.maxHP = self.maxHP + 2
             self.DMG = self.DMG + 1
             self.DFC = self.DFC + 1
-        elif race == "troll":
+        elif self.race == "troll":
             self.DFC = self.DFC + 2
-        elif race == "dwarf":
+        elif self.race == "dwarf":
             self.maxHP = self.maxHP + 8
-        elif race == "lizardfolk":
+        elif self.race == "lizardfolk":
             self.DMG = self.DMG + 4
-        elif race == "elf":
+        elif self.race == "elf":
             self.DMG = self.DMG + 2
             self.DFC = self.DFC + 1
-        elif race == "ascended":
+        elif self.race == "ascended":
             self.DMG = self.DMG + 2
             self.DFC = self.DFC + 1
             self.maxHP = self.maxHP + 4
         else:
-            print("Invalid race for new player prestige!")
+            print("Invalid self.race for new player prestige!")
 
     def giveGold(self, g, vendor):
         if vendor:
