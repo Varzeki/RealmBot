@@ -8,7 +8,6 @@ import random
 import discord
 import asyncio
 import math
-import sys
 from discord.ext import commands
 from wand.image import Image
 from wand.drawing import Drawing
@@ -42,12 +41,11 @@ emoji_set = {
     "important": ("\u203C" + "\uFE0F"),
     "skull": "💀",
 }
-fullHP = emoji_set["greenHP"] * 10
-ratList = ["Rat"]
+rat_list = ["Rat"]
 channels = {}
 reactables = {"playerInventories": {}, "vendors": {}}
 roles = {}
-classRoles = [
+class_roles = [
     "arcanist",
     "overseer",
     "warden",
@@ -56,7 +54,7 @@ classRoles = [
     "corsair",
     "arbiter",
 ]
-raceRoles = [
+race_roles = [
     "human",
     "troll",
     "lizardfolk",
@@ -64,9 +62,9 @@ raceRoles = [
     "elf",
 ]
 players = {}
-activeMobs = {}
-activePets = []
-currentTick = 0
+active_mobs = {}
+active_pets = []
+current_tick = 0
 
 tier_levels = {
     "t1": [1],
@@ -137,7 +135,7 @@ def generatePet():
 
 
 async def doPetEvents():
-    global activePets
+    global active_pets
     for chan in channels["pet-zones"].values():
         if random.uniform(0, 1) > 0.8:
             pet = Pet()
@@ -254,12 +252,12 @@ async def doPetEvents():
                         + "_PetStatsOutput.png"
                     )
                 )
-                activePets.append([petMsg, pet, 5])
+                active_pets.append([petMsg, pet, 5])
             except:
                 print("Tried to send pet message but failed!")
                 print(traceback.format_exc())
 
-        for p in activePets:
+        for p in active_pets:
             try:
                 p[2] = p[2] - 1
                 if p[2] < 1:
@@ -271,11 +269,11 @@ async def doPetEvents():
             except:
                 print("Tried to modify pet timer but did not exist!")
                 print(traceback.format_exc())
-        activePets = [petData for petData in activePets if petData[2] > 0]
+        active_pets = [petData for petData in active_pets if petData[2] > 0]
 
 
 async def doHealthRegen():
-    global activeMobs
+    global active_mobs
     global players
     global emoji_set
     for p in players.values():
@@ -288,7 +286,7 @@ async def doHealthRegen():
                 p.hpBar = (emoji_set["greenHP"] * hpSlots) + (
                     emoji_set["redHP"] * (10 - hpSlots)
                 )
-    for m in activeMobs.values():
+    for m in active_mobs.values():
         if len(m.playersEngaged) == 0:
             if not m.HP == m.maxHP:
                 m.HP = m.HP + round((0.1 * m.maxHP))
@@ -316,8 +314,8 @@ async def doHealthRegen():
 
 async def doPlayerFixup():
     global players
-    global activeMobs
-    # if currentTick == 5:
+    global active_mobs
+    # if current_tick == 5:
     invalidPlayers = [
         i
         for i in [p for p in players.values() if p.inCombat]
@@ -326,12 +324,12 @@ async def doPlayerFixup():
             players[p]
             for p in [
                 item
-                for sublist in [m.playersEngaged for m in activeMobs.values()]
+                for sublist in [m.playersEngaged for m in active_mobs.values()]
                 for item in sublist
             ]
         ]
     ]
-    # activeEngagedPlayers = [players[p] for p in [item for sublist in [m.playersEngaged for m in activeMobs.values()] for item in sublist]]
+    # activeEngagedPlayers = [players[p] for p in [item for sublist in [m.playersEngaged for m in active_mobs.values()] for item in sublist]]
     if len(invalidPlayers) > 0:
         print("FIXING INVALID PLAYERS:")
         print([p.name for p in invalidPlayers])
@@ -342,16 +340,16 @@ async def doPlayerFixup():
 
 
 async def doCombat():
-    global activeMobs
+    global active_mobs
     global players
-    global currentTick
+    global current_tick
     global vc
-    currentTick = currentTick + 1
-    if currentTick > 10:
+    current_tick = current_tick + 1
+    if current_tick > 10:
         with open("./Data/Players.pkl", "w+b") as f:
             pickle.dump(players, f, pickle.HIGHEST_PROTOCOL)
-        currentTick = 0
-    for mob in list(activeMobs.values()):
+        current_tick = 0
+    for mob in list(active_mobs.values()):
         pMessage = "Party:"
         if not mob.playersEngaged == []:
             pMessage = pMessage + "\n"
@@ -464,7 +462,7 @@ async def doCombat():
                     mob.lootBonus = mob.lootBonus + players[p].lootBonus
                 for p in mob.playersEngaged:
                     players[p].STAT_mobsKilled = players[p].STAT_mobsKilled + 1
-                    if mob.name in ratList:
+                    if mob.name in rat_list:
                         players[p].STAT_ratsBeaten = players[p].STAT_ratsBeaten + 1
                     players[p].inCombat = False
                     pLoot = mob.getLoot(players[p].lootBonus)
@@ -491,16 +489,16 @@ async def doCombat():
                 if importantEvent:
                     await z.add_reaction(emoji_set["important"])
                 tier = mob.tier
-                activeMobs.pop(tier, None)
+                active_mobs.pop(tier, None)
                 msgs = (
                     await channels["tiers"][tier + "-main"].history(limit=200).flatten()
                 )
                 for msg in msgs:
                     await msg.delete(delay=0.1)
-                activeMobs[tier] = Mob(tier)
+                active_mobs[tier] = Mob(tier)
                 try:
                     await channels["tiers"][tier + "-main"].send(
-                        file=activeMobs[tier].image
+                        file=active_mobs[tier].image
                     )
                 except:
                     print("Error sending New Mob Image")
@@ -508,19 +506,19 @@ async def doCombat():
                 reactables[tier + "-hpBar"] = await channels["tiers"][
                     tier + "-main"
                 ].send(
-                    activeMobs[tier].name
+                    active_mobs[tier].name
                     + " (LVL: "
-                    + str(activeMobs[tier].level)
+                    + str(active_mobs[tier].level)
                     + ") - "
-                    + str(activeMobs[tier].HP)
+                    + str(active_mobs[tier].HP)
                     + "/"
-                    + str(activeMobs[tier].maxHP)
+                    + str(active_mobs[tier].maxHP)
                     + "HP"
                     + "\n"
-                    + activeMobs[tier].hpBar
+                    + active_mobs[tier].hpBar
                 )
                 await reactables[tier + "-hpBar"].add_reaction(emoji_set["swords"])
-                activeMobs[tier].hpMessage = reactables[tier + "-hpBar"]
+                active_mobs[tier].hpMessage = reactables[tier + "-hpBar"]
                 try:
                     await channels["tiers"][tier + "-main"].send(
                         file=discord.File("Data/Resources/Images/vs.png")
@@ -528,13 +526,13 @@ async def doCombat():
                 except:
                     print("Error sending New VS Image")
                     print(traceback.format_exc())
-                activeMobs[tier].partyMessage = await channels["tiers"][
+                active_mobs[tier].partyMessage = await channels["tiers"][
                     tier + "-main"
                 ].send("Party:\n")
                 await channels["tiers"][tier + "-log"].send(
-                    activeMobs[tier].encounterText
+                    active_mobs[tier].encounterText
                 )
-                if "Rat" in activeMobs[tier].name:
+                if "Rat" in active_mobs[tier].name:
                     vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
             else:
                 hpSlots = round((mob.HP / mob.maxHP) * 10)
@@ -759,7 +757,7 @@ class Player:
             self.prestiges = self.prestiges + 1
         except:
             self.prestiges = 1
-        if not "The Prestigious" in self.titles:
+        if "The Prestigious" not in self.titles:
             self.titles["The Prestigious"] = ", the Prestigious"
             self.STAT_titlesCollected = len(self.titles)
         if self.pClass == "arcanist":
@@ -828,7 +826,7 @@ class Player:
 
     def addLoot(self, loot):
         self.STAT_itemsLooted = self.STAT_itemsLooted + 1
-        if not "Empty" in self.inventory:
+        if "Empty" not in self.inventory:
             g = self.giveGold(loot.value, True)
             return (
                 self.name
@@ -1073,7 +1071,7 @@ async def on_ready():
     global roles
     global reactables
     global players
-    global activeMobs
+    global active_mobs
     global vc
     realm = bot.guilds[0]
     channels = {
@@ -1148,25 +1146,50 @@ async def on_ready():
     for msg in msgs:
         await msg.delete(delay=0.2)
     await c.send(
-        "** **\n**Rules**\n1: No NSFW or obscene content outside of marked channels. This includes text, images, or links featuring nudity, sex, hard violence, or other graphically disturbing content.\n2: Treat everyone with respect. Absolutely no harassment, witch hunting, sexism, racism, or hate speech will be tolerated.\n3: If you see something against the rules or something that makes you feel unsafe, let staff know. We want this server to be a welcoming space!"
+        "** **\n**Rules**\n"
+        "1: No NSFW or obscene content outside of marked channels. This includes text, images, or links featuring nudity, sex, hard violence, or other graphically disturbing content.\n"
+        "2: Treat everyone with respect. Absolutely no harassment, witch hunting, sexism, racism, or hate speech will be tolerated.\n"
+        "3: If you see something against the rules or something that makes you feel unsafe, let staff know. We want this server to be a welcoming space!"
     )
     await c.send(
-        "** **\n**Registration**\nTo get started in Realm, head down to the registration channels and react.\nAs you react to each prompt, a new channel will become available to you.\nOnce you are done, you can start your adventure in #the-arboretum!"
+        "** **\n"
+        "**Registration**\n"
+        "To get started in Realm, head down to the registration channels and react.\n"
+        "As you react to each prompt, a new channel will become available to you.\n"
+        "Once you are done, you can start your adventure in #the-arboretum!"
     )
     await c.send(
-        "** **\n**Combat**\nCombat in realm is pretty simple - head into a channel with an enemy, and react using the crossed swords.\nNow that you have engaged the mob, combat will happen automatically.\nCheck the matching log channel for details of your fight!"
+        "** **\n"
+        "**Combat**\n"
+        "Combat in realm is pretty simple - head into a channel with an enemy, and react using the crossed swords.\n"
+        "Now that you have engaged the mob, combat will happen automatically.\n"
+        "Check the matching log channel for details of your fight!"
     )
     await c.send(
-        '** **\n**Loot**\nAfter a couple of fights, you might find yourself in possession of some loot.\nTo check it out, open a DM with Realmkeeper and use the !inventory command.\nNow that you can see your inventory, you can add to the reactions to choose which gear slot you want to move or sell.\nIf you want to make the process of selling gear a little faster, consider using the !sell command.\nThis command accepts a number, 1-7, or the word "all".'
+        "** **\n"
+        "**Loot**\n"
+        "After a couple of fights, you might find yourself in possession of some loot.\n"
+        "To check it out, open a DM with Realmkeeper and use the !inventory command.\n"
+        "Now that you can see your inventory, you can add to the reactions to choose which gear slot you want to move or sell.\n"
+        'If you want to make the process of selling gear a little faster, consider using the !sell command.\nThis command accepts a number, 1-7, or the word "all".'
     )
     await c.send(
-        "** **\n**Buying Gear**\nOnce you reach a certain level, you will be able to access a shop that can sell you gear of your level, among other items.\nThe extra gear useful if you haven't managed to get any good drops lately!\nJust react to the item you want to buy, and Realmkeeper will send you an offer with cost appropriate for your level."
+        "** **\n**Buying Gear**\n"
+        "Once you reach a certain level, you will be able to access a shop that can sell you gear of your level, among other items.\n"
+        "The extra gear useful if you haven't managed to get any good drops lately!\n"
+        "Just react to the item you want to buy, and Realmkeeper will send you an offer with cost appropriate for your level."
     )
     await c.send(
-        "** **\n**Pets**\nOnce you reach a certain level, the menagerie will become available to you.\nHere, you can react to pets to catch them, but be quick, because they could despawn or be caught by another player!\nPets provide you a percentage bonus to your stats."
+        "** **\n"
+        "**Pets**\n"
+        "Once you reach a certain level, the menagerie will become available to you.\n"
+        "Here, you can react to pets to catch them, but be quick, because they could despawn or be caught by another player!\n"
+        "Pets provide you a percentage bonus to your stats."
     )
     await c.send(
-        "** **\n**Stat Cards**\n!stats will give you a statcard generated just for your character! You can also highlight someone with !stats to get a statcard of their character.\n"
+        "** **\n"
+        "**Stat Cards**\n"
+        "!stats will give you a statcard generated just for your character! You can also highlight someone with !stats to get a statcard of their character.\n"
     )
     for c in channels["registration"].values():
         msgs = await c.history(limit=200).flatten()
@@ -1179,63 +1202,87 @@ async def on_ready():
             await reactables["register"].add_reaction(emoji_set["thumbsUP"])
         if c.name == "class-select":
             reactables["class-select-arcanist"] = await c.send(
-                "The Arcanist\nA magic class based on high damage. Has low base HP and high base DMG.\nPerk: Very high base DMG."
+                "The Arcanist\n"
+                "A magic class based on high damage. Has low base HP and high base DMG.\n"
+                "Perk: Very high base DMG."
             )
             await reactables["class-select-arcanist"].add_reaction(
                 emoji_set["thumbsUP"]
             )
             reactables["class-select-overseer"] = await c.send(
-                "The Overseer\nA follower based class with balanced stats.\nPerk: Bring an extra follower to each combat with a portion of your stats."
+                "The Overseer\n"
+                "A pet based class with balanced stats.\n"
+                "Perk: Pets are 10% more effective."
             )
             await reactables["class-select-overseer"].add_reaction(
                 emoji_set["thumbsUP"]
             )
             reactables["class-select-warden"] = await c.send(
-                "The Warden\nA tank class with extra DFC and HP, but low damage.\nPerk: Your threat is doubled."
+                "The Warden\n"
+                "A tank class with extra DFC and HP, but low damage.\n"
+                "Perk: Your threat is doubled."
             )
             await reactables["class-select-warden"].add_reaction(emoji_set["thumbsUP"])
             reactables["class-select-mender"] = await c.send(
-                "The Mender\nA healing class with low DFC.\nPerk: Heal your party for 10% of your damage each round."
+                "The Mender\n"
+                "A healing class with low DFC.\n"
+                "Perk: Heal your party for 6-8 percent of your damage each round."
             )
             await reactables["class-select-mender"].add_reaction(emoji_set["thumbsUP"])
             reactables["class-select-curator"] = await c.send(
-                "The Curator\nA wealth based class with balanced stats.\nPerk: Every round, stack up a bonus loot roll for your entire party. 5% bonus gold."
+                "The Curator\n"
+                "A wealth based class with balanced stats.\n"
+                "Perk: Double the chance of a drop. 5% bonus gold."
             )
             await reactables["class-select-curator"].add_reaction(emoji_set["thumbsUP"])
             reactables["class-select-corsair"] = await c.send(
-                "The Corsair\nA weapon based class with low defensive stats.\nPerk: Gain an extra weapon slot instead of an armour slot, and halves your threat."
+                "The Corsair\n"
+                "An equipment based class with low defensive stats.\n"
+                "Perk: Gain an extra handheld slot instead of an armour slot, and halves your threat."
             )
             await reactables["class-select-corsair"].add_reaction(emoji_set["thumbsUP"])
             reactables["class-select-arbiter"] = await c.send(
-                "The Arbiter\nA ranged class that gains more damage the longer a fight goes on.\nPerk: Gain 5% bonus DMG per round."
+                "The Arbiter\n"
+                "A ranged class that gains more damage the longer a fight goes on.\n"
+                "Perk: Gain 5% bonus DMG per round."
             )
             await reactables["class-select-arbiter"].add_reaction(emoji_set["thumbsUP"])
         if c.name == "race-select":
             reactables["race-select-human"] = await c.send(
-                "Human\nA regular human.\nStats: DMG +1, DFC +1, HP +2"
+                "Human\n" "A regular human.\n" "Stats: DMG +1, DFC +1, HP +2"
             )
             await reactables["race-select-human"].add_reaction(emoji_set["thumbsUP"])
             reactables["race-select-troll"] = await c.send(
-                "Troll\nA large, muscled humanoid with intimidating tusks.\nStats: DFC +2"
+                "Troll\n"
+                "A large, muscled humanoid with intimidating tusks.\n"
+                "Stats: DFC +2"
             )
             await reactables["race-select-troll"].add_reaction(emoji_set["thumbsUP"])
             reactables["race-select-lizardfolk"] = await c.send(
-                "Lizardfolk\nA savage race of scaly and aggressive hunters.\nStats: DMG +4"
+                "Lizardfolk\n"
+                "A savage race of scaly and aggressive hunters.\n"
+                "Stats: DMG +4"
             )
             await reactables["race-select-lizardfolk"].add_reaction(
                 emoji_set["thumbsUP"]
             )
             reactables["race-select-dwarf"] = await c.send(
-                "Dwarf\nA stout and kind people, who are most at home in mountains.\nStats: HP +8"
+                "Dwarf\n"
+                "A stout and kind people, who are most at home in mountains.\n"
+                "Stats: HP +8"
             )
             await reactables["race-select-dwarf"].add_reaction(emoji_set["thumbsUP"])
             reactables["race-select-elf"] = await c.send(
-                "Elf\nA proud race of slender and elegant craftspeople, with pointed ears.\nStats: DFC+1, DMG +2"
+                "Elf\n"
+                "A proud race of slender and elegant craftspeople, with pointed ears.\n"
+                "Stats: DFC+1, DMG +2"
             )
             await reactables["race-select-elf"].add_reaction(emoji_set["thumbsUP"])
         if c.name == "name-select":
             await c.send(
-                "Last step!\nType a name for your character below.\nThis should be between 1 and 12 characters long, made of letters and spaces only."
+                "Last step!\n"
+                "Type a name for your character below.\n"
+                "This should be between 1 and 12 characters long, made of letters and spaces only."
             )
     for t in channels["tiers"]:
         if "main" in t:
@@ -1243,35 +1290,35 @@ async def on_ready():
             msgs = await c.history(limit=200).flatten()
             for msg in msgs:
                 await msg.delete(delay=0.2)
-            activeMobs[t[:2]] = Mob(t[:2])
+            active_mobs[t[:2]] = Mob(t[:2])
             await channels["tiers"][t.replace("main", "log")].send(
-                activeMobs[t[:2]].encounterText
+                active_mobs[t[:2]].encounterText
             )
             try:
-                await c.send(file=activeMobs[t[:2]].image)
+                await c.send(file=active_mobs[t[:2]].image)
             except:
                 print("Error sending Initial Mob Image for " & str(t[:2]))
                 print(traceback.format_exc())
             reactables[t[:2] + "-hpBar"] = await c.send(
-                activeMobs[t[:2]].name
+                active_mobs[t[:2]].name
                 + " (LVL: "
-                + str(activeMobs[t[:2]].level)
+                + str(active_mobs[t[:2]].level)
                 + ") - "
-                + str(activeMobs[t[:2]].HP)
+                + str(active_mobs[t[:2]].HP)
                 + "/"
-                + str(activeMobs[t[:2]].maxHP)
+                + str(active_mobs[t[:2]].maxHP)
                 + "\n"
-                + activeMobs[t[:2]].hpBar
+                + active_mobs[t[:2]].hpBar
             )
             await reactables[t[:2] + "-hpBar"].add_reaction(emoji_set["swords"])
-            activeMobs[t[:2]].hpMessage = reactables[t[:2] + "-hpBar"]
+            active_mobs[t[:2]].hpMessage = reactables[t[:2] + "-hpBar"]
             try:
                 await c.send(file=discord.File("Data/Resources/Images/vs.png"))
             except:
                 print("Error sending Initial VS Image for " & str(t[:2]))
                 print(traceback.format_exc())
-            activeMobs[t[:2]].partyMessage = await c.send("Party:\n")
-            if "Rat" in activeMobs[t[:2]].name:
+            active_mobs[t[:2]].partyMessage = await c.send("Party:\n")
+            if "Rat" in active_mobs[t[:2]].name:
                 vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
     c = channels["pet-zones"]["the-menagerie"]
     msgs = await c.history(limit=200).flatten()
@@ -1336,19 +1383,20 @@ async def on_message(message):
                 else:
                     foundClassRole = False
                     foundRaceRole = False
-                    for c in classRoles:
+                    for c in class_roles:
                         if roles[c] in message.author.roles:
                             pClass = c
                             foundClassRole = True
                             break
-                    for r in raceRoles:
+                    for r in race_roles:
                         if roles[r] in message.author.roles:
                             pRace = r
                             foundRaceRole = True
                             break
                     if not foundClassRole:
                         await message.author.send(
-                            "Sorry, I tried to register your character but you don't seem to have a class! Please reach out in the help channel to get this fixed up."
+                            "Sorry, I tried to register your character but you don't seem to have a class!\n"
+                            "Please reach out in the #help channel to get this fixed up."
                         )
                         print(
                             "Player attempted __init__ in name-select but no class role was found!"
@@ -1356,7 +1404,8 @@ async def on_message(message):
                         await message.author.add_roles(roles["name-select"])
                     elif not foundRaceRole:
                         await message.author.send(
-                            "Sorry, I tried to register your character but you don't seem to have a race! Please reach out in the help channel to get this fixed up."
+                            "Sorry, I tried to register your character but you don't seem to have a race!\n"
+                            "Please reach out in the #help channel to get this fixed up."
                         )
                         print(
                             "Player attempted __init__ in name-select but no race role was found!"
@@ -1410,7 +1459,8 @@ async def on_message(message):
                                 + str(players[message.author.id].maxHP)
                             )
                             await message.author.send(
-                                "** **\nYou awaken in a strange forest, the smell of dew thick in the air.\nIn the distance, you see a city atop a huge hill, the dense trees between you."
+                                "** **\nYou awaken in a strange forest, the smell of dew thick in the air.\n"
+                                "In the distance, you see a city atop a huge hill, the dense trees between you."
                             )
                             with open("./Data/Players.pkl", "w+b") as f:
                                 pickle.dump(players, f, pickle.HIGHEST_PROTOCOL)
@@ -2479,7 +2529,7 @@ async def on_message(message):
 
 @bot.event
 async def on_raw_reaction_remove(payload):
-    global activeMobs
+    global active_mobs
     global graceful_init
     if not graceful_init:
         channel = await bot.fetch_channel(payload.channel_id)
@@ -2490,7 +2540,7 @@ async def on_raw_reaction_remove(payload):
             return
         if user.bot:
             return
-        for mob in [*activeMobs.values()]:
+        for mob in [*active_mobs.values()]:
             if message == mob.hpMessage:
                 if user.id in mob.playersEngaged:
                     mob.playersEngaged.remove(user.id)
@@ -2499,7 +2549,7 @@ async def on_raw_reaction_remove(payload):
 
 @bot.event
 async def on_reaction_add(reaction, user):
-    global activeMobs
+    global active_mobs
     global graceful_init
     if not graceful_init:
         message = reaction.message
@@ -2521,96 +2571,99 @@ async def on_reaction_add(reaction, user):
                 await user.add_roles(roles["character-creation"])
                 await user.add_roles(roles["class-select"])
         elif message in reactables["vendors"].values():
-            if message == reactables["vendors"]["caravan-weapon-lootbox"]:
-                boxType = "weapon"
-                boxRarity = "basic"
-            elif message == reactables["vendors"]["caravan-armour-lootbox"]:
-                boxType = "armour"
-                boxRarity = "basic"
-            if boxRarity == "basic":
-                cost = math.ceil(150 * (1.1 ** players[user.id].level))
-            elif boxRarity == "advanced":
-                cost = math.ceil(350 * (1.1 ** players[user.id].level))
-            buyMessage = await user.send(
-                "This "
-                + boxRarity.capitalize()
-                + " "
-                + boxType.capitalize()
-                + " Lootbox would cost you "
-                + str(cost)
-                + " gold."
-            )
-            await buyMessage.add_reaction(emoji_set["moneyBag"])
-
-            def check(r, u):
-                return (
-                    (r.message == buyMessage)
-                    and (str(r.emoji) == emoji_set["moneyBag"])
-                    and (u.id == user.id)
+            if e == emoji_set["moneyBag"]:
+                if message == reactables["vendors"]["caravan-weapon-lootbox"]:
+                    boxType = "weapon"
+                    boxRarity = "basic"
+                elif message == reactables["vendors"]["caravan-armour-lootbox"]:
+                    boxType = "armour"
+                    boxRarity = "basic"
+                if boxRarity == "basic":
+                    cost = math.ceil(150 * (1.1 ** players[user.id].level))
+                elif boxRarity == "advanced":
+                    cost = math.ceil(350 * (1.1 ** players[user.id].level))
+                buyMessage = await user.send(
+                    "This "
+                    + boxRarity.capitalize()
+                    + " "
+                    + boxType.capitalize()
+                    + " Lootbox would cost you "
+                    + str(cost)
+                    + " gold."
                 )
+                await buyMessage.add_reaction(emoji_set["moneyBag"])
 
-            try:
-                try:
-                    react, usr = await bot.wait_for(
-                        "reaction_add", check=check, timeout=20.0
+                def check(r, u):
+                    return (
+                        (r.message == buyMessage)
+                        and (str(r.emoji) == emoji_set["moneyBag"])
+                        and (u.id == user.id)
                     )
-                except asyncio.TimeoutError:
-                    await buyMessage.delete()
-                    await user.send("Time's up - no deal!")
-                    return
-                else:
-                    if players[user.id].gold >= cost:
-                        if "Empty" in players[user.id].inventory:
-                            players[user.id].gold = players[user.id].gold - cost
-                            lootOK = False
-                            if boxRarity == "basic":
-                                tier = random.choice(
-                                    ["t1", "t2", "t3", "t4", "t5", "t6"]
+
+                try:
+                    try:
+                        react, usr = await bot.wait_for(
+                            "reaction_add", check=check, timeout=20.0
+                        )
+                    except asyncio.TimeoutError:
+                        await buyMessage.delete()
+                        await user.send("Time's up - no deal!")
+                        return
+                    else:
+                        if players[user.id].gold >= cost:
+                            if "Empty" in players[user.id].inventory:
+                                players[user.id].gold = players[user.id].gold - cost
+                                lootOK = False
+                                if boxRarity == "basic":
+                                    tier = random.choice(
+                                        ["t1", "t2", "t3", "t4", "t5", "t6"]
+                                    )
+                                    possibleRarities = [
+                                        "Common",
+                                        "Uncommon",
+                                        "Rare",
+                                    ]
+                                elif boxRarity == "advanced":
+                                    tier = "t7"
+                                    possibleRarities = [
+                                        "Epic",
+                                        "Legendary",
+                                        "Zekiforged",
+                                    ]
+                                while not lootOK:
+                                    lootGen = Loot(
+                                        tier,
+                                        players[user.id].level,
+                                        "equipment",
+                                    )
+                                    if (
+                                        lootGen.lootType == boxType
+                                        and lootGen.rarity in possibleRarities
+                                    ):
+                                        lootOK = True
+                                players[user.id].addLoot(lootGen)
+                                await buyMessage.delete()
+                                await user.send(
+                                    "Sold! You have received a "
+                                    + lootGen.fullName
+                                    + "."
                                 )
-                                possibleRarities = [
-                                    "Common",
-                                    "Uncommon",
-                                    "Rare",
-                                ]
-                            elif boxRarity == "advanced":
-                                tier = "t7"
-                                possibleRarities = [
-                                    "Epic",
-                                    "Legendary",
-                                    "Zekiforged",
-                                ]
-                            while not lootOK:
-                                lootGen = Loot(
-                                    tier,
-                                    players[user.id].level,
-                                    "equipment",
-                                )
-                                if (
-                                    lootGen.lootType == boxType
-                                    and lootGen.rarity in possibleRarities
-                                ):
-                                    lootOK = True
-                            players[user.id].addLoot(lootGen)
-                            await buyMessage.delete()
-                            await user.send(
-                                "Sold! You have received a " + lootGen.fullName + "."
-                            )
+                            else:
+                                await buyMessage.delete()
+                                await user.send("You don't have the space for this!")
                         else:
                             await buyMessage.delete()
-                            await user.send("You don't have the space for this!")
-                    else:
-                        await buyMessage.delete()
-                        await user.send("You can't afford this!")
-            except:
-                print("Error during lootbox transaction!")
-                print(traceback.format_exc())
+                            await user.send("You can't afford this!")
+                except:
+                    print("Error during lootbox transaction!")
+                    print(traceback.format_exc())
         else:
-            for cls in classRoles:
+            for cls in class_roles:
                 if message == reactables["class-select-" + cls]:
                     await user.remove_roles(roles["class-select"])
                     time.sleep(1)
                     hasRole = False
-                    for x in classRoles:
+                    for x in class_roles:
                         if roles[x] in user.roles:
                             hasRole = True
                             break
@@ -2618,12 +2671,12 @@ async def on_reaction_add(reaction, user):
                         await user.add_roles(roles[cls])
                         await user.add_roles(roles["race-select"])
                     return
-            for rce in raceRoles:
+            for rce in race_roles:
                 if message == reactables["race-select-" + rce]:
                     await user.remove_roles(roles["race-select"])
                     time.sleep(1)
                     hasRole = False
-                    for x in raceRoles:
+                    for x in race_roles:
                         if roles[x] in user.roles:
                             hasRole = True
                             break
@@ -2631,22 +2684,23 @@ async def on_reaction_add(reaction, user):
                         await user.add_roles(roles[rce])
                         await user.add_roles(roles["name-select"])
                     return
-            for mob in [*activeMobs.values()]:
-                if message == mob.hpMessage:
-                    if not user.id in mob.playersEngaged:
-                        if not len(mob.playersEngaged) > 3:
-                            if not players[user.id].inCombat:
-                                mob.playersEngaged.append(user.id)
-                                if user.id in mob.playersEngaged:
-                                    players[user.id].inCombat = True
+            if e == emoji_set["swords"]:
+                for mob in [*active_mobs.values()]:
+                    if message == mob.hpMessage:
+                        if user.id not in mob.playersEngaged:
+                            if not len(mob.playersEngaged) > 3:
+                                if not players[user.id].inCombat:
+                                    mob.playersEngaged.append(user.id)
+                                    if user.id in mob.playersEngaged:
+                                        players[user.id].inCombat = True
+                                else:
+                                    await user.send("You are already in combat!")
                             else:
-                                await user.send("You are already in combat!")
+                                await user.send(
+                                    "There is already a full party fighting this mob!"
+                                )
                         else:
-                            await user.send(
-                                "There is already a full party fighting this mob!"
-                            )
-                    else:
-                        pass
+                            pass
 
 
 @bot.command()
