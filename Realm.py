@@ -769,7 +769,7 @@ class Player:
 
     def heal(self, amount):
         if not self.HP < 1:
-            self.HP = self.HP + armourCount
+            self.HP = self.HP + amount
             if self.HP > self.maxHP:
                 self.HP = self.maxHP
 
