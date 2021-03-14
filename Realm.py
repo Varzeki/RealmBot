@@ -368,6 +368,18 @@ async def doCombat():
                     + mob.name
                     + "\n"
                 )
+                if players[p].pClass == "mender":
+                    heal = heal + round(0.1*damage)
+                    damageLog = (
+                        damageLog
+                        + players[p].name
+                        + " heals "
+                        + str(heal)
+                        + " health to the party!"
+                        + "\n"
+                    )
+                    for p in mob.playersEngaged:
+                        players[p].heal(heal)
 
                 if p == attackedPlayer:
                     damage = players[p].getDamageTaken(mob.getDamage())
@@ -754,6 +766,11 @@ class Player:
             bonusDFC = bonusDFC + self.equipment[1].defence
             bonusDMG = bonusDMG + self.equipment[1].damage
         return [bonusDFC, bonusDMG]
+    def heal(self, amount):
+        if not self.HP < 1:
+            self.HP = self.HP + armourCount
+            if self.HP > self.maxHP:
+                self.HP = self.maxHP
 
 
 class Loot:
