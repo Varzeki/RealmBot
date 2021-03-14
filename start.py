@@ -1,7 +1,15 @@
 import os
+import git
+from dotenv import load_dotenv
+
+load_dotenv()
+TOKEN = os.getenv("DISCORD_TOKEN")
+import Realm
+
+repo = git.Repo("./")
 
 while True:
     print("\nRUNNING GIT PULL")
-    os.system("git pull")
+    repo.remotes.origin.pull()
     print("RUNNING BOT")
-    os.system("python3 Realm.py")
+    Realm.bot.run(TOKEN)
