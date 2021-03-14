@@ -369,7 +369,7 @@ async def doCombat():
                     + "\n"
                 )
                 if players[p].pClass == "mender":
-                    heal = round(0.1 * damage)
+                    heal = round(random.uniform(0.06,0.08) * damage)
                     damageLog = (
                         damageLog
                         + players[p].name
