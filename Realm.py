@@ -369,7 +369,7 @@ async def doCombat():
                     + "\n"
                 )
                 if players[p].pClass == "mender":
-                    heal = heal + round(0.1*damage)
+                    heal = round(0.1 * damage)
                     damageLog = (
                         damageLog
                         + players[p].name
@@ -766,6 +766,7 @@ class Player:
             bonusDFC = bonusDFC + self.equipment[1].defence
             bonusDMG = bonusDMG + self.equipment[1].damage
         return [bonusDFC, bonusDMG]
+
     def heal(self, amount):
         if not self.HP < 1:
             self.HP = self.HP + armourCount
