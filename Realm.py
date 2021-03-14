@@ -2540,28 +2540,34 @@ async def on_reaction_add(reaction, user):
 
 @bot.command()
 async def addxp(ctx, passedMember: discord.Member, passedXP: int):
-    print("XP COMMAND")
+    print("ADMIN: XP command used by " + str(ctx.author.name))
     global players
-    if passedMember.id in players:
-        players[passedMember.id].giveEXP(passedXP, players[passedMember.id].level)
-        await ctx.send(
-            "Gave " + players[passedMember.id].name + " " + str(passedXP) + "XP"
-        )
-    else:
-        await ctx.send("Not a registered player")
+    if ctx.channel == channels["admin"]:
+        if passedMember.id in players:
+            players[passedMember.id].giveEXP(passedXP, players[passedMember.id].level)
+            await ctx.send(
+                "Gave " + players[passedMember.id].name + " " + str(passedXP) + "XP"
+            )
+        else:
+            await ctx.send("Not a registered player")
 
 
 @bot.command()
 async def stats(ctx, passedMember: discord.Member):
     if ctx.channel == channels["havens"]["the-tavern"]:
         if passedMember.id in players:
+
             def shortFormat(num):
-                num = float('{:.3g}'.format(num))
+                num = float("{:.3g}".format(num))
                 magnitude = 0
                 while abs(num) >= 1000:
                     magnitude += 1
                     num /= 1000.0
-                return '{}{}'.format('{:f}'.format(num).rstrip('0').rstrip('.'), ['', 'K', 'M', 'B', 'T'][magnitude])
+                return "{}{}".format(
+                    "{:f}".format(num).rstrip("0").rstrip("."),
+                    ["", "K", "M", "B", "T"][magnitude],
+                )
+
             factList = [
                 players[passedMember.id].name
                 + " has died "
