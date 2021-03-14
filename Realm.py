@@ -580,6 +580,7 @@ class Player:
         self.level = 1
         self.nextLevelEXP = 100
         self.requiredEXP = 100
+        self.prestiges = 0
         self.titles = {
             pClass.capitalize(): ", " + pClass.capitalize(),
             "Early Bird": ", Early Bird",
@@ -726,7 +727,12 @@ class Player:
         self.EXP = self.EXP + x
         if self.EXP >= self.nextLevelEXP:
             self.level = self.level + 1
-            self.requiredEXP = self.requiredEXP * 1.18
+            xpScaleDown=0
+            if self.level > 39:
+                xpScaleDown = 0.03
+            if self.level > 49:
+                xpScaleDown = 0.06
+            self.requiredEXP = self.requiredEXP * (1.18-xpScaleDown)
             self.nextLevelEXP = self.nextLevelEXP + self.requiredEXP
             self.maxHP = round(self.maxHP * 1.1)
             self.HP = self.maxHP
@@ -735,6 +741,74 @@ class Player:
             self.DFC = round(self.DFC * 1.1)
             return [x, self.name + " has gained a level!\n"]
         return [x, ""]
+    def prestige():
+        self.level = 1
+        self.EXP = 0
+        self.nextLevelEXP = 100
+        self.requiredEXP = 100
+        self.gold = 0
+        try:
+            self.prestiges = self.prestiges + 1
+        except:
+            self.prestiges = 1
+        if not "The Prestigious" in self.titles:
+            self.titles["The Prestigious"] = ", the Prestigious"
+            self.STAT_titlesCollected = len(self.titles)
+        if pClass == "arcanist":
+            self.maxHP = 30
+            self.DMG = 38
+            self.DFC = 5
+        elif pClass == "overseer":
+            self.maxHP = 50
+            self.DMG = 25
+            self.DFC = 10
+        elif pClass == "warden":
+            self.threat = 20
+            self.maxHP = 80
+            self.DMG = 15
+            self.DFC = 12
+        elif pClass == "mender":
+            self.maxHP = 40
+            self.DMG = 26
+            self.DFC = 8
+        elif pClass == "curator":
+            self.maxHP = 60
+            self.DMG = 22
+            self.DFC = 10
+        elif pClass == "corsair":
+            self.maxHP = 40
+            self.DMG = 32
+            self.DFC = 5
+        elif pClass == "arbiter":
+            self.maxHP = 40
+            self.DMG = 28
+            self.DFC = 10
+        elif pClass == "ambassador":
+            self.maxHP = 60
+            self.DMG = 26
+            self.DFC = 11
+        else:
+            print("Invalid class for new player prestige!")
+        if race == "human":
+            self.maxHP = self.maxHP + 2
+            self.DMG = self.DMG + 1
+            self.DFC = self.DFC + 1
+        elif race == "troll":
+            self.DFC = self.DFC + 2
+        elif race == "dwarf":
+            self.maxHP = self.maxHP + 8
+        elif race == "lizardfolk":
+            self.DMG = self.DMG + 4
+        elif race == "elf":
+            self.DMG = self.DMG + 2
+            self.DFC = self.DFC + 1
+        elif race == "ascended":
+            self.DMG = self.DMG + 2
+            self.DFC = self.DFC + 1
+            self.maxHP = self.maxHP + 4
+        else:
+            print("Invalid race for new player prestige!")
+
 
     def giveGold(self, g, vendor):
         if vendor:
