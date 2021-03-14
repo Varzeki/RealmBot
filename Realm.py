@@ -2638,7 +2638,9 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
 
 
 @bot.command()
-async def stats(ctx, passedMember: discord.Member):
+async def stats(ctx, passedMember: discord.Member=None):
+    if passedMember is None:
+        passedMember = ctx.author
     if ctx.channel == channels["havens"]["the-tavern"]:
         if passedMember.id in players:
 
@@ -2883,6 +2885,7 @@ async def stop(ctx):
     print("ADMIN: Stop command used by " + str(ctx.author.name))
     if ctx.channel == channels["admin"]:
         await bot.close()
+
 
 
 bot.run(TOKEN)
