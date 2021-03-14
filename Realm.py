@@ -2233,243 +2233,7 @@ async def on_message(message):
                     graceful_exit = True
 
             if message.channel == channels["havens"]["the-tavern"]:
-                if message.content == "!oldstats":
-                    if message.author.id in players:
-                        factList = [
-                            players[message.author.id].name
-                            + " has died "
-                            + str(players[message.author.id].STAT_timesDied)
-                            + " times!",
-                            players[message.author.id].name
-                            + " has killed "
-                            + str(players[message.author.id].STAT_mobsKilled)
-                            + " mobs!",
-                            players[message.author.id].name
-                            + " has bested "
-                            + str(players[message.author.id].STAT_ratsBeaten)
-                            + " rats!",
-                            players[message.author.id].name
-                            + " has received "
-                            + str(players[message.author.id].STAT_itemsLooted)
-                            + " drops!",
-                            players[message.author.id].name
-                            + " has looted "
-                            + str(players[message.author.id].STAT_goldLooted)
-                            + " gold!",
-                            players[message.author.id].name
-                            + " has collected "
-                            + str(players[message.author.id].STAT_titlesCollected)
-                            + " titles!",
-                            players[message.author.id].name
-                            + " has dealt out "
-                            + str(players[message.author.id].STAT_damageDealt)
-                            + " damage!",
-                            players[message.author.id].name
-                            + " has taken "
-                            + str(players[message.author.id].STAT_damageReceived)
-                            + " damage!",
-                        ]
-                        await message.author.avatar_url.save(
-                            "Data/Dynamic/" + str(message.author.id) + "_UserImage.png"
-                        )
-                        statsImage = Image(filename="Data/Resources/Images/stats.png")
-                        discordImage = Image(
-                            filename=(
-                                "Data/Dynamic/"
-                                + str(message.author.id)
-                                + "_UserImage.png"
-                            )
-                        )
-                        maskImage = Image(filename="Data/Resources/Images/mask.png")
-                        greenHPImage = Image(
-                            filename="Data/Resources/Images/greenHP.png"
-                        )
-                        redHPImage = Image(filename="Data/Resources/Images/redHP.png")
-                        dot = Image(
-                            filename=(
-                                "Data/Resources/Images/"
-                                + players[message.author.id].pClass
-                                + "Dot.png"
-                            )
-                        )
-
-                        def apply_mask(image, mask, invert=False):
-                            image.alpha_channel = True
-                            if invert:
-                                mask.negate()
-                            with Image(
-                                width=image.width,
-                                height=image.height,
-                                background=Color("transparent"),
-                            ) as alpha_image:
-                                alpha_image.composite_channel(
-                                    "alpha", mask, "copy_opacity", 0, 0
-                                )
-                                image.composite_channel(
-                                    "alpha", alpha_image, "multiply", 0, 0
-                                )
-
-                        s = statsImage.clone()
-                        a = discordImage.clone().convert("png")
-                        m = maskImage.clone()
-                        d = dot.clone()
-                        g = greenHPImage.clone()
-                        r = redHPImage.clone()
-                        with Drawing() as draw:
-                            a.resize(128, 128)
-                            g.resize(35, 35)
-                            r.resize(35, 35)
-                            # draw.fill_color = Color("black")
-                            # draw.rectangle(left=int((s.width/2)-64),top=30,width=128,height=128,radius=64)  # 30% rounding?
-                            apply_mask(a, m)
-                            draw.font = "Data/Resources/Fonts/whitneybold.otf"
-                            draw.font_size = 18
-                            draw.fill_color = Color("white")
-                            draw.text_alignment = "center"
-                            draw.font_weight = 700
-                            draw.text(
-                                int(s.width / 2),
-                                180,
-                                players[message.author.id].name
-                                + players[message.author.id].title,
-                            )
-                            draw.font = "Data/Resources/Fonts/whitneybook.otf"
-                            draw.fill_color = Color("#B4B6B9")
-                            draw.text(
-                                int(s.width / 2),
-                                205,
-                                "Level: " + str(players[message.author.id].level),
-                            )
-                            draw.font = "Data/Resources/Fonts/whitneybold.otf"
-                            draw.fill_color = Color("#B9BBBE")
-                            draw.text(int(s.width / 2) - 110, 270, "HEALTH")
-                            draw.text(int(s.width / 2) - 119, 390, "STATS")
-                            draw.text(int(s.width / 2) - 129, 540, "FACT")
-                            draw.font = "Data/Resources/Fonts/whitneymedium.otf"
-                            draw.text(
-                                int(s.width / 2),
-                                350,
-                                str(players[message.author.id].HP)
-                                + "/"
-                                + str(players[message.author.id].maxHP)
-                                + "HP",
-                            )
-                            draw.text(
-                                int(s.width / 2),
-                                440,
-                                "Gold: " + str(players[message.author.id].gold),
-                            )
-                            draw.text(
-                                int(s.width / 2),
-                                420,
-                                "Next Level: "
-                                + str(
-                                    round(
-                                        players[message.author.id].nextLevelEXP
-                                        - players[message.author.id].EXP
-                                    )
-                                )
-                                + "EXP",
-                            )
-                            statBlock = players[message.author.id].getBonusStats()
-                            draw.text(
-                                int(s.width / 2),
-                                460,
-                                "DMG: "
-                                + str(players[message.author.id].DMG)
-                                + "+"
-                                + str(statBlock[1]),
-                            )
-                            draw.text(
-                                int(s.width / 2),
-                                480,
-                                "DFC: "
-                                + str(players[message.author.id].DFC)
-                                + "+"
-                                + str(statBlock[0]),
-                            )
-                            draw.text(
-                                int(s.width / 2), 580, random.sample(factList, k=1)[0]
-                            )
-                            hpSlots = round(
-                                (
-                                    players[message.author.id].HP
-                                    / players[message.author.id].maxHP
-                                )
-                                * 10
-                            )
-                            if not hpSlots == 0:
-                                if not hpSlots == 10:
-                                    for i in range(1, hpSlots + 1):
-                                        draw.composite(
-                                            operator="over",
-                                            left=int(((s.width / 2) - 180) + 33 * i),
-                                            top=290,
-                                            width=35,
-                                            height=35,
-                                            image=g,
-                                        )
-                                else:
-                                    for i in range(1, hpSlots):
-                                        draw.composite(
-                                            operator="over",
-                                            left=int(((s.width / 2) - 180) + 33 * i),
-                                            top=290,
-                                            width=35,
-                                            height=35,
-                                            image=g,
-                                        )
-                            if not 10 - hpSlots == 0:
-                                for i in range(hpSlots + 1, 10):
-                                    draw.composite(
-                                        operator="over",
-                                        left=int(((s.width / 2) - 180) + 33 * i),
-                                        top=290,
-                                        width=35,
-                                        height=35,
-                                        image=r,
-                                    )
-                            draw.composite(
-                                operator="over",
-                                left=int((s.width / 2) - 64),
-                                top=20,
-                                width=128,
-                                height=128,
-                                image=a,
-                            )
-                            draw.composite(
-                                operator="over",
-                                left=int((s.width / 2) + 22),
-                                top=112,
-                                width=40,
-                                height=40,
-                                image=d,
-                            )
-                            draw(s)
-
-                            s.save(
-                                filename=(
-                                    "Data/Dynamic/"
-                                    + str(message.author.id)
-                                    + "_UserStatsOutput.png"
-                                )
-                            )
-                        try:
-                            await message.channel.send(
-                                file=discord.File(
-                                    "Data/Dynamic/"
-                                    + str(message.author.id)
-                                    + "_UserStatsOutput.png"
-                                )
-                            )
-                        except:
-                            print("Error sending User Stats Image")
-                            print(traceback.format_exc())
-                    else:
-                        await message.channel.send(
-                            "You don't appear to be registered yet!"
-                        )
-                elif message.content == "!spawn_pet":
+                if message.content == "!spawn_pet":
                     if players[message.author.id].pClass == "overseer":
                         minRarity = "Epic"
                         pet = Pet(minRarity)
@@ -2786,10 +2550,18 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
     else:
         await ctx.send("Not a registered player")
 
+
 @bot.command()
 async def stats(ctx, passedMember: discord.Member):
     if ctx.channel == channels["havens"]["the-tavern"]:
         if passedMember.id in players:
+            def shortFormat(num):
+                num = float('{:.3g}'.format(num))
+                magnitude = 0
+                while abs(num) >= 1000:
+                    magnitude += 1
+                    num /= 1000.0
+                return '{}{}'.format('{:f}'.format(num).rstrip('0').rstrip('.'), ['', 'K', 'M', 'B', 'T'][magnitude])
             factList = [
                 players[passedMember.id].name
                 + " has died "
@@ -2797,7 +2569,7 @@ async def stats(ctx, passedMember: discord.Member):
                 + " times!",
                 players[passedMember.id].name
                 + " has killed "
-                + str(players[passedMember.id].STAT_mobsKilled)
+                + str(shortFormat(players[passedMember.id].STAT_mobsKilled))
                 + " mobs!",
                 players[passedMember.id].name
                 + " has bested "
@@ -2805,11 +2577,11 @@ async def stats(ctx, passedMember: discord.Member):
                 + " rats!",
                 players[passedMember.id].name
                 + " has received "
-                + str(players[passedMember.id].STAT_itemsLooted)
+                + str(shortFormat(players[passedMember.id].STAT_itemsLooted))
                 + " drops!",
                 players[passedMember.id].name
                 + " has looted "
-                + str(players[passedMember.id].STAT_goldLooted)
+                + str(shortFormat(players[passedMember.id].STAT_goldLooted))
                 + " gold!",
                 players[passedMember.id].name
                 + " has collected "
@@ -2817,11 +2589,11 @@ async def stats(ctx, passedMember: discord.Member):
                 + " titles!",
                 players[passedMember.id].name
                 + " has dealt out "
-                + str(players[passedMember.id].STAT_damageDealt)
+                + str(shortFormat(players[passedMember.id].STAT_damageDealt))
                 + " damage!",
                 players[passedMember.id].name
                 + " has taken "
-                + str(players[passedMember.id].STAT_damageReceived)
+                + str(shortFormat(players[passedMember.id].STAT_damageReceived))
                 + " damage!",
             ]
             await passedMember.avatar_url.save(
@@ -2829,16 +2601,10 @@ async def stats(ctx, passedMember: discord.Member):
             )
             statsImage = Image(filename="Data/Resources/Images/stats.png")
             discordImage = Image(
-                filename=(
-                    "Data/Dynamic/"
-                    + str(passedMember.id)
-                    + "_UserImage.png"
-                )
+                filename=("Data/Dynamic/" + str(passedMember.id) + "_UserImage.png")
             )
             maskImage = Image(filename="Data/Resources/Images/mask.png")
-            greenHPImage = Image(
-                filename="Data/Resources/Images/greenHP.png"
-            )
+            greenHPImage = Image(filename="Data/Resources/Images/greenHP.png")
             redHPImage = Image(filename="Data/Resources/Images/redHP.png")
             dot = Image(
                 filename=(
@@ -2857,12 +2623,8 @@ async def stats(ctx, passedMember: discord.Member):
                     height=image.height,
                     background=Color("transparent"),
                 ) as alpha_image:
-                    alpha_image.composite_channel(
-                        "alpha", mask, "copy_opacity", 0, 0
-                    )
-                    image.composite_channel(
-                        "alpha", alpha_image, "multiply", 0, 0
-                    )
+                    alpha_image.composite_channel("alpha", mask, "copy_opacity", 0, 0)
+                    image.composite_channel("alpha", alpha_image, "multiply", 0, 0)
 
             s = statsImage.clone()
             a = discordImage.clone().convert("png")
@@ -2885,8 +2647,7 @@ async def stats(ctx, passedMember: discord.Member):
                 draw.text(
                     int(s.width / 2),
                     180,
-                    players[passedMember.id].name
-                    + players[passedMember.id].title,
+                    players[passedMember.id].name + players[passedMember.id].title,
                 )
                 draw.font = "Data/Resources/Fonts/whitneybook.otf"
                 draw.fill_color = Color("#B4B6B9")
@@ -2943,15 +2704,9 @@ async def stats(ctx, passedMember: discord.Member):
                     + "+"
                     + str(statBlock[0]),
                 )
-                draw.text(
-                    int(s.width / 2), 580, random.sample(factList, k=1)[0]
-                )
+                draw.text(int(s.width / 2), 580, random.sample(factList, k=1)[0])
                 hpSlots = round(
-                    (
-                        players[passedMember.id].HP
-                        / players[passedMember.id].maxHP
-                    )
-                    * 10
+                    (players[passedMember.id].HP / players[passedMember.id].maxHP) * 10
                 )
                 if not hpSlots == 0:
                     if not hpSlots == 10:
@@ -3004,26 +2759,20 @@ async def stats(ctx, passedMember: discord.Member):
 
                 s.save(
                     filename=(
-                        "Data/Dynamic/"
-                        + str(passedMember.id)
-                        + "_UserStatsOutput.png"
+                        "Data/Dynamic/" + str(passedMember.id) + "_UserStatsOutput.png"
                     )
                 )
             try:
                 await ctx.send(
                     file=discord.File(
-                        "Data/Dynamic/"
-                        + str(passedMember.id)
-                        + "_UserStatsOutput.png"
+                        "Data/Dynamic/" + str(passedMember.id) + "_UserStatsOutput.png"
                     )
                 )
             except:
                 print("Error sending User Stats Image")
                 print(traceback.format_exc())
         else:
-            await ctx.send(
-                "This user doesn't appear to be registered yet!"
-            )
+            await ctx.send("This user doesn't appear to be registered yet!")
 
 
 bot.run(TOKEN)
