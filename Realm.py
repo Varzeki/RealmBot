@@ -2233,7 +2233,7 @@ async def on_message(message):
                     graceful_exit = True
 
             if message.channel == channels["havens"]["the-tavern"]:
-                if message.content == "!stats":
+                if message.content == "!oldstats":
                     if message.author.id in players:
                         factList = [
                             players[message.author.id].name
@@ -2785,6 +2785,245 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
         )
     else:
         await ctx.send("Not a registered player")
+
+@bot.command()
+async def stats(ctx, passedMember: discord.Member):
+    if ctx.channel == channels["havens"]["the-tavern"]:
+        if passedMember.id in players:
+            factList = [
+                players[passedMember.id].name
+                + " has died "
+                + str(players[passedMember.id].STAT_timesDied)
+                + " times!",
+                players[passedMember.id].name
+                + " has killed "
+                + str(players[passedMember.id].STAT_mobsKilled)
+                + " mobs!",
+                players[passedMember.id].name
+                + " has bested "
+                + str(players[passedMember.id].STAT_ratsBeaten)
+                + " rats!",
+                players[passedMember.id].name
+                + " has received "
+                + str(players[passedMember.id].STAT_itemsLooted)
+                + " drops!",
+                players[passedMember.id].name
+                + " has looted "
+                + str(players[passedMember.id].STAT_goldLooted)
+                + " gold!",
+                players[passedMember.id].name
+                + " has collected "
+                + str(players[passedMember.id].STAT_titlesCollected)
+                + " titles!",
+                players[passedMember.id].name
+                + " has dealt out "
+                + str(players[passedMember.id].STAT_damageDealt)
+                + " damage!",
+                players[passedMember.id].name
+                + " has taken "
+                + str(players[passedMember.id].STAT_damageReceived)
+                + " damage!",
+            ]
+            await passedMember.avatar_url.save(
+                "Data/Dynamic/" + str(passedMember.id) + "_UserImage.png"
+            )
+            statsImage = Image(filename="Data/Resources/Images/stats.png")
+            discordImage = Image(
+                filename=(
+                    "Data/Dynamic/"
+                    + str(passedMember.id)
+                    + "_UserImage.png"
+                )
+            )
+            maskImage = Image(filename="Data/Resources/Images/mask.png")
+            greenHPImage = Image(
+                filename="Data/Resources/Images/greenHP.png"
+            )
+            redHPImage = Image(filename="Data/Resources/Images/redHP.png")
+            dot = Image(
+                filename=(
+                    "Data/Resources/Images/"
+                    + players[passedMember.id].pClass
+                    + "Dot.png"
+                )
+            )
+
+            def apply_mask(image, mask, invert=False):
+                image.alpha_channel = True
+                if invert:
+                    mask.negate()
+                with Image(
+                    width=image.width,
+                    height=image.height,
+                    background=Color("transparent"),
+                ) as alpha_image:
+                    alpha_image.composite_channel(
+                        "alpha", mask, "copy_opacity", 0, 0
+                    )
+                    image.composite_channel(
+                        "alpha", alpha_image, "multiply", 0, 0
+                    )
+
+            s = statsImage.clone()
+            a = discordImage.clone().convert("png")
+            m = maskImage.clone()
+            d = dot.clone()
+            g = greenHPImage.clone()
+            r = redHPImage.clone()
+            with Drawing() as draw:
+                a.resize(128, 128)
+                g.resize(35, 35)
+                r.resize(35, 35)
+                # draw.fill_color = Color("black")
+                # draw.rectangle(left=int((s.width/2)-64),top=30,width=128,height=128,radius=64)  # 30% rounding?
+                apply_mask(a, m)
+                draw.font = "Data/Resources/Fonts/whitneybold.otf"
+                draw.font_size = 18
+                draw.fill_color = Color("white")
+                draw.text_alignment = "center"
+                draw.font_weight = 700
+                draw.text(
+                    int(s.width / 2),
+                    180,
+                    players[passedMember.id].name
+                    + players[passedMember.id].title,
+                )
+                draw.font = "Data/Resources/Fonts/whitneybook.otf"
+                draw.fill_color = Color("#B4B6B9")
+                draw.text(
+                    int(s.width / 2),
+                    205,
+                    "Level: " + str(players[passedMember.id].level),
+                )
+                draw.font = "Data/Resources/Fonts/whitneybold.otf"
+                draw.fill_color = Color("#B9BBBE")
+                draw.text(int(s.width / 2) - 110, 270, "HEALTH")
+                draw.text(int(s.width / 2) - 119, 390, "STATS")
+                draw.text(int(s.width / 2) - 129, 540, "FACT")
+                draw.font = "Data/Resources/Fonts/whitneymedium.otf"
+                draw.text(
+                    int(s.width / 2),
+                    350,
+                    str(players[passedMember.id].HP)
+                    + "/"
+                    + str(players[passedMember.id].maxHP)
+                    + "HP",
+                )
+                draw.text(
+                    int(s.width / 2),
+                    440,
+                    "Gold: " + str(players[passedMember.id].gold),
+                )
+                draw.text(
+                    int(s.width / 2),
+                    420,
+                    "Next Level: "
+                    + str(
+                        round(
+                            players[passedMember.id].nextLevelEXP
+                            - players[passedMember.id].EXP
+                        )
+                    )
+                    + "EXP",
+                )
+                statBlock = players[passedMember.id].getBonusStats()
+                draw.text(
+                    int(s.width / 2),
+                    460,
+                    "DMG: "
+                    + str(players[passedMember.id].DMG)
+                    + "+"
+                    + str(statBlock[1]),
+                )
+                draw.text(
+                    int(s.width / 2),
+                    480,
+                    "DFC: "
+                    + str(players[passedMember.id].DFC)
+                    + "+"
+                    + str(statBlock[0]),
+                )
+                draw.text(
+                    int(s.width / 2), 580, random.sample(factList, k=1)[0]
+                )
+                hpSlots = round(
+                    (
+                        players[passedMember.id].HP
+                        / players[passedMember.id].maxHP
+                    )
+                    * 10
+                )
+                if not hpSlots == 0:
+                    if not hpSlots == 10:
+                        for i in range(1, hpSlots + 1):
+                            draw.composite(
+                                operator="over",
+                                left=int(((s.width / 2) - 180) + 33 * i),
+                                top=290,
+                                width=35,
+                                height=35,
+                                image=g,
+                            )
+                    else:
+                        for i in range(1, hpSlots):
+                            draw.composite(
+                                operator="over",
+                                left=int(((s.width / 2) - 180) + 33 * i),
+                                top=290,
+                                width=35,
+                                height=35,
+                                image=g,
+                            )
+                if not 10 - hpSlots == 0:
+                    for i in range(hpSlots + 1, 10):
+                        draw.composite(
+                            operator="over",
+                            left=int(((s.width / 2) - 180) + 33 * i),
+                            top=290,
+                            width=35,
+                            height=35,
+                            image=r,
+                        )
+                draw.composite(
+                    operator="over",
+                    left=int((s.width / 2) - 64),
+                    top=20,
+                    width=128,
+                    height=128,
+                    image=a,
+                )
+                draw.composite(
+                    operator="over",
+                    left=int((s.width / 2) + 22),
+                    top=112,
+                    width=40,
+                    height=40,
+                    image=d,
+                )
+                draw(s)
+
+                s.save(
+                    filename=(
+                        "Data/Dynamic/"
+                        + str(passedMember.id)
+                        + "_UserStatsOutput.png"
+                    )
+                )
+            try:
+                await ctx.send(
+                    file=discord.File(
+                        "Data/Dynamic/"
+                        + str(passedMember.id)
+                        + "_UserStatsOutput.png"
+                    )
+                )
+            except:
+                print("Error sending User Stats Image")
+                print(traceback.format_exc())
+        else:
+            await ctx.send(
+                "This user doesn't appear to be registered yet!"
+            )
 
 
 bot.run(TOKEN)
