@@ -1395,22 +1395,21 @@ async def on_message(message):
                             await message.author.add_roles(roles["registered"])
                             await message.author.send("Character registered!")
                             await message.author.send(
-                                "Class: " + players[message.author.id].pClass
+                                "** **\nName: "
+                                + players[message.author.id].name
+                                + "\nClass: "
+                                + players[message.author.id].pClass
+                                + "\nRace: "
+                                + players[message.author.id].race
+                                + "\nDMG: "
+                                + str(players[message.author.id].DMG)
+                                + "\nDFC: "
+                                + str(players[message.author.id].DFC)
+                                + "\nMaxHP: "
+                                + str(players[message.author.id].maxHP)
                             )
                             await message.author.send(
-                                "Race: " + players[message.author.id].race
-                            )
-                            await message.author.send(
-                                "Name: " + players[message.author.id].name
-                            )
-                            await message.author.send(
-                                "DMG: " + str(players[message.author.id].DMG)
-                            )
-                            await message.author.send(
-                                "DFC: " + str(players[message.author.id].DFC)
-                            )
-                            await message.author.send(
-                                "MaxHP: " + str(players[message.author.id].maxHP)
+                                "** **\nYou awaken in a strange forest, the smell of dew thick in the air.\nIn the distance, you see a city atop a huge hill, the dense trees between you."
                             )
                             with open("./Data/Players.pkl", "w+b") as f:
                                 pickle.dump(players, f, pickle.HIGHEST_PROTOCOL)
