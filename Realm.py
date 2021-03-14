@@ -1078,6 +1078,7 @@ async def on_ready():
     channels = {
         "help": realm.get_channel(763273256839938048),
         "admin": realm.get_channel(770931709846749197),
+        "guidebook": realm.get_channel(770931709846749196),
         "registration": {
             "register": realm.get_channel(763269562426064906),
             "class-select": realm.get_channel(763269670857736202),
@@ -2638,7 +2639,7 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
 
 
 @bot.command()
-async def stats(ctx, passedMember: discord.Member=None):
+async def stats(ctx, passedMember: discord.Member = None):
     if passedMember is None:
         passedMember = ctx.author
     if ctx.channel == channels["havens"]["the-tavern"]:
@@ -2885,7 +2886,6 @@ async def stop(ctx):
     print("ADMIN: Stop command used by " + str(ctx.author.name))
     if ctx.channel == channels["admin"]:
         await bot.close()
-
 
 
 bot.run(TOKEN)
