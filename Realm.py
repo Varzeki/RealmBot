@@ -2667,7 +2667,7 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
 async def stats(ctx, passedMember: discord.Member = None):
     if passedMember is None:
         passedMember = ctx.author
-    if ctx.channel == channels["havens"]["the-tavern"]:
+    if not ctx.channel == channels["help"]:
         if passedMember.id in players:
 
             def shortFormat(num):
