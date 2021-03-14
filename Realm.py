@@ -1149,6 +1149,24 @@ async def on_ready():
     await c.send(
         "** **\n**Rules**\n1: No NSFW or obscene content outside of marked channels. This includes text, images, or links featuring nudity, sex, hard violence, or other graphically disturbing content.\n2: Treat everyone with respect. Absolutely no harassment, witch hunting, sexism, racism, or hate speech will be tolerated.\n3: If you see something against the rules or something that makes you feel unsafe, let staff know. We want this server to be a welcoming space!"
     )
+    await c.send(
+        "** **\n**Registration**\nTo get started in Realm, head down to the registration channels and react.\nAs you react to each prompt, a new channel will become available to you.\nOnce you are done, you can start your adventure in #the-arboretum!"
+    )
+    await c.send(
+        "** **\n**Combat**\nCombat in realm is pretty simple - head into a channel with an enemy, and react using the crossed swords.\nNow that you have engaged the mob, combat will happen automatically.\nCheck the matching log channel for details of your fight!"
+    )
+    await c.send(
+        '** **\n**Loot**\nAfter a couple of fights, you might find yourself in possession of some loot.\nTo check it out, open a DM with Realmkeeper and use the !inventory command.\nNow that you can see your inventory, you can add to the reactions to choose which gear slot you want to move or sell.\nIf you want to make the process of selling gear a little faster, consider using the !sell command.\nThis command accepts a number, 1-7, or the word "all".'
+    )
+    await c.send(
+        "** **\n**Buying Gear**\nOnce you reach a certain level, you will be able to access a shop that can sell you gear of your level, among other items.\nThe extra gear useful if you haven't managed to get any good drops lately!\nJust react to the item you want to buy, and Realmkeeper will send you an offer with cost appropriate for your level."
+    )
+    await c.send(
+        "** **\n**Pets**\nOnce you reach a certain level, the menagerie will become available to you.\nHere, you can react to pets to catch them, but be quick, because they could despawn or be caught by another player!\nPets provide you a percentage bonus to your stats."
+    )
+    await c.send(
+        "** **\n**Stat Cards**\n!stats will give you a statcard generated just for your character! You can also highlight someone with !stats to get a statcard of their character.\n"
+    )
     for c in channels["registration"].values():
         msgs = await c.history(limit=200).flatten()
         for msg in msgs:
