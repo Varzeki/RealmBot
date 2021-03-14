@@ -2872,6 +2872,7 @@ async def prestige(ctx, passedMember: discord.Member):
             await ctx.send("Not a registered player")
 
 
+@bot.command()
 async def stop(ctx):
     print("ADMIN: Stop command used by " + str(ctx.author.name))
     if ctx.channel == channels["admin"]:
