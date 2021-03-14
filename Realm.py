@@ -1142,6 +1142,13 @@ async def on_ready():
         p.hpBar = emoji_set["greenHP"] * 10
         reactables["playerInventories"][p.ID] = None
         p.openInventory = False
+    c = channels["guidebook"]
+    msgs = await c.history(limit=200).flatten()
+    for msg in msgs:
+        await msg.delete(delay=0.2)
+    c.send(
+        "**Rules**\n1: No NSFW or obscene content outside of marked channels. This includes text, images, or links featuring nudity, sex, hard violence, or other graphically disturbing content.\n2: Treat everyone with respect. Absolutely no harassment, witch hunting, sexism, racism, or hate speech will be tolerated.\n3: If you see something against the rules or something that makes you feel unsafe, let staff know. We want this server to be a welcoming space!"
+    )
     for c in channels["registration"].values():
         msgs = await c.history(limit=200).flatten()
         for msg in msgs:
