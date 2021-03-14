@@ -369,7 +369,7 @@ async def doCombat():
                     + "\n"
                 )
                 if players[p].pClass == "mender":
-                    heal = round(random.uniform(0.06,0.08) * damage)
+                    heal = round(random.uniform(0.06, 0.08) * damage)
                     damageLog = (
                         damageLog
                         + players[p].name
@@ -1161,6 +1161,10 @@ async def on_ready():
             activeMobs[t[:2]].partyMessage = await c.send("Party:\n")
             if "Rat" in activeMobs[t[:2]].name:
                 vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
+    c = channels["pet-zones"]["the-menagerie"]
+    msgs = await c.history(limit=200).flatten()
+    for msg in msgs:
+        await msg.delete(delay=0.2)
     c = channels["havens"]["the-travelling-caravan"]
     msgs = await c.history(limit=200).flatten()
     for msg in msgs:
