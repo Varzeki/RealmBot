@@ -55,7 +55,13 @@ classRoles = [
     "corsair",
     "arbiter",
 ]
-raceRoles = ["human", "troll", "lizardfolk", "dwarf", "elf"]
+raceRoles = [
+    "human",
+    "troll",
+    "lizardfolk",
+    "dwarf",
+    "elf",
+]
 players = {}
 activeMobs = {}
 activePets = []
@@ -72,7 +78,7 @@ tier_levels = {
 }
 
 
-def generate_mob(tier):
+def generateMob(tier):
     fileMap = {
         "t1": "./Data/Levels/T1_THE_ARBORETUM/Mobs",
         "t2": "./Data/Levels/T2_THE_LOWER_CITY/Mobs",
@@ -98,7 +104,7 @@ def generate_mob(tier):
     return [mobStats, mobArt]
 
 
-def generate_loot(tier, level, lootType="any"):
+def generateLoot(tier, level, lootType="any"):
     fileMap = {
         "t1": "./Data/Levels/T1_THE_ARBORETUM/Loot",
         "t2": "./Data/Levels/T2_THE_LOWER_CITY/Loot",
@@ -120,7 +126,7 @@ def generate_loot(tier, level, lootType="any"):
     return dropData
 
 
-def generate_pet():
+def generatePet():
     with open("Data/Pets/spawnTable.yaml", "r") as stream:
         spawnTable = yaml.safe_load(stream)
     pet = random.choices([*spawnTable], weights=[*spawnTable.values()], k=1)[0]
@@ -454,7 +460,7 @@ async def doCombat():
                     if mob.name in ratList:
                         players[p].STAT_ratsBeaten = players[p].STAT_ratsBeaten + 1
                     players[p].inCombat = False
-                    pLoot = mob.getLoot()
+                    pLoot = mob.getLoot(players[p].lootBonus)
                     pEXP = players[p].giveEXP(pLoot[1], mob.level)
                     pGold = str(players[p].giveGold(pLoot[0], True))
                     # get loot
@@ -603,7 +609,7 @@ class Player:
         self.goldMult = 1
         self.lootBonus = 0
         self.follower = ""
-        self.followerStatPerc = 0
+        self.followerStatBonus = 0
         self.inCombat = False
         if pClass == "arcanist":
             self.threat = 10
@@ -615,8 +621,7 @@ class Player:
             self.maxHP = 50
             self.DMG = 25
             self.DFC = 10
-            self.follower = "Impling"
-            self.followerStatPerc = 0.1
+            self.followerStatBonus = 0.1
         elif pClass == "warden":
             self.threat = 20
             self.maxHP = 80
@@ -632,7 +637,7 @@ class Player:
             self.maxHP = 60
             self.DMG = 22
             self.DFC = 10
-            self.lootBonus = 0.1
+            self.lootBonus = 0.05
             self.goldMult = 1.05
         elif pClass == "corsair":
             self.threat = 5
@@ -733,7 +738,7 @@ class Player:
 
     def giveGold(self, g, vendor):
         if vendor:
-            received = g * round(self.goldMult)
+            received = round(g * self.goldMult)
         else:
             received = g
         self.gold = round(self.gold + received)
@@ -776,7 +781,7 @@ class Player:
 
 class Loot:
     def __init__(self, tier, level, lootType="any"):
-        lootData = generate_loot(tier, lootType)
+        lootData = generateLoot(tier, lootType)
         self.name = lootData["name"]
         self.lootType = lootData["type"]
         self.level = level
@@ -861,7 +866,7 @@ class Loot:
 
 class Mob:
     def __init__(self, tier):
-        mobData = generate_mob(tier)
+        mobData = generateMob(tier)
         stats = mobData[0]
         self.tier = tier
         self.level = random.sample(tier_levels[self.tier], k=1)[0]
@@ -904,9 +909,9 @@ class Mob:
             d = damage_payload[0]
         return d
 
-    def getLoot(self):
+    def getLoot(self, playerBonus):
         roll = random.uniform(0, 1)
-        req = self.lootBonus + 0.1
+        req = self.lootBonus + playerBonus + 0.05
         if roll < req:
             return [
                 round(random.uniform(0.9, 1.1) * float(self.goldReward)),
@@ -922,7 +927,7 @@ class Mob:
 
 class Pet:
     def __init__(self, minRarity="any"):
-        petData = generate_pet()
+        petData = generatePet()
         self.name = petData["name"]
         self.damage = petData["damage"]
         self.defence = petData["defence"]
