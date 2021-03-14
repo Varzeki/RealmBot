@@ -727,12 +727,12 @@ class Player:
         self.EXP = self.EXP + x
         if self.EXP >= self.nextLevelEXP:
             self.level = self.level + 1
-            xpScaleDown=0
+            xpScaleDown = 0
             if self.level > 39:
                 xpScaleDown = 0.03
             if self.level > 49:
                 xpScaleDown = 0.06
-            self.requiredEXP = self.requiredEXP * (1.18-xpScaleDown)
+            self.requiredEXP = self.requiredEXP * (1.18 - xpScaleDown)
             self.nextLevelEXP = self.nextLevelEXP + self.requiredEXP
             self.maxHP = round(self.maxHP * 1.1)
             self.HP = self.maxHP
@@ -741,6 +741,7 @@ class Player:
             self.DFC = round(self.DFC * 1.1)
             return [x, self.name + " has gained a level!\n"]
         return [x, ""]
+
     def prestige():
         self.level = 1
         self.EXP = 0
@@ -808,7 +809,6 @@ class Player:
             self.maxHP = self.maxHP + 4
         else:
             print("Invalid race for new player prestige!")
-
 
     def giveGold(self, g, vendor):
         if vendor:
@@ -2858,6 +2858,19 @@ async def stats(ctx, passedMember: discord.Member):
                 print(traceback.format_exc())
         else:
             await ctx.send("This user doesn't appear to be registered yet!")
+
+@bot.command()
+async def prestige(ctx, passedMember: discord.Member):
+    print("ADMIN: Prestige command used by " + str(ctx.author.name))
+    global players
+    if ctx.channel == channels["admin"]:
+        if passedMember.id in players:
+            players[passedMember.id].prestige()
+            await ctx.send(
+                "Forced prestige on " + str(players[passedMember.id].name)
+            )
+        else:
+            await ctx.send("Not a registered player")
 
 
 bot.run(TOKEN)
