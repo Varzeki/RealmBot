@@ -8,16 +8,18 @@ import random
 import discord
 import asyncio
 import math
+import traceback
+from dotenv import load_dotenv
 from discord.ext import commands
 from wand.image import Image
 from wand.drawing import Drawing
 from wand.color import Color
-import traceback
-from dotenv import load_dotenv
+
 
 load_dotenv()
-TOKEN = os.getenv("DISCORD_TOKEN")
 
+
+TOKEN = os.getenv("DISCORD_TOKEN")
 graceful_init = False
 graceful_exit = False
 intents = discord.Intents.default()
@@ -65,7 +67,6 @@ players = {}
 active_mobs = {}
 active_pets = []
 current_tick = 0
-
 tier_levels = {
     "t1": [1],
     "t2": range(1, 11),
