@@ -2595,16 +2595,16 @@ async def on_reaction_add(reaction, user):
             if e == emoji_set["moneyBag"]:
                 if message == reactables["vendors"]["caravan-weapon-lootbox"]:
                     boxType = "weapon"
-                    boxRarity = "basic"
+                    boxRarity = "advanced"
                 elif message == reactables["vendors"]["caravan-armour-lootbox"]:
                     boxType = "armour"
+                    boxRarity = "advanced"
+                elif message == reactables["vendors"]["bazaar-armour-lootbox"]:
+                    boxType = "armour"
                     boxRarity = "basic"
                 elif message == reactables["vendors"]["bazaar-armour-lootbox"]:
                     boxType = "armour"
-                    boxRarity = "advanced"
-                elif message == reactables["vendors"]["bazaar-armour-lootbox"]:
-                    boxType = "armour"
-                    boxRarity = "advanced"
+                    boxRarity = "basic"
                 if boxRarity == "basic":
                     cost = math.ceil(150 * (1.1 ** players[user.id].level))
                 elif boxRarity == "advanced":
