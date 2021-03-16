@@ -2653,8 +2653,6 @@ async def on_reaction_add(reaction, user):
                                 elif boxRarity == "advanced":
                                     tier = "t7"
                                     possibleRarities = [
-                                        "Common",
-                                        "Uncommon",
                                         "Rare",
                                         "Epic",
                                         "Legendary",
