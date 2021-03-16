@@ -2745,6 +2745,7 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
         else:
             await ctx.send("Not a registered player")
 
+
 @bot.command()
 async def addgold(ctx, passedMember: discord.Member, passedGold: int):
     print("ADMIN: Gold command used by " + str(ctx.author.name))
@@ -2753,10 +2754,15 @@ async def addgold(ctx, passedMember: discord.Member, passedGold: int):
         if passedMember.id in players:
 
             await ctx.send(
-                "Gave " + players[passedMember.id].name + " " + str(players[passedMember.id].giveGold(passedGold)) + " gold"
+                "Gave "
+                + players[passedMember.id].name
+                + " "
+                + str(players[passedMember.id].giveGold(passedGold))
+                + " gold"
             )
         else:
             await ctx.send("Not a registered player")
+
 
 @bot.command()
 async def stats(ctx, passedMember: discord.Member = None):
