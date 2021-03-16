@@ -2599,8 +2599,8 @@ async def on_reaction_add(reaction, user):
                 elif message == reactables["vendors"]["caravan-armour-lootbox"]:
                     boxType = "armour"
                     boxRarity = "advanced"
-                elif message == reactables["vendors"]["bazaar-armour-lootbox"]:
-                    boxType = "armour"
+                elif message == reactables["vendors"]["bazaar-weapon-lootbox"]:
+                    boxType = "weapon"
                     boxRarity = "basic"
                 elif message == reactables["vendors"]["bazaar-armour-lootbox"]:
                     boxType = "armour"
