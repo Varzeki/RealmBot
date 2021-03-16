@@ -816,8 +816,8 @@ class Player:
         else:
             print("Invalid self.race for new player prestige!")
 
-    def giveGold(self, g, vendor):
-        if vendor:
+    def giveGold(self, g, multiply=True):
+        if multiply:
             received = round(g * self.goldMult)
         else:
             received = g
@@ -2745,6 +2745,18 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
         else:
             await ctx.send("Not a registered player")
 
+@bot.command()
+async def addgold(ctx, passedMember: discord.Member, passedGold: int):
+    print("ADMIN: Gold command used by " + str(ctx.author.name))
+    global players
+    if ctx.channel == channels["admin"]:
+        if passedMember.id in players:
+
+            await ctx.send(
+                "Gave " + players[passedMember.id].name + " " + str(players[passedMember.id].giveGold(passedGold)) + " gold"
+            )
+        else:
+            await ctx.send("Not a registered player")
 
 @bot.command()
 async def stats(ctx, passedMember: discord.Member = None):
