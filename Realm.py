@@ -1104,6 +1104,7 @@ async def on_ready():
         "havens": {
             "the-tavern": realm.get_channel(763300003095117846),
             "the-travelling-caravan": realm.get_channel(817631855603089439),
+            "the-bazaar": realm.get_channel(821259911483621376),
         },
         "pet-zones": {
             "the-menagerie": realm.get_channel(818311959047831552),
@@ -1329,19 +1330,38 @@ async def on_ready():
     msgs = await c.history(limit=200).flatten()
     for msg in msgs:
         await msg.delete(delay=0.2)
-    await c.send("Welcome to the travelling caravan! The wares are as below:")
+    await c.send("Welcome to the Travelling Caravan! The wares are as below:")
     reactables["vendors"]["caravan-weapon-lootbox"] = await c.send(
-        "Basic Weapon Lootbox",
-        file=discord.File("Data/Resources/Images/LootBoxWeaponBasic.png"),
+        "Advanced Weapon Lootbox",
+        file=discord.File("Data/Resources/Images/LootBoxWeaponAdvanced.png"),
     )
     await reactables["vendors"]["caravan-weapon-lootbox"].add_reaction(
         emoji_set["moneyBag"]
     )
     reactables["vendors"]["caravan-armour-lootbox"] = await c.send(
+        "Advanced Armour Lootbox",
+        file=discord.File("Data/Resources/Images/LootBoxArmourAdvanced.png"),
+    )
+    await reactables["vendors"]["caravan-armour-lootbox"].add_reaction(
+        emoji_set["moneyBag"]
+    )
+    c = channels["havens"]["the-bazaar"]
+    msgs = await c.history(limit=200).flatten()
+    for msg in msgs:
+        await msg.delete(delay=0.2)
+    await c.send("Welcome to The Bazaar! The wares are as below:")
+    reactables["vendors"]["bazaar-weapon-lootbox"] = await c.send(
+        "Basic Weapon Lootbox",
+        file=discord.File("Data/Resources/Images/LootBoxWeaponBasic.png"),
+    )
+    await reactables["vendors"]["bazaar-weapon-lootbox"].add_reaction(
+        emoji_set["moneyBag"]
+    )
+    reactables["vendors"]["bazaar-armour-lootbox"] = await c.send(
         "Basic Armour Lootbox",
         file=discord.File("Data/Resources/Images/LootBoxArmourBasic.png"),
     )
-    await reactables["vendors"]["caravan-armour-lootbox"].add_reaction(
+    await reactables["vendors"]["bazaar-armour-lootbox"].add_reaction(
         emoji_set["moneyBag"]
     )
     print("Channel Initialization Complete")
@@ -2579,6 +2599,12 @@ async def on_reaction_add(reaction, user):
                 elif message == reactables["vendors"]["caravan-armour-lootbox"]:
                     boxType = "armour"
                     boxRarity = "basic"
+                elif message == reactables["vendors"]["bazaar-armour-lootbox"]:
+                    boxType = "armour"
+                    boxRarity = "advanced"
+                elif message == reactables["vendors"]["bazaar-armour-lootbox"]:
+                    boxType = "armour"
+                    boxRarity = "advanced"
                 if boxRarity == "basic":
                     cost = math.ceil(150 * (1.1 ** players[user.id].level))
                 elif boxRarity == "advanced":
@@ -2627,9 +2653,11 @@ async def on_reaction_add(reaction, user):
                                 elif boxRarity == "advanced":
                                     tier = "t7"
                                     possibleRarities = [
+                                        "Common",
+                                        "Uncommon",
+                                        "Rare",
                                         "Epic",
                                         "Legendary",
-                                        "Zekiforged",
                                     ]
                                 while not lootOK:
                                     lootGen = Loot(
