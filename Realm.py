@@ -2926,9 +2926,7 @@ async def stats(ctx, passedMember: discord.Member = None):
                     draw.text(
                         int(s.width / 2),
                         420,
-                        "Next Level: "
-                        + str(players[passedMember.id].nextLevelEXP)
-                        + "EXP",
+                        "Next Level: " + str(players[passedMember.id].nextLevelEXP),
                     )
                 else:
                     draw.text(
