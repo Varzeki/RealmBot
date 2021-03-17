@@ -2921,7 +2921,7 @@ async def stats(ctx, passedMember: discord.Member = None):
                     440,
                     "Gold: " + str(players[passedMember.id].gold),
                 )
-                if players[passedMember].nextLevelEXP == "MAX LEVEL":
+                if players[passedMember.id].nextLevelEXP == "MAX LEVEL":
                     draw.text(
                         int(s.width / 2),
                         420,
