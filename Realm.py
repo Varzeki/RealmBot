@@ -2792,6 +2792,15 @@ async def addgold(ctx, passedMember: discord.Member, passedGold: int):
 
 
 @bot.command()
+async def resetprestige(ctx):
+    global players
+    if ctx.channel == channels["admin"]:
+        for p in players:
+            p.prestiges = 0
+            print(p.name)
+
+
+@bot.command()
 async def stats(ctx, passedMember: discord.Member = None):
     if passedMember is None:
         passedMember = ctx.author
