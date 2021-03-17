@@ -2796,9 +2796,15 @@ async def resetplayers(ctx):
     global players
     if ctx.channel == channels["admin"]:
         for p in players:
-            p.prestige()
-            p.prestiges = 0
-            print(p.name)
+            try:
+                print(str(p.prestiges))
+                if p.prestiges > 0:
+                    p.prestige()
+            except:
+                pass
+            finally:
+                p.prestiges = 0
+                print(p.name)
 
 
 @bot.command()
