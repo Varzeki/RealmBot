@@ -763,6 +763,7 @@ class Player:
                         await realm.get_member(self.ID).add_roles(roles["shops-master"])
                     if self.level == maxLevel:
                         self.nextLevelEXP = "MAX LEVEL"
+                        break
                 if gained == 1:
                     return [x, self.name + " has gained a level!\n"]
                 else:
