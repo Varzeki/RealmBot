@@ -752,15 +752,13 @@ class Player:
                     self.DMG = round(self.DMG * 1.1)
                     self.DFC = round(self.DFC * 1.1)
                     if self.level == 3:
-                        await bot.get_user(self.id).add_roles(roles["tier-access"])
+                        await bot.get_user(self.ID).add_roles(roles["tier-access"])
                     elif self.level == 10:
-                        await bot.get_user(self.id).add_roles(roles["shops-basic"])
+                        await bot.get_user(self.ID).add_roles(roles["shops-basic"])
                     elif self.level == 45:
-                        await bot.get_user(self.id).add_roles(
-                            roles["shops-advanced"]
-                        )
+                        await bot.get_user(self.ID).add_roles(roles["shops-advanced"])
                     elif self.level == 60:
-                        await realm.fetch_user(self.id).add_roles(roles["shops-master"])
+                        await realm.fetch_user(self.ID).add_roles(roles["shops-master"])
                     if self.level == maxLevel:
                         self.nextLevelEXP = "MAX LEVEL"
                 if gained == 1:
