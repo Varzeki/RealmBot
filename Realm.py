@@ -724,7 +724,7 @@ class Player:
             return d - actualDFC
 
     async def giveEXP(self, x, lvl):
-        global realm
+        global bot
         lvlDiff = lvl - self.level
         if lvlDiff < -4:
             lvlDiff = -5
@@ -752,11 +752,11 @@ class Player:
                     self.DMG = round(self.DMG * 1.1)
                     self.DFC = round(self.DFC * 1.1)
                     if self.level == 3:
-                        await realm.fetch_user(self.id).add_roles(roles["tier-access"])
+                        await bot.get_user(self.id).add_roles(roles["tier-access"])
                     elif self.level == 10:
-                        await realm.fetch_user(self.id).add_roles(roles["shops-basic"])
+                        await bot.get_user(self.id).add_roles(roles["shops-basic"])
                     elif self.level == 45:
-                        await realm.fetch_user(self.id).add_roles(
+                        await bot.get_user(self.id).add_roles(
                             roles["shops-advanced"]
                         )
                     elif self.level == 60:
