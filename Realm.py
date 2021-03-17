@@ -467,7 +467,7 @@ async def doCombat():
                         players[p].STAT_ratsBeaten = players[p].STAT_ratsBeaten + 1
                     players[p].inCombat = False
                     pLoot = mob.getLoot(players[p].lootBonus)
-                    pEXP = players[p].giveEXP(pLoot[1], mob.level)
+                    pEXP = await players[p].giveEXP(pLoot[1], mob.level)
                     pGold = str(players[p].giveGold(pLoot[0], True))
                     # get loot
                     # give to players
@@ -723,30 +723,53 @@ class Player:
             self.STAT_damageReceived = self.STAT_damageReceived + (d - actualDFC)
             return d - actualDFC
 
-    def giveEXP(self, x, lvl):
+    async def giveEXP(self, x, lvl):
+        global realm
         lvlDiff = lvl - self.level
         if lvlDiff < -4:
             lvlDiff = -5
         elif lvlDiff > 4:
             lvlDiff = 5
-        x = round(((5 + lvlDiff) * 0.2) * x)
-        self.EXP = self.EXP + x
-        if self.EXP >= self.nextLevelEXP:
-            self.level = self.level + 1
-            xpScaleDown = 0
-            if self.level > 39:
-                xpScaleDown = 0.03
-            if self.level > 49:
-                xpScaleDown = 0.06
-            self.requiredEXP = self.requiredEXP * (1.18 - xpScaleDown)
-            self.nextLevelEXP = self.nextLevelEXP + self.requiredEXP
-            self.maxHP = round(self.maxHP * 1.1)
-            self.HP = self.maxHP
-            self.hpBar = emoji_set["greenHP"] * 10
-            self.DMG = round(self.DMG * 1.1)
-            self.DFC = round(self.DFC * 1.1)
-            return [x, self.name + " has gained a level!\n"]
-        return [x, ""]
+        x = round((((5 + lvlDiff) * 0.2) * x) * (1 + (self.prestiges * 0.05)))
+        maxLevel = 60 + (5 * self.prestiges)
+        if self.level < maxLevel:
+            self.EXP = self.EXP + x
+            if self.EXP >= self.nextLevelEXP:
+                gained = 0
+                while self.EXP >= self.nextLevelEXP:
+                    gained = gained + 1
+                    self.level = self.level + 1
+                    xpScaleDown = 0
+                    if self.level > 39:
+                        xpScaleDown = 0.03
+                    if self.level > 49:
+                        xpScaleDown = 0.06
+                    self.requiredEXP = self.requiredEXP * (1.18 - xpScaleDown)
+                    self.nextLevelEXP = self.nextLevelEXP + self.requiredEXP
+                    self.maxHP = round(self.maxHP * 1.1)
+                    self.HP = self.maxHP
+                    self.hpBar = emoji_set["greenHP"] * 10
+                    self.DMG = round(self.DMG * 1.1)
+                    self.DFC = round(self.DFC * 1.1)
+                    if self.level == 3:
+                        await realm.fetch_user(self.id).add_roles(roles["tier-access"])
+                    elif self.level == 10:
+                        await realm.fetch_user(self.id).add_roles(roles["shops-basic"])
+                    elif self.level == 45:
+                        await realm.fetch_user(self.id).add_roles(
+                            roles["shops-advanced"]
+                        )
+                    elif self.level == 60:
+                        await realm.fetch_user(self.id).add_roles(roles["shops-master"])
+                    if self.level == maxLevel:
+                        self.nextLevelEXP = "MAX LEVEL"
+                if gained == 1:
+                    return [x, self.name + " has gained a level!\n"]
+                else:
+                    return [x, self.name + " has gained " + str(gained) + " levels!\n"]
+            return [x, ""]
+        else:
+            return [0, ""]
 
     def prestige(self):
         self.level = 1
@@ -1130,6 +1153,9 @@ async def on_ready():
         "dwarf": realm.get_role(763382890733633566),
         "elf": realm.get_role(763382893812121610),
         "tier-access": realm.get_role(770537052454125569),
+        "shops-basic": realm.get_role(821536199051182101),
+        "shops-advanced": realm.get_role(821536448758022144),
+        "shops-master": realm.get_role(821537317947834379),
     }
     print("Role IDs Set")
     channel = discord.utils.get(realm.channels, name="the-discordium")
@@ -2736,7 +2762,9 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
     global players
     if ctx.channel == channels["admin"]:
         if passedMember.id in players:
-            players[passedMember.id].giveEXP(passedXP, players[passedMember.id].level)
+            await players[passedMember.id].giveEXP(
+                passedXP, players[passedMember.id].level
+            )
             await ctx.send(
                 "Gave " + players[passedMember.id].name + " " + str(passedXP) + "XP"
             )
@@ -2893,18 +2921,27 @@ async def stats(ctx, passedMember: discord.Member = None):
                     440,
                     "Gold: " + str(players[passedMember.id].gold),
                 )
-                draw.text(
-                    int(s.width / 2),
-                    420,
-                    "Next Level: "
-                    + str(
-                        round(
-                            players[passedMember.id].nextLevelEXP
-                            - players[passedMember.id].EXP
-                        )
+                if players[passedMember].nextLevelEXP == "MAX LEVEL":
+                    draw.text(
+                        int(s.width / 2),
+                        420,
+                        "Next Level: "
+                        + str(players[passedMember.id].nextLevelEXP)
+                        + "EXP",
                     )
-                    + "EXP",
-                )
+                else:
+                    draw.text(
+                        int(s.width / 2),
+                        420,
+                        "Next Level: "
+                        + str(
+                            round(
+                                players[passedMember.id].nextLevelEXP
+                                - players[passedMember.id].EXP
+                            )
+                        )
+                        + "EXP",
+                    )
                 statBlock = players[passedMember.id].getBonusStats()
                 draw.text(
                     int(s.width / 2),
