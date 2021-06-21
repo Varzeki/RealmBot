@@ -2792,19 +2792,15 @@ async def addgold(ctx, passedMember: discord.Member, passedGold: int):
 
 
 @bot.command()
-async def resetplayers(ctx):
+async def prestige_fix(ctx):
     global players
     if ctx.channel == channels["admin"]:
         for p in players:
             try:
                 print(str(p.prestiges))
-                if p.prestiges > 0:
-                    p.prestige()
             except:
-                pass
-            finally:
                 p.prestiges = 0
-                print(p.name)
+                print(p.name + " had prestige fixed")
 
 
 @bot.command()
