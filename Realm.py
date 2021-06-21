@@ -2797,10 +2797,10 @@ async def prestige_fix(ctx):
     if ctx.channel == channels["admin"]:
         for p in players:
             try:
-                print(str(p.prestiges))
+                print(str(players[p].prestiges))
             except:
-                p.prestiges = 0
-                print(p.name + " had prestige fixed")
+                players[p].prestiges = 0
+                print(players[p].name + " had prestige fixed")
 
 
 @bot.command()
