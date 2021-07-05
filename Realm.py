@@ -18,6 +18,8 @@ from wand.color import Color
 
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler()
+formatter = logging.Formatter(logging.BASIC_FORMAT)
+handler.setFormatter(formatter)
 handler.setLevel(logging.DEBUG)
 logger.addHandler(handler)
 logger.setLevel(logging.DEBUG)
