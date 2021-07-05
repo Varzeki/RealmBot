@@ -16,7 +16,8 @@ from wand.image import Image
 from wand.drawing import Drawing
 from wand.color import Color
 
-logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger("REALMKEEPER")
+logger.basicConfig(level=logging.DEBUG)
 
 load_dotenv()
 
@@ -257,8 +258,8 @@ async def doPetEvents():
                 )
                 active_pets.append([petMsg, pet, 5])
             except:
-                logging.error("Tried to send pet message but failed!")
-                logging.error(traceback.format_exc())
+                logger.error("Tried to send pet message but failed!")
+                logger.error(traceback.format_exc())
 
         for p in active_pets:
             try:
@@ -267,11 +268,11 @@ async def doPetEvents():
                     try:
                         await p[0].delete()
                     except:
-                        logging.error("Tried to time-out pet but did not exist!")
-                        logging.error(traceback.format_exc())
+                        logger.error("Tried to time-out pet but did not exist!")
+                        logger.error(traceback.format_exc())
             except:
-                logging.error("Tried to modify pet timer but did not exist!")
-                logging.error(traceback.format_exc())
+                logger.error("Tried to modify pet timer but did not exist!")
+                logger.error(traceback.format_exc())
         active_pets = [petData for petData in active_pets if petData[2] > 0]
 
 
@@ -334,8 +335,8 @@ async def doPlayerFixup():
     ]
     # activeEngagedPlayers = [players[p] for p in [item for sublist in [m.playersEngaged for m in active_mobs.values()] for item in sublist]]
     if len(invalidPlayers) > 0:
-        logging.warning("FIXING INVALID PLAYERS:")
-        logging.warning([p.name for p in invalidPlayers])
+        logger.warning("FIXING INVALID PLAYERS:")
+        logger.warning([p.name for p in invalidPlayers])
         for i in invalidPlayers:
             i.inCombat = False
             i.HP = i.maxHP
@@ -504,8 +505,8 @@ async def doCombat():
                         file=active_mobs[tier].image
                     )
                 except:
-                    logging.error("Error sending New Mob Image")
-                    logging.error(traceback.format_exc())
+                    logger.error("Error sending New Mob Image")
+                    logger.error(traceback.format_exc())
                 reactables[tier + "-hpBar"] = await channels["tiers"][
                     tier + "-main"
                 ].send(
@@ -527,8 +528,8 @@ async def doCombat():
                         file=discord.File("Data/Resources/Images/vs.png")
                     )
                 except:
-                    logging.error("Error sending New VS Image")
-                    logging.error(traceback.format_exc())
+                    logger.error("Error sending New VS Image")
+                    logger.error(traceback.format_exc())
                 active_mobs[tier].partyMessage = await channels["tiers"][
                     tier + "-main"
                 ].send("Party:\n")
@@ -664,7 +665,7 @@ class Player:
             self.DMG = 26
             self.DFC = 11
         else:
-            logging.error("Invalid pClass for new Player constructor!")
+            logger.error("Invalid pClass for new Player constructor!")
         if race == "human":
             self.maxHP = self.maxHP + 2
             self.DMG = self.DMG + 1
@@ -683,10 +684,10 @@ class Player:
             self.DFC = self.DFC + 1
             self.maxHP = self.maxHP + 4
         else:
-            logging.error("Invalid race for new Player constructor!")
+            logger.error("Invalid race for new Player constructor!")
         self.HP = self.maxHP
         self.hpBar = emoji_set["greenHP"] * 10
-        logging.info("New player created of ID: " + str(self.ID))
+        logger.info("New player created of ID: " + str(self.ID))
 
     def getDamage(self, r):
         d = random.uniform(0.9, 1.1) * float(self.DMG)
@@ -821,7 +822,7 @@ class Player:
             self.DMG = 26
             self.DFC = 11
         else:
-            logging.error("Invalid pClass for new player prestige!")
+            logger.error("Invalid pClass for new player prestige!")
         if self.race == "human":
             self.maxHP = self.maxHP + 2
             self.DMG = self.DMG + 1
@@ -840,7 +841,7 @@ class Player:
             self.DFC = self.DFC + 1
             self.maxHP = self.maxHP + 4
         else:
-            logging.error("Invalid race for new player prestige!")
+            logger.error("Invalid race for new player prestige!")
 
     def giveGold(self, g, multiply=True):
         if multiply:
@@ -1092,7 +1093,7 @@ class Pet:
 @bot.event
 async def on_ready():
     global graceful_exit
-    logging.info(f"Connection to discord successful as: {bot.user}")
+    logger.info(f"Connection to discord successful as: {bot.user}")
     global realm
     global channels
     global roles
@@ -1136,7 +1137,7 @@ async def on_ready():
             "the-menagerie": realm.get_channel(818311959047831552),
         },
     }
-    logging.info("Channel IDs Set")
+    logger.info("Channel IDs Set")
     roles = {
         "class-select": realm.get_role(763270590109843457),
         "race-select": realm.get_role(763270592869695498),
@@ -1160,12 +1161,12 @@ async def on_ready():
         "shops-advanced": realm.get_role(821536448758022144),
         "shops-master": realm.get_role(821537317947834379),
     }
-    logging.info("Role IDs Set")
+    logger.info("Role IDs Set")
     channel = discord.utils.get(realm.channels, name="the-discordium")
     vc = await channel.connect()
     with open("./Data/Players.pkl", "rb") as f:
         players = pickle.load(f)
-    logging.info("Players Loaded")
+    logger.info("Players Loaded")
     for p in players.values():
         p.inCombat = False
         p.HP = p.maxHP
@@ -1328,8 +1329,8 @@ async def on_ready():
             try:
                 await c.send(file=active_mobs[t[:2]].image)
             except:
-                logging.error("Error sending Initial Mob Image for " & str(t[:2]))
-                logging.error(traceback.format_exc())
+                logger.error("Error sending Initial Mob Image for " & str(t[:2]))
+                logger.error(traceback.format_exc())
             reactables[t[:2] + "-hpBar"] = await c.send(
                 active_mobs[t[:2]].name
                 + " (LVL: "
@@ -1346,8 +1347,8 @@ async def on_ready():
             try:
                 await c.send(file=discord.File("Data/Resources/Images/vs.png"))
             except:
-                logging.error("Error sending Initial VS Image for " & str(t[:2]))
-                logging.error(traceback.format_exc())
+                logger.error("Error sending Initial VS Image for " & str(t[:2]))
+                logger.error(traceback.format_exc())
             active_mobs[t[:2]].partyMessage = await c.send("Party:\n")
             if "Rat" in active_mobs[t[:2]].name:
                 vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
@@ -1393,14 +1394,14 @@ async def on_ready():
     await reactables["vendors"]["bazaar-armour-lootbox"].add_reaction(
         emoji_set["moneyBag"]
     )
-    logging.info("Channel Initialization Complete")
-    logging.info("Commencing Cycle")
+    logger.info("Channel Initialization Complete")
+    logger.info("Commencing Cycle")
     while not graceful_exit:
         try:
             await doCombat()
         except:
-            logging.error("Error during combat routine")
-            logging.error(traceback.format_exc())
+            logger.error("Error during combat routine")
+            logger.error(traceback.format_exc())
         await doHealthRegen()
         await doPetEvents()
         await doPlayerFixup()
@@ -1427,7 +1428,7 @@ async def on_message(message):
 
                 await message.author.remove_roles(roles["name-select"])
                 if message.author.id in players:
-                    logging.warning(
+                    logger.warning(
                         "Player attempted new object construction in name-select but was already present!"
                     )
                 else:
@@ -1448,7 +1449,7 @@ async def on_message(message):
                             "Sorry, I tried to register your character but you don't seem to have a class!\n"
                             "Please reach out in the #help channel to get this fixed up."
                         )
-                        logging.warning(
+                        logger.warning(
                             "Player attempted new object construction in name-select but no class role was found!"
                         )
                         await message.author.add_roles(roles["name-select"])
@@ -1457,7 +1458,7 @@ async def on_message(message):
                             "Sorry, I tried to register your character but you don't seem to have a race!\n"
                             "Please reach out in the #help channel to get this fixed up."
                         )
-                        logging.warning(
+                        logger.warning(
                             "Player attempted new object construction in name-select but no race role was found!"
                         )
                         await message.author.add_roles(roles["name-select"])
@@ -1466,7 +1467,7 @@ async def on_message(message):
                             await message.author.send(
                                 "Sorry, that name is an improper length! It should be between 1 and 12 characters."
                             )
-                            logging.warning(
+                            logger.warning(
                                 "Player attempted new object construction in name-select but name length was incorrect!"
                             )
                             await message.author.add_roles(roles["name-select"])
@@ -1474,7 +1475,7 @@ async def on_message(message):
                             await message.author.send(
                                 "Sorry, that name includes invalid characters! It should contain only letters and spaces."
                             )
-                            logging.warning(
+                            logger.warning(
                                 "Player attempted new object construction in name-select but name characters were invalid!"
                             )
                             await message.author.add_roles(roles["name-select"])
@@ -2413,13 +2414,13 @@ async def on_message(message):
                                                 )
                                     loop = True
                         except:
-                            logging.error("Error in inventory management!")
+                            logger.error("Error in inventory management!")
                             await reactables["playerInventories"][
                                 currentPlayer.ID
                             ].delete()
                             currentPlayer.openInventory = False
                             reactables["playerInventories"][currentPlayer.ID] = None
-                            logging.error(traceback.format_exc())
+                            logger.error(traceback.format_exc())
 
             elif message.channel == channels["admin"]:
                 if message.author.bot:
@@ -2432,7 +2433,7 @@ async def on_message(message):
                         reactables["playerInventories"][message.author.id] = None
 
                 elif message.content == "!restart":
-                    logging.info("Graceful Restart Triggered")
+                    logger.info("Graceful Restart Triggered")
                     graceful_init = True
                     await channels["help"].send("RESTART IN 3 MINUTES")
                     await asyncio.sleep(60)
@@ -2572,8 +2573,8 @@ async def on_message(message):
                             )
                         )
                     except:
-                        logging.error("Error sending Pet Image")
-                        logging.error(traceback.format_exc())
+                        logger.error("Error sending Pet Image")
+                        logger.error(traceback.format_exc())
         await bot.process_commands(message)
 
 
@@ -2601,18 +2602,18 @@ async def on_raw_reaction_remove(payload):
 async def on_reaction_add(reaction, user):
     global active_mobs
     global graceful_init
-    logging.info("Registered reaction event")
+    logger.info("Registered reaction event")
     found = False
     if not graceful_init:
         message = reaction.message
         e = str(reaction.emoji)
 
         if user.bot:
-            logging.info("User was bot")
+            logger.info("User was bot")
             return
         if message == reactables["register"]:
             found = True
-            logging.info("Reaction: register")
+            logger.info("Reaction: register")
             if user.id in players:
                 await user.send(
                     "Looks like you've been here before! I'm trying to regenerate your roles now., but if something is missing, please visit the help channel."
@@ -2627,7 +2628,7 @@ async def on_reaction_add(reaction, user):
                 await user.add_roles(roles["class-select"])
         elif message in reactables["vendors"].values():
             found = True
-            logging.info("Reaction: vendor")
+            logger.info("Reaction: vendor")
             if e == emoji_set["moneyBag"]:
                 if message == reactables["vendors"]["caravan-weapon-lootbox"]:
                     boxType = "weapon"
@@ -2718,13 +2719,13 @@ async def on_reaction_add(reaction, user):
                             await buyMessage.delete()
                             await user.send("You can't afford this!")
                 except:
-                    logging.error("Error during lootbox transaction!")
-                    logging.error(traceback.format_exc())
+                    logger.error("Error during lootbox transaction!")
+                    logger.error(traceback.format_exc())
         else:
             for cls in class_roles:
                 if message == reactables["class-select-" + cls]:
                     found = True
-                    logging.info("Reaction: class-select")
+                    logger.info("Reaction: class-select")
                     await user.remove_roles(roles["class-select"])
                     time.sleep(1)
                     hasRole = False
@@ -2739,7 +2740,7 @@ async def on_reaction_add(reaction, user):
             for rce in race_roles:
                 if message == reactables["race-select-" + rce]:
                     found = True
-                    logging.info("Reaction: race-select")
+                    logger.info("Reaction: race-select")
                     await user.remove_roles(roles["race-select"])
                     time.sleep(1)
                     hasRole = False
@@ -2755,7 +2756,7 @@ async def on_reaction_add(reaction, user):
                 for mob in [*active_mobs.values()]:
                     if message == mob.hpMessage:
                         found = True
-                        logging.info("Reaction: combat with " + mob.name)
+                        logger.info("Reaction: combat with " + mob.name)
                         if user.id not in mob.playersEngaged:
                             if not len(mob.playersEngaged) > 3:
                                 if not players[user.id].inCombat:
@@ -2771,13 +2772,13 @@ async def on_reaction_add(reaction, user):
                         else:
                             pass
     if not found:
-        logging.info("Reaction target invalid")
+        logger.info("Reaction target invalid")
 
 
 @bot.command()
 async def addxp(ctx, passedMember: discord.Member, passedXP: int):
 
-    logging.info("ADMIN: XP command used by " + str(ctx.author.name))
+    logger.info("ADMIN: XP command used by " + str(ctx.author.name))
     global players
     if ctx.channel == channels["admin"]:
         if passedMember.id in players:
@@ -2793,7 +2794,7 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
 
 @bot.command()
 async def addgold(ctx, passedMember: discord.Member, passedGold: int):
-    logging.info("ADMIN: Gold command used by " + str(ctx.author.name))
+    logger.info("ADMIN: Gold command used by " + str(ctx.author.name))
     global players
     if ctx.channel == channels["admin"]:
         if passedMember.id in players:
@@ -2815,10 +2816,10 @@ async def prestige_fix(ctx):
     if ctx.channel == channels["admin"]:
         for p in players:
             try:
-                logging.info(str(players[p].prestiges))
+                logger.info(str(players[p].prestiges))
             except:
                 players[p].prestiges = 0
-                logging.warning(players[p].name + " had prestige fixed")
+                logger.warning(players[p].name + " had prestige fixed")
 
 
 @bot.command()
@@ -3053,15 +3054,15 @@ async def stats(ctx, passedMember: discord.Member = None):
                     )
                 )
             except:
-                logging.error("Error sending User Stats Image")
-                logging.error(traceback.format_exc())
+                logger.error("Error sending User Stats Image")
+                logger.error(traceback.format_exc())
         else:
             await ctx.send("This user doesn't appear to be registered yet!")
 
 
 @bot.command()
 async def prestige(ctx, passedMember: discord.Member):
-    logging.info("ADMIN: Prestige command used by " + str(ctx.author.name))
+    logger.info("ADMIN: Prestige command used by " + str(ctx.author.name))
     global players
     if ctx.channel == channels["admin"]:
         if passedMember.id in players:
@@ -3073,7 +3074,7 @@ async def prestige(ctx, passedMember: discord.Member):
 
 @bot.command()
 async def stop(ctx):
-    logging.critical("ADMIN: Stop command used by " + str(ctx.author.name))
+    logger.critical("ADMIN: Stop command used by " + str(ctx.author.name))
     if ctx.channel == channels["admin"]:
         global graceful_exit
         graceful_exit = True
