@@ -16,8 +16,8 @@ from wand.image import Image
 from wand.drawing import Drawing
 from wand.color import Color
 
-logger = logging.getLogger("REALMKEEPER")
-logger.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
+logger.setLevel(level=logging.DEBUG)
 
 load_dotenv()
 
