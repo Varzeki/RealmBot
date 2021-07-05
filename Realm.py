@@ -16,6 +16,7 @@ from wand.image import Image
 from wand.drawing import Drawing
 from wand.color import Color
 
+logging.basicConfig(level=logging.DEBUG)
 
 load_dotenv()
 
