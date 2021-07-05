@@ -17,7 +17,10 @@ from wand.drawing import Drawing
 from wand.color import Color
 
 logger = logging.getLogger(__name__)
-logger.setLevel(level=logging.DEBUG)
+handler = logging.StreamHandler()
+handler.setLevel(logging.DEBUG)
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
 
 load_dotenv()
 
