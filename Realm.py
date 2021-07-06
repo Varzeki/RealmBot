@@ -2861,8 +2861,8 @@ async def test_audio(ctx, *, args):
         tts = gTTS(args)
         tts.save("Data/Resources/Audio/preProcessVoiceFile.mp3")
         tfm = sox.Transformer()
-        tfm.pitch(-12)
-        tfm.reverb(reverberance=30)
+        tfm.pitch(-9)
+        tfm.reverb(reverberance=50)
         tfm.build_file(
             "Data/Resources/Audio/preProcessVoiceFile.mp3",
             "Data/Resources/Audio/postProcessVoiceFile.mp3",
