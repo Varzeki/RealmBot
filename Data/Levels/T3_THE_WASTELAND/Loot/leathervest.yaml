@@ -1,7 +1,7 @@
-name: Leather Vest
+name: Hyena leather vest
 type: armour
 damage: 0
 defence: 5
 value: 40
-description: A basic leather vest.
+description: A leather vest made from the hide of a hyena
 defaultRarity: Common

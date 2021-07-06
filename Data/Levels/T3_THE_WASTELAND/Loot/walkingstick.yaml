@@ -1,8 +1,8 @@
-name: Walking Stick
+name: Orcish Axe
 type: weapon
 damage: 7
 defence: 0
 value: 45
-description: A long stick, suitable for providing extra balance.
+description: A crude axehead on a strong stick. excellent for the savage on a budget
 defaultRarity: Common
 defaultElement: None

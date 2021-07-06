@@ -5,6 +5,6 @@ equipment:
   shiv: 10
   studdedleather: 10
 treasure:
-  jewelry: 10
-  enchantedvase: 10
-  goldbar: 10
+  jewelry: 5
+  enchantedvase: 4
+  ruby: 5

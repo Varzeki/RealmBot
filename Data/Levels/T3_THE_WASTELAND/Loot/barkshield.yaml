@@ -1,8 +1,8 @@
-name: Bark Shield
+name: Orcish Shield
 type: weapon
 damage: 0
 defence: 4
 value: 35
-description: A makeshift shield comprised of tree bark.
+description: A crude shield made by a crude people
 defaultRarity: Common
 defaultElement: None
