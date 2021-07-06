@@ -578,15 +578,15 @@ async def doCombat():
                     elif tier == "t2":
                         x = "the Lower City"
                     elif tier == "t3":
-                        x = "the Lower City"
+                        x = "the Wasteland"
                     elif tier == "t4":
-                        x = "the Lower City"
+                        x = "the Plaguelands"
                     elif tier == "t5":
-                        x = "the Lower City"
+                        x = "the Everdark"
                     elif tier == "t6":
-                        x = "the Lower City"
+                        x = "the Steppes of Creation"
                     elif tier == "t7":
-                        x = "the Lower City"
+                        x = "the Citadel"
                     else:
                         x = "an unknown location"
 
@@ -1434,15 +1434,15 @@ async def on_ready():
                 elif t[:2] == "t2":
                     x = "the Lower City"
                 elif t[:2] == "t3":
-                    x = "the Lower City"
+                    x = "the Wasteland"
                 elif t[:2] == "t4":
-                    x = "the Lower City"
+                    x = "the Plaguelands"
                 elif t[:2] == "t5":
-                    x = "the Lower City"
+                    x = "the Everdark"
                 elif t[:2] == "t6":
-                    x = "the Lower City"
+                    x = "the Steppes of Creation"
                 elif t[:2] == "t7":
-                    x = "the Lower City"
+                    x = "the Citadel"
                 else:
                     x = "an unknown location"
 
