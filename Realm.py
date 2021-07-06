@@ -2863,7 +2863,7 @@ async def test_audio(ctx, *, args):
         tfm = sox.Transformer()
         tfm.pitch(-6)
         tfm.reverb(reverberance=50)
-        tfm.chorus(n_voices=12, gain_in=0.4, gain_out=0.9)
+        tfm.chorus(n_voices=6, gain_in=0.4, gain_out=0.9)
         tfm.build_file(
             "Data/Resources/Audio/preProcessVoiceFile.mp3",
             "Data/Resources/Audio/postProcessVoiceFile.mp3",
