@@ -16,6 +16,7 @@ from wand.image import Image
 from wand.drawing import Drawing
 from wand.color import Color
 from gtts import gTTS
+import sox
 
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler()
@@ -2858,8 +2859,14 @@ async def test_audio(ctx, *, args):
     if ctx.channel == channels["admin"]:
         logger.debug(args)
         tts = gTTS(args)
-        tts.save("Data/Resources/Audio/currentVoiceFile.mp3")
-        vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/currentVoiceFile.mp3"))
+        tts.save("Data/Resources/Audio/preProcessVoiceFile.mp3")
+        tfm = sox.Transformer()
+        tfm.pitch(-3)
+        tfm.build_file(
+            "Data/Resources/Audio/preProcessVoiceFile.mp3",
+            "Data/Resources/Audio/postProcessVoiceFile.mp3",
+        )
+        vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/postProcessVoiceFile.mp3"))
 
 
 @bot.command()
