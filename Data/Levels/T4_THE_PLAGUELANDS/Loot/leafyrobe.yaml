@@ -1,7 +1,7 @@
-name: Leafy Robe
+name: Alchemist's Robe
 type: armour
 damage: 0
 defence: 4
 value: 35
-description: A light robe made of leaves, stitched together by vines.
+description: The sturdy, practical robe of an alchemist. Covered in questionable stains you don't want to think about.
 defaultRarity: Common

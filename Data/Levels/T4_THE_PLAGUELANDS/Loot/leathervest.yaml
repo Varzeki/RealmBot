@@ -1,7 +1,7 @@
-name: Leather Vest
+name: Looted Armour
 type: armour
 damage: 0
 defence: 5
 value: 40
-description: A basic leather vest.
+description: Armour looted from a ogre's treasure horde.
 defaultRarity: Common

@@ -1,8 +1,8 @@
-name: Bark Shield
+name: Skeleton's shield
 type: weapon
 damage: 0
 defence: 4
 value: 35
-description: A makeshift shield comprised of tree bark.
+description: A Shield you stole from a skeleton. kinda rude if you ask me
 defaultRarity: Common
 defaultElement: None

@@ -1,8 +1,8 @@
-name: Walking Stick
+name: Zombie Arm
 type: weapon
 damage: 7
 defence: 0
 value: 45
-description: A long stick, suitable for providing extra balance.
+description: A surprisingly effective weapon.
 defaultRarity: Common
 defaultElement: None

@@ -1,8 +1,8 @@
-name: Club
+name: Alchemist's Wand
 type: weapon
 damage: 8
 defence: 0
 value: 50
-description: A crude weapon made of naturally shaped wood.
+description: A finely made wand previously belonging to a mad alchemist
 defaultRarity: Common
 defaultElement: None
