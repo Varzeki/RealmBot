@@ -2857,7 +2857,8 @@ async def test_audio(ctx, *, args):
     global players
     if ctx.channel == channels["admin"]:
         logger.debug(args)
-        gTTS(args).save("./Data/Resources/audio/currentVoiceFile.mp3")
+        tts = gTTS(args)
+        tts.save("./Data/Resources/audio/currentVoiceFile.mp3")
         vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/currentVoiceFile.mp3"))
 
 
