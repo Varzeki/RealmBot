@@ -2862,9 +2862,6 @@ async def test_audio(ctx, *, args):
         tts.save("Data/Resources/Audio/preProcessVoiceFile.mp3")
         tfm = sox.Transformer()
         tfm.pitch(-6)
-
-        tfm.echos()
-        tfm.flanger()
         tfm.reverb(reverberance=50)
         tfm.build_file(
             "Data/Resources/Audio/preProcessVoiceFile.mp3",
