@@ -573,7 +573,20 @@ async def doCombat():
                 )
                 logger.debug("Sent mob encounter")
                 if "Rat" in active_mobs[tier].name:
-                    pass
+                    tts = gTTS(tier)
+                    tts.save("Data/Resources/Audio/preProcessVoiceFile.mp3")
+                    tfm = sox.Transformer()
+                    tfm.pitch(-6)
+                    tfm.reverb(reverberance=50)
+                    tfm.build_file(
+                        "Data/Resources/Audio/preProcessVoiceFile.mp3",
+                        "Data/Resources/Audio/postProcessVoiceFile.mp3",
+                    )
+                    vc.play(
+                        discord.FFmpegPCMAudio(
+                            "Data/Resources/Audio/postProcessVoiceFile.mp3"
+                        )
+                    )
                     # vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
             else:
                 hpSlots = round((mob.HP / mob.maxHP) * 10)
@@ -1399,7 +1412,20 @@ async def on_ready():
                 logger.error(traceback.format_exc())
             active_mobs[t[:2]].partyMessage = await c.send("Party:\n")
             if "Rat" in active_mobs[t[:2]].name:
-                pass
+                tts = gTTS(t)
+                tts.save("Data/Resources/Audio/preProcessVoiceFile.mp3")
+                tfm = sox.Transformer()
+                tfm.pitch(-6)
+                tfm.reverb(reverberance=50)
+                tfm.build_file(
+                    "Data/Resources/Audio/preProcessVoiceFile.mp3",
+                    "Data/Resources/Audio/postProcessVoiceFile.mp3",
+                )
+                vc.play(
+                    discord.FFmpegPCMAudio(
+                        "Data/Resources/Audio/postProcessVoiceFile.mp3"
+                    )
+                )
                 # vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
             logger.debug("Sent " + c.name + " Messages")
     c = channels["pet-zones"]["the-menagerie"]
