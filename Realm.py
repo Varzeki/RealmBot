@@ -573,7 +573,24 @@ async def doCombat():
                 )
                 logger.debug("Sent mob encounter")
                 if "Rat" in active_mobs[tier].name:
-                    tts = gTTS(tier)
+                    if tier == "t1":
+                        x = "the Arboretum"
+                    elif tier == "t2":
+                        x = "the Lower City"
+                    elif tier == "t3":
+                        x = "the Lower City"
+                    elif tier == "t4":
+                        x = "the Lower City"
+                    elif tier == "t5":
+                        x = "the Lower City"
+                    elif tier == "t6":
+                        x = "the Lower City"
+                    elif tier == "t7":
+                        x = "the Lower City"
+                    else:
+                        x = "an unknown location"
+
+                    tts = gTTS("A rat has spawned in " + x)
                     tts.save("Data/Resources/Audio/preProcessVoiceFile.mp3")
                     tfm = sox.Transformer()
                     tfm.pitch(-6)
@@ -1412,7 +1429,24 @@ async def on_ready():
                 logger.error(traceback.format_exc())
             active_mobs[t[:2]].partyMessage = await c.send("Party:\n")
             if "Rat" in active_mobs[t[:2]].name:
-                tts = gTTS(t)
+                if t[:2] == "t1":
+                    x = "the Arboretum"
+                elif t[:2] == "t2":
+                    x = "the Lower City"
+                elif t[:2] == "t3":
+                    x = "the Lower City"
+                elif t[:2] == "t4":
+                    x = "the Lower City"
+                elif t[:2] == "t5":
+                    x = "the Lower City"
+                elif t[:2] == "t6":
+                    x = "the Lower City"
+                elif t[:2] == "t7":
+                    x = "the Lower City"
+                else:
+                    x = "an unknown location"
+
+                tts = gTTS("A rat has spawned in " + x)
                 tts.save("Data/Resources/Audio/preProcessVoiceFile.mp3")
                 tfm = sox.Transformer()
                 tfm.pitch(-6)
