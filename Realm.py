@@ -15,6 +15,7 @@ from discord.ext import commands
 from wand.image import Image
 from wand.drawing import Drawing
 from wand.color import Color
+from gtts import gTTS
 
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler()
@@ -2847,6 +2848,17 @@ async def addxp(ctx, passedMember: discord.Member, passedXP: int):
             )
         else:
             await ctx.send("Not a registered player")
+
+
+@bot.command()
+async def test_audio(ctx, *, args):
+
+    logger.info("ADMIN: test_audio command used by " + str(ctx.author.name))
+    global players
+    if ctx.channel == channels["admin"]:
+        logger.debug(args)
+        gTTS(args).save("./Data/Resources/audio/currentVoiceFile.mp3")
+        vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/currentVoiceFile.mp3"))
 
 
 @bot.command()
