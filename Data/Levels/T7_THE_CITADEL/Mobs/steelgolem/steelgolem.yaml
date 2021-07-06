@@ -1,8 +1,8 @@
 name: Steel Golem
-healthLow: 100
+healthLow: 125
 healthHigh: 150
 dmgLow: 20
-dmgHigh: 40
+dmgHigh: 30
 rewardLow: 20
 rewardHigh: 30
 lootBonus: 0

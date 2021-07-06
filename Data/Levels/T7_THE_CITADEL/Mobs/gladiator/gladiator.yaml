@@ -1,5 +1,5 @@
 name: Gladiator
-healthLow: 40
+healthLow: 60
 healthHigh: 150
 dmgLow: 30
 dmgHigh: 60
