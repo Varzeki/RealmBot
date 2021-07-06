@@ -2863,8 +2863,8 @@ async def test_audio(ctx, *, args):
         tfm = sox.Transformer()
         tfm.pitch(-3)
         tfm.build_file(
-            "Data/Resources/Audio/preProcessVoiceFile.mp3",
-            "Data/Resources/Audio/postProcessVoiceFile.mp3",
+            "/root/Realmbot/Data/Resources/Audio/preProcessVoiceFile.mp3",
+            "/root/Realmbot/Data/Resources/Audio/postProcessVoiceFile.mp3",
         )
         vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/postProcessVoiceFile.mp3"))
 
