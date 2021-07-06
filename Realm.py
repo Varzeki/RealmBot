@@ -109,6 +109,7 @@ def generateMob(tier):
         + "/Art/"
         + random.choice(os.listdir(fileMap[tier] + "/" + mobName + "/Art"))
     )
+    logger.debug("Generated new mob from data")
     return [mobStats, mobArt]
 
 
@@ -131,6 +132,7 @@ def generateLoot(tier, level, lootType="any"):
     )[0]
     with open(fileMap[tier] + "/" + drop + ".yaml", "r") as stream:
         dropData = yaml.safe_load(stream)
+    logger.debug("Generated new loot from data")
     return dropData
 
 
@@ -140,13 +142,16 @@ def generatePet():
     pet = random.choices([*spawnTable], weights=[*spawnTable.values()], k=1)[0]
     with open("Data/Pets/" + pet + ".yaml", "r") as stream:
         petData = yaml.safe_load(stream)
+    logger.debug("Generated new pet from data")
     return petData
 
 
 async def doPetEvents():
     global active_pets
+    logger.debug("Pet event")
     for chan in channels["pet-zones"].values():
         if random.uniform(0, 1) > 0.8:
+            logger.debug("Spawn roll success")
             pet = Pet()
             backgroundImage = Image(filename="Data/Resources/Images/petStats.png")
             petTypeImage = Image(
@@ -251,6 +256,7 @@ async def doPetEvents():
                         + "_PetStatsOutput.png"
                     )
                 )
+            logger.debug("Generated pet image")
             try:
                 petMsg = await chan.send(
                     file=discord.File(
@@ -261,6 +267,7 @@ async def doPetEvents():
                         + "_PetStatsOutput.png"
                     )
                 )
+                logger.debug("Pet message sent")
                 active_pets.append([petMsg, pet, 5])
             except:
                 logger.error("Tried to send pet message but failed!")
@@ -272,19 +279,22 @@ async def doPetEvents():
                 if p[2] < 1:
                     try:
                         await p[0].delete()
+                        logger.debug("Deleted pet message")
                     except:
-                        logger.error("Tried to time-out pet but did not exist!")
+                        logger.error("Tried to time-out pet message but did not exist!")
                         logger.error(traceback.format_exc())
             except:
                 logger.error("Tried to modify pet timer but did not exist!")
                 logger.error(traceback.format_exc())
         active_pets = [petData for petData in active_pets if petData[2] > 0]
+        logger.debug("Refreshed active pets")
 
 
 async def doHealthRegen():
     global active_mobs
     global players
     global emoji_set
+    logger.debug("Health regen event")
     for p in players.values():
         if not p.inCombat:
             if not p.HP == p.maxHP:
@@ -295,6 +305,7 @@ async def doHealthRegen():
                 p.hpBar = (emoji_set["greenHP"] * hpSlots) + (
                     emoji_set["redHP"] * (10 - hpSlots)
                 )
+                logger.debug(p.name + " regenerated HP")
     for m in active_mobs.values():
         if len(m.playersEngaged) == 0:
             if not m.HP == m.maxHP:
@@ -319,6 +330,7 @@ async def doHealthRegen():
                     + "\n"
                     + m.hpBar
                 )
+                logger.debug(m.name + " regenerated HP and edited message")
 
 
 async def doPlayerFixup():
@@ -353,14 +365,19 @@ async def doCombat():
     global players
     global current_tick
     global vc
+    logger.debug("Combat event")
     current_tick = current_tick + 1
+    logger.debug("Current tick: " + str(current_tick))
     if current_tick > 10:
+        logger.debug("Writing player data to file")
         with open("./Data/Players.pkl", "w+b") as f:
             pickle.dump(players, f, pickle.HIGHEST_PROTOCOL)
         current_tick = 0
     for mob in list(active_mobs.values()):
+        logger.debug("MOB - " + mob.name)
         pMessage = "Party:"
         if not mob.playersEngaged == []:
+            logger.debug("In combat")
             pMessage = pMessage + "\n"
             attackedPlayer = random.choices(
                 mob.playersEngaged,
@@ -414,6 +431,7 @@ async def doCombat():
                         + "\n"
                     )
                     if players[p].HP < 1:
+                        logger.debug("Player death event - " + players[p].name)
                         deathEvent = True
                         damageLog = (
                             damageLog
@@ -434,6 +452,9 @@ async def doCombat():
                         )
                         if not mob.HP < 1:
                             mob.playersEngaged.remove(p)
+                            logger.debug(
+                                "Player removed from combat due to death event"
+                            )
                     else:
                         hpSlots = round((players[p].HP / players[p].maxHP) * 10)
                         if not hpSlots > -1:
@@ -462,9 +483,11 @@ async def doCombat():
                     + "\n"
                 )
             z = await channels["tiers"][mob.tier + "-log"].send(damageLog)
+            logger.debug("Damage log sent")
             if deathEvent:
                 await z.add_reaction(emoji_set["skull"])
             if mob.HP < 1:
+                logger.debug("Mob death event")
                 importantEvent = False
                 lootLog = mob.defeatText + "\n"
                 for p in mob.playersEngaged:
@@ -494,16 +517,20 @@ async def doCombat():
                     if not pLoot[2] == "Nothing":
                         importantEvent = True
                         lootLog = lootLog + players[p].addLoot(pLoot[2]) + "\n"
+                logger.debug("Player EXP + Loot resolved")
                 z = await channels["tiers"][mob.tier + "-log"].send(lootLog)
+                logger.debug("Loot log sent")
                 if importantEvent:
                     await z.add_reaction(emoji_set["important"])
                 tier = mob.tier
                 active_mobs.pop(tier, None)
+                logger.debug("Mob removed from active list")
                 msgs = (
                     await channels["tiers"][tier + "-main"].history(limit=200).flatten()
                 )
                 for msg in msgs:
                     await msg.delete(delay=0.1)
+                logger.debug("Deleted mob messages")
                 active_mobs[tier] = Mob(tier)
                 try:
                     await channels["tiers"][tier + "-main"].send(
@@ -538,11 +565,14 @@ async def doCombat():
                 active_mobs[tier].partyMessage = await channels["tiers"][
                     tier + "-main"
                 ].send("Party:\n")
+                logger.debug("Sent mob messages")
                 await channels["tiers"][tier + "-log"].send(
                     active_mobs[tier].encounterText
                 )
+                logger.debug("Sent mob encounter")
                 if "Rat" in active_mobs[tier].name:
-                    vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
+                    pass
+                    # vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
             else:
                 hpSlots = round((mob.HP / mob.maxHP) * 10)
                 if not hpSlots > -1:
@@ -575,10 +605,13 @@ async def doCombat():
                         + "\n"
                         + mob.hpBar
                     )
+                    logger.debug("Mob message edited")
                 if not pMessage == mob.partyMessage.content:
                     await mob.partyMessage.edit(content=pMessage)
+                    logger.debug("Party message edited")
         elif not pMessage == mob.partyMessage.content:
             await mob.partyMessage.edit(content=pMessage)
+            logger.debug("Party message edited")
 
 
 class Player:
@@ -1169,6 +1202,7 @@ async def on_ready():
     logger.info("Role IDs Set")
     channel = discord.utils.get(realm.channels, name="the-discordium")
     vc = await channel.connect()
+    logger.debug("VC Connection Success")
     with open("./Data/Players.pkl", "rb") as f:
         players = pickle.load(f)
     logger.info("Players Loaded")
@@ -1178,16 +1212,19 @@ async def on_ready():
         p.hpBar = emoji_set["greenHP"] * 10
         reactables["playerInventories"][p.ID] = None
         p.openInventory = False
+        logger.debug(p.name + " state reset")
     c = channels["guidebook"]
     msgs = await c.history(limit=200).flatten()
     for msg in msgs:
         await msg.delete(delay=0.2)
+    logger.debug("Deleted Guidebook Messages")
     await c.send(
         "** **\n**Rules**\n"
         "1: No NSFW or obscene content outside of marked channels. This includes text, images, or links featuring nudity, sex, hard violence, or other graphically disturbing content.\n"
         "2: Treat everyone with respect. Absolutely no harassment, witch hunting, sexism, racism, or hate speech will be tolerated.\n"
         "3: If you see something against the rules or something that makes you feel unsafe, let staff know. We want this server to be a welcoming space!"
     )
+
     await c.send(
         "** **\n"
         "**Registration**\n"
@@ -1228,10 +1265,12 @@ async def on_ready():
         "**Stat Cards**\n"
         "!stats will give you a statcard generated just for your character! You can also highlight someone with !stats to get a statcard of their character.\n"
     )
+    logger.debug("Sent Guidebook Messages")
     for c in channels["registration"].values():
         msgs = await c.history(limit=200).flatten()
         for msg in msgs:
             await msg.delete(delay=0.2)
+        logger.debug("Deleted " + c.name + " Messages")
         if c.name == "register":
             reactables["register"] = await c.send(
                 "Welcome to Realm! To get started, hit the thumbs up to create your character."
@@ -1321,12 +1360,14 @@ async def on_ready():
                 "Type a name for your character below.\n"
                 "This should be between 1 and 12 characters long, made of letters and spaces only."
             )
+        logger.debug("Sent " + c.name + " Messages")
     for t in channels["tiers"]:
         if "main" in t:
             c = channels["tiers"][t]
             msgs = await c.history(limit=200).flatten()
             for msg in msgs:
                 await msg.delete(delay=0.2)
+            logger.debug("Deleted " + c.name + " Messages")
             active_mobs[t[:2]] = Mob(t[:2])
             await channels["tiers"][t.replace("main", "log")].send(
                 active_mobs[t[:2]].encounterText
@@ -1356,15 +1397,19 @@ async def on_ready():
                 logger.error(traceback.format_exc())
             active_mobs[t[:2]].partyMessage = await c.send("Party:\n")
             if "Rat" in active_mobs[t[:2]].name:
-                vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
+                pass
+                # vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
+            logger.debug("Sent " + c.name + " Messages")
     c = channels["pet-zones"]["the-menagerie"]
     msgs = await c.history(limit=200).flatten()
     for msg in msgs:
         await msg.delete(delay=0.2)
+    logger.debug("Deleted " + c.name + " Messages")
     c = channels["havens"]["the-travelling-caravan"]
     msgs = await c.history(limit=200).flatten()
     for msg in msgs:
         await msg.delete(delay=0.2)
+    logger.debug("Deleted " + c.name + " Messages")
     await c.send("Welcome to the Travelling Caravan! The wares are as below:")
     reactables["vendors"]["caravan-weapon-lootbox"] = await c.send(
         "Advanced Weapon Lootbox",
@@ -1380,10 +1425,12 @@ async def on_ready():
     await reactables["vendors"]["caravan-armour-lootbox"].add_reaction(
         emoji_set["moneyBag"]
     )
+    logger.debug("Sent " + c.name + " Messages")
     c = channels["havens"]["the-bazaar"]
     msgs = await c.history(limit=200).flatten()
     for msg in msgs:
         await msg.delete(delay=0.2)
+    logger.debug("Deleted " + c.name + " Messages")
     await c.send("Welcome to The Bazaar! The wares are as below:")
     reactables["vendors"]["bazaar-weapon-lootbox"] = await c.send(
         "Basic Weapon Lootbox",
@@ -1399,6 +1446,7 @@ async def on_ready():
     await reactables["vendors"]["bazaar-armour-lootbox"].add_reaction(
         emoji_set["moneyBag"]
     )
+    logger.debug("Sent " + c.name + " Messages")
     logger.info("Channel Initialization Complete")
     logger.info("Commencing Cycle")
     while not graceful_exit:
@@ -1419,13 +1467,14 @@ async def on_message(message):
     global players
     global graceful_init
     global graceful_exit
+    logger.debug("Message event")
     if not graceful_init:
         if message.channel == channels["help"]:
             if message.content == "!reset":
                 players[message.author.id].inCombat = False
                 players[message.author.id].HP = players[message.author.id].maxHP
                 players[message.author.id].hpBar = emoji_set["greenHP"] * 10
-                await message.channel.send("Player Reset!")
+                await message.channel.send("Player State Reset!")
         else:
             if message.channel == channels["registration"]["name-select"]:
                 if message.author.bot:
@@ -2587,6 +2636,7 @@ async def on_message(message):
 async def on_raw_reaction_remove(payload):
     global active_mobs
     global graceful_init
+    logger.debug("Raw reaction remove event")
     if not graceful_init:
         channel = await bot.fetch_channel(payload.channel_id)
         user = await bot.fetch_user(payload.user_id)
@@ -2598,23 +2648,25 @@ async def on_raw_reaction_remove(payload):
             return
         for mob in [*active_mobs.values()]:
             if message == mob.hpMessage:
+                logger.debug("Reaction removed from Mob")
                 if user.id in mob.playersEngaged:
                     mob.playersEngaged.remove(user.id)
                     players[user.id].inCombat = False
+                    logger.debug("Player removed from combat")
 
 
 @bot.event
 async def on_reaction_add(reaction, user):
     global active_mobs
     global graceful_init
-    logger.info("Registered reaction event")
+    logger.debug("Reaction add event")
     found = False
     if not graceful_init:
         message = reaction.message
         e = str(reaction.emoji)
 
         if user.bot:
-            logger.info("User was bot")
+            logger.debug("User was bot")
             return
         if message == reactables["register"]:
             found = True
@@ -2633,7 +2685,7 @@ async def on_reaction_add(reaction, user):
                 await user.add_roles(roles["class-select"])
         elif message in reactables["vendors"].values():
             found = True
-            logger.info("Reaction: vendor")
+            logger.debug("Reaction: vendor")
             if e == emoji_set["moneyBag"]:
                 if message == reactables["vendors"]["caravan-weapon-lootbox"]:
                     boxType = "weapon"
@@ -2730,7 +2782,7 @@ async def on_reaction_add(reaction, user):
             for cls in class_roles:
                 if message == reactables["class-select-" + cls]:
                     found = True
-                    logger.info("Reaction: class-select")
+                    logger.debug("Reaction: class-select")
                     await user.remove_roles(roles["class-select"])
                     time.sleep(1)
                     hasRole = False
@@ -2745,7 +2797,7 @@ async def on_reaction_add(reaction, user):
             for rce in race_roles:
                 if message == reactables["race-select-" + rce]:
                     found = True
-                    logger.info("Reaction: race-select")
+                    logger.debug("Reaction: race-select")
                     await user.remove_roles(roles["race-select"])
                     time.sleep(1)
                     hasRole = False
@@ -2761,7 +2813,7 @@ async def on_reaction_add(reaction, user):
                 for mob in [*active_mobs.values()]:
                     if message == mob.hpMessage:
                         found = True
-                        logger.info("Reaction: combat with " + mob.name)
+                        logger.debug("Reaction: combat with " + mob.name)
                         if user.id not in mob.playersEngaged:
                             if not len(mob.playersEngaged) > 3:
                                 if not players[user.id].inCombat:
@@ -2777,7 +2829,7 @@ async def on_reaction_add(reaction, user):
                         else:
                             pass
     if not found:
-        logger.info("Reaction target invalid")
+        logger.debug("Reaction target invalid")
 
 
 @bot.command()
@@ -2821,7 +2873,7 @@ async def prestige_fix(ctx):
     if ctx.channel == channels["admin"]:
         for p in players:
             try:
-                logger.info(str(players[p].prestiges))
+                logger.debug(str(players[p].prestiges))
             except:
                 players[p].prestiges = 0
                 logger.warning(players[p].name + " had prestige fixed")
