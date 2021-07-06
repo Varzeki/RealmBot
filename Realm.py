@@ -435,6 +435,44 @@ async def doCombat():
                     if players[p].HP < 1:
                         logger.debug("Player death event - " + players[p].name)
                         deathEvent = True
+                        if mob.tier == "t1":
+                            x = "the Arboretum"
+                        elif mob.tier == "t2":
+                            x = "the Lower City"
+                        elif mob.tier == "t3":
+                            x = "the Wasteland"
+                        elif mob.tier == "t4":
+                            x = "the Plaguelands"
+                        elif mob.tier == "t5":
+                            x = "the Everdark"
+                        elif mob.tier == "t6":
+                            x = "the Steppes of Creation"
+                        elif mob.tier == "t7":
+                            x = "the Citadel"
+                        else:
+                            x = "an unknown location"
+                        tts = gTTS(
+                            players[p].name
+                            + " died and lost "
+                            + str(round(0.05 * players[p].gold))
+                            + " gold "
+                            + " in "
+                            + x
+                            + "!"
+                        )
+                        tts.save("Data/Resources/Audio/preProcessVoiceFile.mp3")
+                        tfm = sox.Transformer()
+                        tfm.pitch(-6)
+                        tfm.reverb(reverberance=50)
+                        tfm.build_file(
+                            "Data/Resources/Audio/preProcessVoiceFile.mp3",
+                            "Data/Resources/Audio/postProcessVoiceFile.mp3",
+                        )
+                        vc.play(
+                            discord.FFmpegPCMAudio(
+                                "Data/Resources/Audio/postProcessVoiceFile.mp3"
+                            )
+                        )
                         damageLog = (
                             damageLog
                             + players[p].name
