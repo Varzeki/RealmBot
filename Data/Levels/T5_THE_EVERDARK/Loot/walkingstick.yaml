@@ -1,8 +1,8 @@
-name: Walking Stick
+name: Dark Spear
 type: weapon
 damage: 7
 defence: 0
 value: 45
-description: A long stick, suitable for providing extra balance.
+description: A long spear taken from a drow
 defaultRarity: Common
 defaultElement: None
