@@ -1002,14 +1002,17 @@ class Loot:
         self.level = level
         self.value = round(random.uniform(0.9, 1.1) * float(lootData["value"]))
         self.description = lootData["description"]
+        if self.level == 1:
+            lMult = 1
+        else:
+            lMult = 1.1 ** self.level
+        self.value = round(self.value * lMult)
         if not self.lootType == "treasure":
             self.damage = lootData["damage"]
             self.defence = lootData["defence"]
-            if not self.level == 1:
-                lMult = 1.1 ** self.level
-                self.damage = round(self.damage * lMult)
-                self.defence = round(self.defence * lMult)
-                self.value = round(self.value * lMult)
+            self.damage = round(self.damage * lMult)
+            self.defence = round(self.defence * lMult)
+
             rarityRoll = random.uniform(0, 1)
             rarityList = [
                 "Common",
