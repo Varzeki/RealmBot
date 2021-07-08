@@ -1,7 +1,7 @@
-name: Leafy Robe
+name: Dave's Old Bathrobe
 type: armour
 damage: 0
 defence: 4
 value: 35
-description: A light robe made of leaves, stitched together by vines.
+description: A tag on the inside is marked 'Dave', you are not sure how this functions as armour, only that it does.
 defaultRarity: Common

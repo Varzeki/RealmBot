@@ -1,8 +1,8 @@
-name: Walking Stick
+name: Dave's Old Magic Wand
 type: weapon
 damage: 7
 defence: 0
 value: 45
-description: A long stick, suitable for providing extra balance.
+description: An old magic wand made from yew, someone has carved 'Dave' along the length
 defaultRarity: Common
 defaultElement: None

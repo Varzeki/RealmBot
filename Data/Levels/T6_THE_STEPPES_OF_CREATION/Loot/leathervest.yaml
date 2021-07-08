@@ -1,7 +1,7 @@
-name: Leather Vest
+name: Dave's Old Breastplate
 type: armour
 damage: 0
 defence: 5
 value: 40
-description: A basic leather vest.
+description: A sturdy enough breastplate. someone has inscribed 'Dave' on the inside of the chest
 defaultRarity: Common

@@ -1,8 +1,8 @@
-name: Bark Shield
+name: Dave's Old Shield
 type: weapon
 damage: 0
 defence: 4
 value: 35
-description: A makeshift shield comprised of tree bark.
+description: An old shield you found. it is labelled 'Dave' on the inside edge
 defaultRarity: Common
 defaultElement: None

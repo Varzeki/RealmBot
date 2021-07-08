@@ -1,8 +1,8 @@
-name: Club
+name: Dave's Old Sword
 type: weapon
 damage: 8
 defence: 0
 value: 50
-description: A crude weapon made of naturally shaped wood.
+description: Someone has inscribed 'Dave' on the hilt of this sword
 defaultRarity: Common
 defaultElement: None
