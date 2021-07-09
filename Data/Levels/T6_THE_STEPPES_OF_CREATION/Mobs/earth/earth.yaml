@@ -6,7 +6,7 @@ dmgHigh: 15
 rewardLow: 3
 rewardHigh: 12
 lootBonus: 0
-encounterText: EARTH ELEMENTAL ENCOUNTER
-defeatText: EARTH ELEMENTAL DEFEAT
+encounterText: You feel a rumble under your feet as an earth elemental emerges from the ground.
+defeatText: The earth elemental breaks apart and falls to the ground in a pile of rubble.
 weakness: Aer
 statValue: 90

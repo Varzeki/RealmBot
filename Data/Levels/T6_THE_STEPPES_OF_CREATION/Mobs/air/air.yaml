@@ -6,7 +6,7 @@ dmgHigh: 15
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
-encounterText: wooshity woosh it comes out of a bush!
-defeatText: wooshity woo it fucks off from you
+encounterText: Wooshity woosh it comes out of a bush!
+defeatText: Wooshity woo it fucks off from you
 weakness: Terra
 statValue: 108

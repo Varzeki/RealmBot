@@ -1,8 +1,8 @@
-name: Walking Stick
+name: Archmage's Staff
 type: weapon
 damage: 7
 defence: 0
 value: 45
-description: A long stick, suitable for providing extra balance.
+description: The tall staff of an Archmage. It shoots fireballs from the tip!
 defaultRarity: Common
 defaultElement: None

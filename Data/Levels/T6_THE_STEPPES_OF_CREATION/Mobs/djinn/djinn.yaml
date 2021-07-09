@@ -6,7 +6,7 @@ dmgHigh: 12
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
-encounterText: DJINN ENCOUNTER
-defeatText: DJINN DEFEAT
+encounterText: You pick up a dirty lamp and decide to give it a rub. A Djinn emerges and attacks you.
+defeatText: The Djinn fades back into the lamp, you decide to leave it alone.
 weakness: Alica
 statValue: 108
