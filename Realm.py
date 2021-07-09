@@ -1514,7 +1514,7 @@ async def on_ready():
         reactables[c.name + "-door"] = await c.send(
             "Form a party to challenge the raid boss!"
         )
-        reactables[c.name + "-door"].add_reaction(emoji_set["door"])
+        await reactables[c.name + "-door"].add_reaction(emoji_set["door"])
         logger.debug("Sent " + c.name + " Messages")
     c = channels["pet-zones"]["the-menagerie"]
     msgs = await c.history(limit=200).flatten()
