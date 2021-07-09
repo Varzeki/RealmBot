@@ -1506,7 +1506,7 @@ async def on_ready():
                 )
                 # vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
             logger.debug("Sent " + c.name + " Messages")
-    for c in channels["raids"]:
+    for c in channels["raids"].values():
         msgs = await c.history(limit=200).flatten()
         for msg in msgs:
             await msg.delete(delay=0.2)
