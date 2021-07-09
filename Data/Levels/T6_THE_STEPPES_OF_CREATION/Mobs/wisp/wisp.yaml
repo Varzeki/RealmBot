@@ -6,7 +6,7 @@ dmgHigh: 30
 lootBonus: 0
 rewardLow: 15
 rewardHigh: 25
-encounterText: WISP ENCOUNTER
-defeatText: WISP DEFEAT
+encounterText: A werelight off the side of the path attracts your attention. It seems to move whenever you get close to it and you quickly become lost. It Attacks!
+defeatText: As the wisp dies you see the path off to your right, you find your way back to it and continue on.
 weakness: Alica
 statValue: 109

@@ -6,7 +6,7 @@ dmgHigh: 25
 rewardLow: 15
 rewardHigh: 25
 lootBonus: 0
-encounterText: FYR ELEMENTAL ENCOUNTER
-defeatText: FYR ELEMENTAL DEFEAT
+encounterText: A whirlwind of flame appears suddenly and races towards you. It's a Fyr Elemntal!
+defeatText: The Flames die down as the Fyr Elemental fades.
 weakness: Aques
 statValue: 111

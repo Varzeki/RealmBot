@@ -6,7 +6,7 @@ dmgHigh: 20
 rewardLow: 10
 rewardHigh: 20
 lootBonus: 0
-encounterText: WATER ELEMENTAL ENCOUNTER
-defeatText: WATER ELEMENTAL DEFEAT
+encounterText: A Tornado of water emerges from a puddle as you pass it by. A water elemental charges you!
+defeatText: A small amount of rain falls on you as the Water Elemental dies.
 weakness: Fyr
 statValue: 88
