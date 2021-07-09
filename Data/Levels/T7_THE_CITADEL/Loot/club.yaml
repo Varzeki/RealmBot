@@ -1,8 +1,8 @@
-name: Club
+name: Holy Sword
 type: weapon
 damage: 8
 defence: 0
 value: 50
-description: A crude weapon made of naturally shaped wood.
+description: A holy weapon taken from a fallen paladin. Will you let it continue its noble purpose or corrupt it for your own ends?
 defaultRarity: Common
 defaultElement: None
