@@ -52,6 +52,7 @@ emoji_set = {
     "moneyBag": "💰",
     "important": ("\u203C" + "\uFE0F"),
     "skull": "💀",
+    "door": "🚪",
 }
 rat_list = ["Rat"]
 channels = {}
@@ -1247,6 +1248,9 @@ async def on_ready():
         "pet-zones": {
             "the-menagerie": realm.get_channel(818311959047831552),
         },
+        "raids": {
+            "the-goblins-lair": realm.get_channel(863058019956162570),
+        },
     }
     logger.info("Channel IDs Set")
     roles = {
@@ -1318,7 +1322,6 @@ async def on_ready():
         "After a couple of fights, you might find yourself in possession of some loot.\n"
         "To check it out, open a DM with Realmkeeper and use the !inventory command.\n"
         "Now that you can see your inventory, you can add to the reactions to choose which gear slot you want to move or sell.\n"
-        'If you want to make the process of selling gear a little faster, consider using the !sell command.\nThis command accepts a number, 1-7, or the word "all".'
     )
     await c.send(
         "** **\n**Buying Gear**\n"
@@ -1503,6 +1506,16 @@ async def on_ready():
                 )
                 # vc.play(discord.FFmpegPCMAudio("Data/Resources/Audio/rat.mp3"))
             logger.debug("Sent " + c.name + " Messages")
+    for c in channels["raids"]:
+        msgs = await c.history(limit=200).flatten()
+        for msg in msgs:
+            await msg.delete(delay=0.2)
+        logger.debug("Deleted " + c.name + " Messages")
+        reactables[c.name + "-door"] = await c.send(
+            "Form a party to challenge the raid boss!"
+        )
+        reactables[c.name + "-door"].add_reaction(emoji_set["door"])
+        logger.debug("Sent " + c.name + " Messages")
     c = channels["pet-zones"]["the-menagerie"]
     msgs = await c.history(limit=200).flatten()
     for msg in msgs:
