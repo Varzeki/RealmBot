@@ -1005,7 +1005,7 @@ class Loot:
         if self.level == 1:
             lMult = 1
         else:
-            lMult = 1.1 ** self.level
+            lMult = 1.1 ** self.level - 1
         self.value = round(self.value * lMult)
         if not self.lootType == "treasure":
             self.damage = lootData["damage"]
@@ -1100,7 +1100,7 @@ class Mob:
         self.dmgLow = stats["dmgLow"]
         self.dmgHigh = stats["dmgHigh"]
         if not self.level == 1:
-            lMult = 1.1 ** self.level
+            lMult = 1.1 ** self.level - 1
             self.maxHP = round(self.maxHP * lMult)
             self.goldReward = round(self.goldReward * lMult)
             self.EXPReward = round(self.EXPReward * lMult)
